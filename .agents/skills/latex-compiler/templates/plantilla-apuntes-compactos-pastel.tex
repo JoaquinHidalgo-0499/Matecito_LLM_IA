@@ -1,0 +1,237 @@
+% =========================================================================
+% PLANTILLA MAESTRA: APUNTES TÉCNICOS COMPACTOS (ESTILO PASTEL)
+% =========================================================================
+% Características:
+% - Márgenes reducidos (1.25 cm) y tipografía compacta (9pt con lmodern).
+% - Sin encabezado superior, sin portada separada y sin tabla de contenidos.
+% - Banner superior estilizado y compacto en la página inicial.
+% - Paleta temática de 4 colores pastel para bloques/unidades.
+% - Cajas tcolorbox temáticas para fundamentación técnica / teoría.
+% - Bloques de código bash / programación con listings y resaltado.
+% - Tablas compactas y estructuradas con tabularx / booktabs.
+% =========================================================================
+
+\documentclass[9pt,a4paper]{extarticle}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[spanish,es-tabla,es-noquoting]{babel}
+\usepackage[top=1.2cm, bottom=1.3cm, left=1.25cm, right=1.25cm]{geometry}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage[many]{tcolorbox}
+\usepackage{hyperref}
+
+% --- Configuración de Página y Tipografía ---
+\pagestyle{plain} % Sin encabezado superior, únicamente pie de página limpio
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+
+% --- Paleta de Colores Pastel Profesionales y Armónicos ---
+\definecolor{bannerbg}{HTML}{EDF2F7}
+\definecolor{bannerframe}{HTML}{4A5568}
+\definecolor{bannertitle}{HTML}{1A202C}
+
+% Unidad / Módulo 1 (Azul Acero Pastel)
+\definecolor{tema1bg}{HTML}{EBF4FA}
+\definecolor{tema1frame}{HTML}{2B6CB0}
+\definecolor{tema1text}{HTML}{1A365D}
+
+% Unidad / Módulo 2 (Verde Salvia Pastel)
+\definecolor{tema2bg}{HTML}{EAF7ED}
+\definecolor{tema2frame}{HTML}{2F855A}
+\definecolor{tema2text}{HTML}{1C4532}
+
+% Unidad / Módulo 3 (Melocotón / Ámbar Pastel)
+\definecolor{tema3bg}{HTML}{FEF3E9}
+\definecolor{tema3frame}{HTML}{C05621}
+\definecolor{tema3text}{HTML}{652B19}
+
+% Unidad / Módulo 4 (Lavanda / Púrpura Pastel)
+\definecolor{tema4bg}{HTML}{F6EEFB}
+\definecolor{tema4frame}{HTML}{6B46C1}
+\definecolor{tema4text}{HTML}{322659}
+
+% Cajas de Código y Bloques de Comandos
+\definecolor{codebg}{HTML}{F8FAFC}
+\definecolor{codeframe}{HTML}{CBD5E1}
+\definecolor{codetitlebg}{HTML}{E2E8F0}
+\definecolor{codetitle}{HTML}{1E293B}
+
+\definecolor{cmdkeyword}{HTML}{0284C7}
+\definecolor{cmdstring}{HTML}{B45309}
+\definecolor{cmdcomment}{HTML}{64748B}
+
+% --- Estilo de Listings para Código ---
+\lstdefinestyle{bashstyle}{
+    language=bash,
+    basicstyle=\ttfamily\fontsize{8.5pt}{10.2pt}\selectfont\color{black},
+    keywordstyle=\color{cmdkeyword}\bfseries,
+    stringstyle=\color{cmdstring},
+    commentstyle=\color{cmdcomment}\itshape,
+    showstringspaces=false,
+    breaklines=true,
+    breakatwhitespace=false,
+    tabsize=2,
+    columns=fullflexible,
+    keepspaces=true,
+    aboveskip=0pt,
+    belowskip=0pt
+}
+
+% --- Cajas TColorBox Personalizadas ---
+\newtcolorbox{bannerbox}{
+    enhanced,
+    colback=bannerbg,
+    colframe=bannerframe,
+    arc=2.5mm,
+    boxrule=0.9pt,
+    left=9pt, right=9pt, top=6pt, bottom=6pt
+}
+
+\newtcolorbox{bloqueheader}[4]{
+    enhanced,
+    colback=#1,
+    colframe=#2,
+    coltitle=#3,
+    arc=2mm,
+    boxrule=1.1pt,
+    title={\textbf{\fontsize{10.5pt}{12.5pt}\selectfont #4}},
+    left=8pt, right=8pt, top=4pt, bottom=4pt,
+    before skip=6pt, after skip=3pt
+}
+
+\newtcolorbox{conceptbox}[4][]{
+    enhanced,
+    breakable,
+    colback=#2,
+    colframe=#3,
+    coltitle=#4,
+    arc=1.5mm,
+    boxrule=0.5pt,
+    leftrule=3.5pt,
+    title={\textbf{\fontsize{8.5pt}{10.5pt}\selectfont $\blacktriangleright$\ Fundamentación Teórica / Concepto Clave: #1}},
+    left=7pt, right=7pt, top=3pt, bottom=3pt,
+    before skip=2.5pt, after skip=3.5pt,
+    fontupper=\fontsize{8.5pt}{10.6pt}\selectfont
+}
+
+\newtcolorbox{codebox}[2][]{
+    enhanced,
+    breakable,
+    colback=codebg,
+    colframe=codeframe,
+    arc=1.5mm,
+    boxrule=0.7pt,
+    title={\textbf{\fontsize{8.5pt}{10.5pt}\selectfont #2}},
+    coltitle=codetitle,
+    colbacktitle=codetitlebg,
+    left=6pt, right=6pt, top=3pt, bottom=3pt,
+    before skip=2.5pt, after skip=2.5pt,
+    #1
+}
+
+% --- Formato Limpio de Subsecciones (Sin Duplicación de Numeración) ---
+\titleformat{\subsection}
+  {\fontsize{9.2pt}{11.2pt}\bfseries\color{bannerframe!90!black}}
+  {}{0pt}{}
+
+\titlespacing*{\subsection}{0pt}{4pt}{2pt}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!70!black,
+    urlcolor=blue!70!black,
+    citecolor=blue!70!black
+}
+
+\begin{document}
+
+% =========================================================================
+% ENCABEZADO COMPACTO DIRECTO (PÁGINA 1)
+% =========================================================================
+\begin{bannerbox}
+    \begin{minipage}[c]{0.72\textwidth}
+        {\textbf{\fontsize{12.5pt}{14.5pt}\selectfont\color{bannertitle} [TÍTULO DEL APUNTE O GUÍA TÉCNICA]}}\\[2pt]
+        {\fontsize{8.5pt}{10.5pt}\selectfont\color{bannerframe} \textbf{[Subtítulo Descriptivo o Unidades Comprendidas]}}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[c]{0.25\textwidth}
+        \raggedleft
+        {\fontsize{7.5pt}{9.5pt}\selectfont\color{bannerframe}
+        \textbf{Materia:} [Sigla / Nombre]\\
+        \textbf{Institución:} FI - UNJu\\
+        \textbf{Tipo:} Apunte Compacto}
+    \end{minipage}
+\end{bannerbox}
+
+\vspace{1pt}
+
+% =========================================================================
+% MÓDULO / UNIDAD 1 (AZUL PASTEL)
+% =========================================================================
+\begin{bloqueheader}{tema1bg}{tema1frame}{tema1text}{Módulo 1: [Nombre de la Unidad / Tema]}
+Resumen ejecutivo o descripción introductoria del módulo 1.
+\end{bloqueheader}
+
+\subsection{1.1 [Título del Subtema]}
+Texto explicativo del subtema...
+
+\begin{codebox}{[Título del Bloque de Código o Comandos]}
+\begin{lstlisting}[style=bashstyle]
+# Comentario en ASCII estándar
+comando --opcion argumento
+\end{lstlisting}
+\end{codebox}
+
+\begin{conceptbox}[[Título del Concepto o Fundamentación]]{tema1bg!60!white}{tema1frame}{tema1text}
+\begin{itemize}[leftmargin=*,noitemsep,topsep=1pt]
+    \item \textbf{Punto clave 1:} Explicación del concepto o por qué.
+    \item \textbf{Punto clave 2:} Fundamento técnico detallado.
+\end{itemize}
+\end{conceptbox}
+
+% =========================================================================
+% MÓDULO / UNIDAD 2 (VERDE PASTEL)
+% =========================================================================
+\begin{bloqueheader}{tema2bg}{tema2frame}{tema2text}{Módulo 2: [Nombre de la Unidad / Tema]}
+Resumen ejecutivo del módulo 2.
+\end{bloqueheader}
+
+\subsection{2.1 [Título del Subtema]}
+Texto explicativo...
+
+\begin{conceptbox}[[Título del Concepto]]{tema2bg!60!white}{tema2frame}{tema2text}
+\begin{itemize}[leftmargin=*,noitemsep,topsep=1pt]
+    \item \textbf{Detalle:} Explicación conceptual.
+\end{itemize}
+\end{conceptbox}
+
+% =========================================================================
+% RESUMEN / TABLA COMPARATIVA
+% =========================================================================
+\vspace{4pt}
+\begin{bloqueheader}{bannerbg}{bannerframe}{bannertitle}{Resumen y Matriz Comparativa}
+\begin{center}
+\renewcommand{\arraystretch}{1.15}
+\fontsize{8pt}{10pt}\selectfont
+\begin{tabularx}{\textwidth}{l p{3cm} X}
+\toprule
+\textbf{Elemento} & \textbf{Identificador / Parámetro} & \textbf{Descripción / Función} \\
+\midrule
+\textbf{Item 1} & Valor A & Descripción detallada del item 1. \\
+\midrule
+\textbf{Item 2} & Valor B & Descripción detallada del item 2. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+\end{bloqueheader}
+
+\end{document}

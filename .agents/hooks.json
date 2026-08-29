@@ -1,0 +1,33 @@
+{
+  "autofix-wikilinks-formatting": {
+    "PostToolUse": [
+      {
+        "matcher": "write_to_file",
+        "hooks": [
+          {
+            "type": "shell",
+            "command": "python3 /home/joaquin/Compartido/braind/.agents/fix_backticks.py"
+          }
+        ]
+      },
+      {
+        "matcher": "replace_file_content",
+        "hooks": [
+          {
+            "type": "shell",
+            "command": "python3 /home/joaquin/Compartido/braind/.agents/fix_backticks.py"
+          }
+        ]
+      },
+      {
+        "matcher": "multi_replace_file_content",
+        "hooks": [
+          {
+            "type": "shell",
+            "command": "python3 /home/joaquin/Compartido/braind/.agents/fix_backticks.py"
+          }
+        ]
+      }
+    ]
+  }
+}

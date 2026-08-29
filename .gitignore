@@ -1,0 +1,39 @@
+# =========================================================================
+# GITIGNORE - REPOSITORIO DE SKILLS, SCRIPTS Y CONFIGURACIÓN LLM WIKI
+# =========================================================================
+
+# 1. Ignorar todo por defecto en la raíz
+/*
+
+# 2. Archivos raíz permitidos
+!.gitignore
+!README.md
+!GEMINI.md
+
+# 3. Carpeta de Reglas del Asistente (Permitir destino de symlink GEMINI.md)
+!/brain/
+/brain/*
+!/brain/GEMINI.md
+
+# 4. Carpeta de Scripts oficiales
+!/scripts/
+!/scripts/**
+
+# 5. Carpeta de Skills y Configuración de Agentes
+!/.agents/
+!/.agents/**
+
+# 6. Archivos temporales o de compilación dentro de las carpetas permitidas
+__pycache__/
+*.py[cod]
+*$py.class
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+.DS_Store
+*~
+*.swp
