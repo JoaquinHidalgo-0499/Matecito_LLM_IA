@@ -12,6 +12,7 @@ Cuando se proporcionen fragmentos de texto, bitácoras o ideas:
 - **Propósito de `archivos-generados/`:** Es exclusivamente una carpeta de **salida y entrega** de artefactos solicitados por el usuario (PDFs compilados con LaTeX, proyectos de código o firmwares). No contiene herramientas ejecutables para el asistente ni participa en la administración interna de `braind`.
 
 **Skills Especializadas de Ingesta y Generación:**
+- **Bandeja de Entrada (Clippings):** Activar skill `ingest-clipping` para depurar y procesar capturas web desde `Clippings/` hacia conceptos o recursos (Inbox Zero).
 - **Sesiones y Bitácoras:** Activar skill `ingest-session` para documentar jornadas en `/brain/sesiones/`.
 - **Material Académico y Conceptos:** Activar skill `ingest-materia` para estructurar unidades y teoría en `/brain/conceptos/`.
 - **Recursos Técnicos y Hardware:** Activar skill `ingest-resource` para registrar servidores, red, inventario de taller y equipamiento en `/brain/recursos/`.

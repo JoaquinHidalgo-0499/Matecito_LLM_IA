@@ -19,6 +19,7 @@ grafo de conocimiento personal en `/brain/`.
 | `brain-lint.py` | `/home/joaquin/Compartido/braind/scripts/brain-lint.py` | Validación de enlaces, YAML, indexación y wikilinks |
 | `brain-stats.py` | `/home/joaquin/Compartido/braind/scripts/brain-stats.py` | Métricas del grafo: palabras, densidad, hubs, tags |
 | `escanear-materias.py` | `/home/joaquin/Compartido/braind/scripts/escanear-materias.py` | Detección de archivos nuevos/modificados en materias académicas |
+| `consolidar-pendientes.py` | `/home/joaquin/Compartido/braind/scripts/consolidar-pendientes.py` | Agrupación y consolidación cronológica de tareas pendientes desde las sesiones |
 
 ## Procedimiento
 
@@ -75,15 +76,28 @@ python3 /home/joaquin/Compartido/braind/scripts/escanear-materias.py
   ```
 - **Nunca modificar los archivos de materias.** Las rutas `~/Compartido/material-Materias/`, `~/Compartido/1er_Cuatrimestre/` y `~/Compartido/2do_Cuatrimestre/` son estrictamente de SOLO LECTURA.
 
-### 4. AUDITORÍA COMPLETA
+### 4. CONSOLIDACIÓN DE PENDIENTES
 
-Cuando el usuario pida una auditoría completa o "revisión general", ejecutar los tres en secuencia:
+Extrae y centraliza las tareas pendientes de las notas de sesiones:
+
+```bash
+python3 /home/joaquin/Compartido/braind/scripts/consolidar-pendientes.py
+```
+
+**Interpretación:**
+- Genera el tablero `Tablero-Pendientes.md` con los ítems agrupados por fecha y referenciando a su nota origen.
+- Puede admitir argumentos como `--output` para cambiar el destino y `--json` para uso programático.
+
+### 5. AUDITORÍA COMPLETA
+
+Cuando el usuario pida una auditoría completa o "revisión general", ejecutar en secuencia:
 
 1. `brain-lint.py` → Salud estructural
 2. `brain-stats.py` → Métricas y tendencias
 3. `escanear-materias` → Novedades académicas pendientes
+4. `consolidar-pendientes.py` → Consolidación de tareas
 
-Presentar un reporte consolidado con las tres secciones.
+Presentar un reporte consolidado con las secciones.
 
 ## Reglas Críticas
 

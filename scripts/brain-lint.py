@@ -125,22 +125,39 @@ def audit_brain(verbose=False):
                 base_name = os.path.splitext(f)[0]
                 all_md_files[base_name] = rel_path
 
-    index_path = os.path.join(BRAIN_DIR, "index.md")
     index_wikilinks = set()
-    if os.path.exists(index_path):
-        with open(index_path, "r", encoding="utf-8", errors="replace") as f:
-            index_content = f.read()
-        raw_index_links = re.findall(r'\[\[(.*?)\]\]', strip_code_blocks(index_content))
-        for l in raw_index_links:
-            if not is_bash_condition(l):
-                clean = l.split('|')[0].split('#')[0].strip()
-                if clean:
-                    index_wikilinks.add(clean)
+    indexes_to_process = ["index"]
+    processed_indexes = set()
+
+    while indexes_to_process:
+        current_index = indexes_to_process.pop(0)
+        if current_index in processed_indexes:
+            continue
+        processed_indexes.add(current_index)
+        
+        idx_rel_path = all_md_files.get(current_index)
+        if not idx_rel_path and current_index == "index":
+            idx_rel_path = "index.md"
+        elif not idx_rel_path:
+            continue
+            
+        index_path = os.path.join(BRAIN_DIR, idx_rel_path)
+        if os.path.exists(index_path):
+            with open(index_path, "r", encoding="utf-8", errors="replace") as f:
+                index_content = f.read()
+            raw_index_links = re.findall(r'\[\[(.*?)\]\]', strip_code_blocks(index_content))
+            for l in raw_index_links:
+                if not is_bash_condition(l):
+                    clean = l.split('|')[0].split('#')[0].strip()
+                    if clean:
+                        index_wikilinks.add(clean)
+                        if clean.startswith("index-") or clean == "Tablero-Pendientes":
+                            indexes_to_process.append(clean)
 
     # 1. Archivos no indexados
     unindexed = [
         name for name in all_md_files 
-        if name not in index_wikilinks and name not in ['index', 'GEMINI']
+        if name not in index_wikilinks and not (name == 'index' or name == 'GEMINI' or name.startswith('index-') or name == 'Tablero-Pendientes')
     ]
 
     # 2. Enlaces rotos y backticks
@@ -160,7 +177,7 @@ def audit_brain(verbose=False):
             yaml_errors[rel_path] = [f"Error de lectura: {e}"]
             continue
 
-        if name not in ['index', 'GEMINI']:
+        if not (name == 'index' or name == 'GEMINI' or name.startswith('index-') or name == 'Tablero-Pendientes'):
             y_errs = validate_frontmatter(content, rel_path)
             if y_errs:
                 yaml_errors[rel_path] = y_errs
