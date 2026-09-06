@@ -9,8 +9,8 @@ import sys
 import re
 import argparse
 import json
-
-BRAIN_DIR = "/home/joaquin/Compartido/braind/brain"
+WORKSPACE_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BRAIN_DIR = os.environ.get("BRAIN_DIR", os.path.join(WORKSPACE_ROOT, "brain"))
 
 # Vocabulario Controlado de Tags
 FORBIDDEN_TAGS = {
@@ -110,18 +110,48 @@ def validate_frontmatter(content, filepath):
         if tag_lower in FORBIDDEN_TAGS:
             errors.append(f"Línea 2-{end_idx+1}: Tag no canónico '{tag}' (debe ser '{FORBIDDEN_TAGS[tag_lower]}')")
 
+    # Validación de coherencia de fecha en sesiones (date vs. nombre de archivo)
+    if note_type == 'session':
+        date_val = fields_found.get('date', '').strip().strip('"').strip("'")
+        if date_val:
+            # Verificar formato ISO 8601
+            if not re.match(r'^\d{4}-\d{2}-\d{2}$', date_val):
+                errors.append(f"Línea 2-{end_idx+1}: Campo 'date' no es ISO 8601 válido (tiene '{date_val}', esperado AAAA-MM-DD)")
+            else:
+                # Verificar coherencia con prefijo del nombre de archivo
+                filename = os.path.basename(filepath)
+                fn_match = re.match(r'^(\d{4}-\d{2}-\d{2})', filename)
+                if fn_match and fn_match.group(1) != date_val:
+                    errors.append(f"Línea 2-{end_idx+1}: Fecha incoherente: frontmatter 'date: {date_val}' ≠ prefijo archivo '{fn_match.group(1)}'")
+
     return errors
 
-def audit_brain(verbose=False):
-    if not os.path.exists(BRAIN_DIR):
-        print(f"{RED}❌ Error: No se encontró el directorio {BRAIN_DIR}{RESET}")
+
+def validate_session_sections(content, filepath):
+    """Valida que las sesiones contengan las 3 secciones obligatorias: Contexto, Decisiones, Pendientes."""
+    warnings = []
+    required_prefixes = ['contexto', 'decisiones', 'pendientes']
+    headings = re.findall(r'^#{2,3}\s+(.+)$', content, re.MULTILINE)
+    headings_lower = [h.strip().lower() for h in headings]
+
+    labels = {'contexto': 'Contexto', 'decisiones': 'Decisiones', 'pendientes': 'Pendientes'}
+    for prefix in required_prefixes:
+        if not any(h.startswith(prefix) for h in headings_lower):
+            warnings.append(f"Sección obligatoria faltante: '## {labels[prefix]}'")
+
+    return warnings
+
+def audit_brain(verbose=False, brain_dir=None):
+    target_dir = os.path.abspath(brain_dir) if brain_dir else BRAIN_DIR
+    if not os.path.exists(target_dir):
+        print(f"{RED}❌ Error: No se encontró el directorio {target_dir}{RESET}")
         sys.exit(1)
 
     all_md_files = {}
-    for root, dirs, files in os.walk(BRAIN_DIR):
+    for root, dirs, files in os.walk(target_dir):
         for f in files:
             if f.endswith('.md'):
-                rel_path = os.path.relpath(os.path.join(root, f), BRAIN_DIR)
+                rel_path = os.path.relpath(os.path.join(root, f), target_dir)
                 base_name = os.path.splitext(f)[0]
                 all_md_files[base_name] = rel_path
 
@@ -141,7 +171,7 @@ def audit_brain(verbose=False):
         elif not idx_rel_path:
             continue
             
-        index_path = os.path.join(BRAIN_DIR, idx_rel_path)
+        index_path = os.path.join(target_dir, idx_rel_path)
         if os.path.exists(index_path):
             with open(index_path, "r", encoding="utf-8", errors="replace") as f:
                 index_content = f.read()
@@ -164,12 +194,13 @@ def audit_brain(verbose=False):
     broken_links = {}
     backtick_links = {}
     yaml_errors = {}
+    session_warnings = {}
     total_wikilinks = 0
 
     for name, rel_path in all_md_files.items():
         if name == 'GEMINI':
             continue
-        full_path = os.path.join(BRAIN_DIR, rel_path)
+        full_path = os.path.join(target_dir, rel_path)
         try:
             with open(full_path, "r", encoding="utf-8", errors="replace") as f:
                 content = f.read()
@@ -181,6 +212,12 @@ def audit_brain(verbose=False):
             y_errs = validate_frontmatter(content, rel_path)
             if y_errs:
                 yaml_errors[rel_path] = y_errs
+
+        # Validar secciones obligatorias en sesiones
+        if rel_path.startswith("sesiones/"):
+            s_warns = validate_session_sections(content, rel_path)
+            if s_warns:
+                session_warnings[rel_path] = s_warns
 
         # Detectar backticks alrededor de wikilinks (ej: `[[link]]` o [[`link`]])
         bad_backticks = re.findall(r'`\[\[.*?\]\]`|\[\[`.*?`\]\]|\[\[.*?`.*?\]\]', content)
@@ -200,12 +237,14 @@ def audit_brain(verbose=False):
                 broken_links.setdefault(rel_path, []).append(l.strip())
 
     return {
+        "target_dir": target_dir,
         "total_files": len(all_md_files),
         "total_wikilinks": total_wikilinks,
         "unindexed": unindexed,
         "broken_links": broken_links,
         "backtick_links": backtick_links,
         "yaml_errors": yaml_errors,
+        "session_warnings": session_warnings,
         "all_files": all_md_files
     }
 
@@ -213,20 +252,24 @@ def main():
     parser = argparse.ArgumentParser(description="Auditor de Salud del Cerebro (brain-lint)")
     parser.add_argument("-v", "--verbose", action="store_true", help="Modo detallado")
     parser.add_argument("-j", "--json", action="store_true", help="Salida en JSON")
+    parser.add_argument("--brain-dir", default=BRAIN_DIR, help="Ruta al directorio brain (por defecto: entorno local)")
     args = parser.parse_args()
 
-    res = audit_brain(verbose=args.verbose)
+    res = audit_brain(verbose=args.verbose, brain_dir=args.brain_dir)
 
     if args.json:
         out = {
+            "target_dir": res["target_dir"],
             "total_files": res["total_files"],
             "total_wikilinks": res["total_wikilinks"],
             "unindexed_count": len(res["unindexed"]),
             "broken_count": sum(len(v) for v in res["broken_links"].values()),
+            "session_warnings_count": sum(len(v) for v in res["session_warnings"].values()),
             "unindexed": res["unindexed"],
             "broken_links": res["broken_links"],
             "backtick_links": res["backtick_links"],
-            "yaml_errors": res["yaml_errors"]
+            "yaml_errors": res["yaml_errors"],
+            "session_warnings": res["session_warnings"]
         }
         print(json.dumps(out, indent=2, ensure_ascii=False))
         sys.exit(0 if (len(res["unindexed"]) == 0 and len(res["broken_links"]) == 0 and len(res["yaml_errors"]) == 0 and len(res["backtick_links"]) == 0) else 1)
@@ -234,7 +277,7 @@ def main():
     print(f"\n{BOLD}{CYAN}┌──────────────────────────────────────────────────────────┐{RESET}")
     print(f"{BOLD}{CYAN}│          AUDITOR DE SALUD DEL CEREBRO (BRAIN-LINT)       │{RESET}")
     print(f"{BOLD}{CYAN}└──────────────────────────────────────────────────────────┘{RESET}")
-    print(f"📁 Ruta: {BOLD}{BRAIN_DIR}{RESET}")
+    print(f"📁 Ruta: {BOLD}{res['target_dir']}{RESET}")
     print(f"📊 Total de notas evaluadas: {BOLD}{res['total_files']}{RESET}")
     print(f"🔗 Total de wikilinks activos: {BOLD}{res['total_wikilinks']}{RESET}\n")
 
@@ -280,6 +323,17 @@ def main():
         print()
     else:
         print(f"{GREEN}✔ 100% de Frontmatters YAML válidos y tags canónicos{RESET}")
+
+    # 5. Reporte de secciones faltantes en sesiones (advertencia, no bloquea)
+    if res["session_warnings"]:
+        total_sw = sum(len(v) for v in res["session_warnings"].values())
+        print(f"{YELLOW}📝 Sesiones con secciones faltantes ({total_sw} advertencias en {len(res['session_warnings'])} notas):{RESET}")
+        for src, warns in res["session_warnings"].items():
+            for w in warns:
+                print(f"   • En {BOLD}{src}{RESET}: {w}")
+        print()
+    else:
+        print(f"{GREEN}✔ Todas las sesiones tienen secciones Contexto/Decisiones/Pendientes{RESET}")
 
     print(f"\n{BOLD}────────────────────────────────────────────────────────────{RESET}")
     if not has_errors:

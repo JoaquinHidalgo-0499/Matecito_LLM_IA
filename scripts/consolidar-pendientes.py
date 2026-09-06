@@ -57,11 +57,12 @@ def main():
     parser.add_argument('--output', default='brain/Tablero-Pendientes.md', help='Archivo de salida Markdown (relativo a braind_dir si no es absoluto).')
     parser.add_argument('--json', action='store_true', help='Generar salida en formato JSON en lugar de Markdown (hacia stdout).')
     parser.add_argument('-v', '--verbose', action='store_true', help='Habilitar logs detallados.')
+    parser.add_argument('--braind-dir', default=str(Path(__file__).resolve().parent.parent), help='Ruta raíz de la base de conocimiento.')
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.DEBUG if args.verbose else logging.INFO, format='%(levelname)s: %(message)s')
 
-    braind_dir = Path('/home/joaquin/Compartido/braind')
+    braind_dir = Path(os.environ.get('BRAIND_DIR', args.braind_dir))
     sesiones_dir = braind_dir / 'brain' / 'sesiones'
     
     if not sesiones_dir.exists():
@@ -113,10 +114,34 @@ def main():
     # Sort months descending
     meses_ordenados = sorted(tareas_por_mes.keys(), reverse=True)
 
+    # Deduplicación: consolidar tareas idénticas (case-insensitive) en una sola entrada
+    total_antes_dedup = total_pendientes
+    for mes in meses_ordenados:
+        seen = {}  # key: tarea_lower -> index en lista deduplicada
+        deduped = []
+        for t in tareas_por_mes[mes]:
+            key = t['tarea'].strip().lower()
+            if key in seen:
+                # Agregar sesión de origen a la entrada existente
+                existing = deduped[seen[key]]
+                if t['sesion'] not in existing['sesiones']:
+                    existing['sesiones'].append(t['sesion'])
+                total_pendientes -= 1
+            else:
+                seen[key] = len(deduped)
+                deduped.append({
+                    'tarea': t['tarea'],
+                    'sesiones': [t['sesion']],
+                    'fecha': t['fecha']
+                })
+        tareas_por_mes[mes] = deduped
+    duplicados_eliminados = total_antes_dedup - total_pendientes
+
     if args.json:
         out_data = {
             'total_sesiones': total_sesiones,
             'total_pendientes': total_pendientes,
+            'duplicados_eliminados': duplicados_eliminados,
             'pendientes_por_mes': {mes: tareas_por_mes[mes] for mes in meses_ordenados}
         }
         print(json.dumps(out_data, indent=2, ensure_ascii=False))
@@ -142,17 +167,21 @@ def main():
         
         f.write(f"**Métricas:**\n")
         f.write(f"- Sesiones analizadas: {total_sesiones}\n")
-        f.write(f"- Pendientes activos: {total_pendientes}\n\n")
+        f.write(f"- Pendientes activos: {total_pendientes}\n")
+        if duplicados_eliminados > 0:
+            f.write(f"- Duplicados consolidados: {duplicados_eliminados}\n")
+        f.write("\n")
         
         for mes in meses_ordenados:
             f.write(f"## {mes}\n\n")
             # sort tasks by date descending within month
             tareas = sorted(tareas_por_mes[mes], key=lambda x: x['fecha'], reverse=True)
             for t in tareas:
-                f.write(f"- [ ] {t['tarea']} (en [[{t['sesion']}]])\n")
+                refs = ', '.join(f"[[{s}]]" for s in t['sesiones'])
+                f.write(f"- [ ] {t['tarea']} (en {refs})\n")
             f.write("\n")
             
-    logging.info(f"Tablero generado en {output_path}")
+    logging.info(f"Tablero generado en {output_path} ({total_pendientes} pendientes, {duplicados_eliminados} duplicados consolidados)")
 
 if __name__ == '__main__':
     main()

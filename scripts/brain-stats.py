@@ -9,8 +9,8 @@ import re
 import json
 import argparse
 from collections import Counter
-
-BRAIN_DIR = "/home/joaquin/Compartido/braind/brain"
+WORKSPACE_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BRAIN_DIR = os.environ.get("BRAIN_DIR", os.path.join(WORKSPACE_ROOT, "brain"))
 
 # Colores ANSI
 BLUE = "\033[1;34m"
@@ -73,7 +73,8 @@ def count_words_and_lines(content, ignore_code_and_yaml=True):
     w_count = len(text_no_code.split())
     return w_count, l_count
 
-def get_stats():
+def get_stats(brain_dir=None):
+    target_dir = os.path.abspath(brain_dir) if brain_dir else BRAIN_DIR
     categories = Counter()
     tags_count = Counter()
     inbound_links = Counter()
@@ -86,12 +87,30 @@ def get_stats():
     file_count = 0
     session_count = 0
 
-    for root, dirs, files in os.walk(BRAIN_DIR):
+    if not os.path.exists(target_dir):
+        return {
+            "target_dir": target_dir,
+            "file_count": 0,
+            "session_count": 0,
+            "total_lines": 0,
+            "total_words": 0,
+            "total_bytes": 0,
+            "categories": categories,
+            "tags_count": tags_count,
+            "top_nodes": [],
+            "orphans": [],
+            "density": 0,
+            "total_edges": 0
+        }
+
+    monthly_activity = Counter()
+
+    for root, dirs, files in os.walk(target_dir):
         for f in files:
             if f.endswith('.md'):
                 file_count += 1
                 full_path = os.path.join(root, f)
-                rel_path = os.path.relpath(full_path, BRAIN_DIR)
+                rel_path = os.path.relpath(full_path, target_dir)
                 base_name = os.path.splitext(f)[0]
                 all_files.add(base_name)
                 
@@ -99,6 +118,10 @@ def get_stats():
                 categories[cat] += 1
                 if cat == "sesiones":
                     session_count += 1
+                    # Extraer YYYY-MM del nombre de archivo para métricas temporales
+                    m = re.match(r'^(\d{4}-\d{2})', f)
+                    if m:
+                        monthly_activity[m.group(1)] += 1
 
                 stat = os.stat(full_path)
                 total_bytes += stat.st_size
@@ -142,6 +165,7 @@ def get_stats():
         density = total_edges / (file_count * (file_count - 1))
 
     return {
+        "target_dir": target_dir,
         "file_count": file_count,
         "session_count": session_count,
         "total_lines": total_lines,
@@ -152,15 +176,17 @@ def get_stats():
         "top_nodes": inbound_links.most_common(10),
         "orphans": orphans,
         "density": density,
-        "total_edges": total_edges
+        "total_edges": total_edges,
+        "monthly_activity": monthly_activity
     }
 
 def main():
     parser = argparse.ArgumentParser(description="Estadísticas de la Base de Conocimiento (brain-stats)")
     parser.add_argument("-j", "--json", action="store_true", help="Salida en JSON")
+    parser.add_argument("--brain-dir", default=BRAIN_DIR, help="Ruta al directorio brain (por defecto: entorno local)")
     args = parser.parse_args()
 
-    s = get_stats()
+    s = get_stats(brain_dir=args.brain_dir)
 
     if args.json:
         print(json.dumps(s, indent=2, ensure_ascii=False))
@@ -205,6 +231,17 @@ def main():
             print(f"   • {o}")
         if len(s["orphans"]) > 10:
             print(f"   • ... y {len(s['orphans']) - 10} más.")
+
+    # Actividad mensual (timeline de sesiones)
+    if s["monthly_activity"]:
+        sorted_months = sorted(s["monthly_activity"].keys())
+        recent = sorted_months[-6:] if len(sorted_months) > 6 else sorted_months
+        max_m = max(s["monthly_activity"][m] for m in recent) if recent else 1
+        print(f"\n📅 {BOLD}Actividad Mensual (Sesiones):{RESET}")
+        for month in recent:
+            count = s["monthly_activity"][month]
+            bar = draw_bar(count, max_m, width=20)
+            print(f"   • {BOLD}{month}{RESET}  {CYAN}{bar}{RESET} {count} sesiones")
     
     print()
 
