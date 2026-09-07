@@ -88,8 +88,8 @@ def validate_frontmatter(content, filepath):
     if missing:
         errors.append(f"Línea 2-{end_idx+1}: Faltan campos obligatorios para tipo '{note_type}': {', '.join(sorted(missing))}")
 
-    # Validación de campos prohibidos en conceptos / recursos
-    if note_type in ('concept', 'resource'):
+    # Validación de campos prohibidos en conceptos / recursos / apuntes
+    if note_type in ('concept', 'resource', 'apunte'):
         forbidden_in_concept = {'date', 'status'} & set(fields_found.keys())
         if forbidden_in_concept:
             errors.append(f"Línea 2-{end_idx+1}: Campos no permitidos para tipo '{note_type}': {', '.join(sorted(forbidden_in_concept))}")
@@ -101,6 +101,8 @@ def validate_frontmatter(content, filepath):
         errors.append(f"Línea 2-{end_idx+1}: Nota en carpeta 'recursos/' debe tener 'type: resource' (tiene '{note_type}')")
     elif filepath.startswith("sesiones/") and note_type != "session":
         errors.append(f"Línea 2-{end_idx+1}: Nota en carpeta 'sesiones/' debe tener 'type: session' (tiene '{note_type}')")
+    elif filepath.startswith("apuntes/") and note_type != "apunte":
+        errors.append(f"Línea 2-{end_idx+1}: Nota en carpeta 'apuntes/' debe tener 'type: apunte' (tiene '{note_type}')")
 
     # Validación de Vocabulario Controlado de Tags
     raw_tags = fields_found.get('tags', '')

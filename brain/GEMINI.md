@@ -7,14 +7,14 @@ Como Administrador Autónomo de esta Base de Conocimiento local, opero bajo las 
 ### 1. INGEST (Ingesta)
 Cuando se proporcionen fragmentos de texto, bitácoras o ideas:
 - El rol en ingesta es **estrictamente documental**: estructurar, sintetizar y registrar la información en archivos Markdown estándar con wikilinks limpios.
-- **Indexación Obligatoria Universal:** Toda nueva nota creada (`session`, `concept` o `resource`) debe indexarse de forma inmediata y autónoma en `/brain/index.md` en su sección correspondiente mediante el enlace [[nombre-de-la-nota]].
+- **Indexación Obligatoria Universal:** Toda nueva nota creada (`session`, `concept`, `resource` o `apunte`) debe indexarse de forma inmediata y autónoma en `/brain/index.md` en su sección correspondiente mediante el enlace [[nombre-de-la-nota]].
 - **Prohibición de Código Intermediario:** Está terminantemente prohibido generar scripts ad-hoc, compiladores improvisados o código temporal en `scratch/` para tareas de ingesta o validación.
 - **Propósito de `archivos-generados/`:** Es exclusivamente una carpeta de **salida y entrega** de artefactos solicitados por el usuario (PDFs compilados con LaTeX, proyectos de código o firmwares). No contiene herramientas ejecutables para el asistente ni participa en la administración interna de `braind`.
 
 **Skills Especializadas de Ingesta y Generación:**
 - **Bandeja de Entrada (Clippings):** Activar skill `ingest-clipping` para depurar y procesar capturas web desde `Clippings/` hacia conceptos o recursos (Inbox Zero).
 - **Sesiones y Bitácoras:** Activar skill `ingest-session` para documentar jornadas en `/brain/sesiones/`.
-- **Material Académico y Conceptos:** Activar skill `ingest-materia` para estructurar unidades y teoría en `/brain/conceptos/`.
+- **Material Académico y Conceptos:** Activar skill `ingest-materia` para estructurar unidades y teoría en `/brain/conceptos/`, y tratados monográficos, guías de estudio, bancos de exámenes y guías de laboratorio en `/brain/apuntes/`.
 - **Recursos Técnicos y Hardware:** Activar skill `ingest-resource` para registrar servidores, red, inventario de taller y equipamiento en `/brain/recursos/`.
 - **Compilación de Documentos LaTeX:** Activar skill `latex-compiler` para maquetar y compilar tratados o guías en PDF dentro de `/archivos-generados/<proyecto>/`.
 
@@ -50,6 +50,17 @@ Cuando se proporcionen fragmentos de texto, bitácoras o ideas:
   tags: [etiquetas]
   ---
   ```
+
+**Notas de Apunte** (`/brain/apuntes/nombre-descriptivo.md`):
+- Frontmatter:
+  ```yaml
+  ---
+  type: apunte
+  title: "Título descriptivo"
+  tags: [etiquetas]
+  ---
+  ```
+- Alberga compendios y tratados de estudio para exámenes, guías integradoras, bancos de preguntas/parciales y manuales/consignas de laboratorios de cátedra.
 
 ### 2. QUERY (Consulta)
 Cuando se hagan preguntas sobre el contenido:

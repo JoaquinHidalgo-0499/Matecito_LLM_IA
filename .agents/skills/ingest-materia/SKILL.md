@@ -30,10 +30,18 @@ Procedimiento maestro para procesar archivos crudos de la facultad y convertirlo
 - **Nota:** No incluyas los campos `date` ni `status` en notas de concepto, el linter de la bóveda fallará si los pones o si omites los 3 campos obligatorios (`type`, `title`, `tags`).
 - **Profundidad Académica:** Si el texto fuente contiene algoritmos, demostraciones matemáticas o código complejo, invoca un **Subagente PRO** (`invoke_subagent` con `Model: pro`) para que redacte el resumen con máxima precisión conceptual (First-Time Right).
 
-### 3. Creación de Bancos de Ejercicios
-- Si el material contiene guías de trabajos prácticos, coloquios o parciales, compílalos en un único archivo:
-  `/home/joaquin/Compartido/braind/brain/conceptos/<siglamateria>-banco-ejercicios-parciales-finales.md`
-- Asegúrate de resolver o estructurar las respuestas con el mayor rigor técnico posible.
+### 3. Creación de Apuntes, Compendios y Bancos de Ejercicios
+- Si el material contiene compendios de estudio para exámenes, tratados integrales, bancos de ejercicios/parciales, cuestionarios o guías de laboratorio de cátedra, créalos en:
+  `/home/joaquin/Compartido/braind/brain/apuntes/<siglamateria>-<nombre-descriptivo>.md`
+- Aplica estrictamente el Frontmatter YAML para "Notas de Apunte" definido en `GEMINI.md`:
+  ```yaml
+  ---
+  type: apunte
+  title: "Título descriptivo del apunte, tratado o banco de examen"
+  tags: [siglamateria, unju, apunte]
+  ---
+  ```
+- **Nota:** Al igual que en conceptos, no incluyas campos `date` ni `status`. El linter validará que tenga `type: apunte` por residir en `apuntes/`.
 
 ### 4. Indexación
 - Todo archivo creado debe ser agregado al índice central.
