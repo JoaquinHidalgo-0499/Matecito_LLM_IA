@@ -82,7 +82,13 @@ Cuando se pida verificar la salud, enlaces o estadísticas del cerebro:
 ## Capacidades del Sistema y Entorno
 - **LaTeX:** Se encuentra instalado `pdflatex` en `/usr/bin/pdflatex`. Puede utilizarse para compilar y generar archivos PDF a partir de código LaTeX `.tex` en el workspace.
 - **Python 3:** Disponible en `/usr/bin/python3`. Los scripts de auditoría residen exclusivamente en `scripts/` (`brain-lint.py`, `brain-stats.py`, `escanear-materias.py`).
-- **Docker:** Disponible en el servidor personal (`servidor_personal` / `192.168.20.200`). Los servicios se gestionan con `docker-compose.yml` en `~/docker/<servicio>/`.
+- **Docker y Servidor Personal:** Disponible en el servidor personal (`servidor_personal` / `servidor-casa` / `192.168.20.200`). Los servicios se gestionan con `docker-compose.yml` en `~/docker/<servicio>/`.
+- **Topología y Cómputo Distribuido (Homelab y Syncthing):** Las carpetas bajo `~/Compartido/` están sincronizadas bidireccionalmente con el servidor personal mediante Syncthing. Para tareas pesadas de procesamiento (RAG, indexación masiva de documentos, conversiones por lotes, cómputo intensivo), **evaluar siempre la topología de antemano**: si los datos y el backend (Ollama, Docker, CPU) residen en el servidor, priorizar la ejecución directa en el servidor (vía SSH, tmux o nohup) para evitar consumo innecesario de batería, saturación de la laptop y dependencia frágil de conexiones de red/VPN.
+- **Explicación Previa Obligatoria de Scripts:** Antes de generar o ejecutar cualquier script (Python, Bash, etc.) o comando complejo, el asistente debe explicar detallada y previamente al usuario:
+  1. Qué hace el script paso a paso.
+  2. Qué bibliotecas o dependencias externas utiliza.
+  3. Qué archivos o rutas lee o modifica.
+  4. Cuál es el objetivo e impacto esperado en el sistema.
 - **Manipulación de Archivos:**
   - Para archivos **dentro de `braind/`**: usar exclusivamente `write_to_file` y `replace_file_content`. Nunca usar `cat << EOF` ni `run_command` para escribir archivos en el workspace.
   - Para archivos **en servidores remotos** (`servidor_personal`, OpenWrt) o rutas externas al workspace: se permite `cat << EOF` vía `run_command`, ya que las herramientas nativas no tienen acceso remoto.
