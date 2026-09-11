@@ -86,6 +86,29 @@ Formato de alta densidad de información para apuntes de estudio, guías de labo
 
 ---
 
+### Formato C: Currículum Vitae Ejecutivo Sans-Serif (1 Columna ATS-Friendly)
+Estructura lineal optimizada para roles de ingeniería, infraestructura, desarrollo y máxima compatibilidad con motores ATS:
+* **Características:**
+  - Tipografía moderna Sans-Serif (`\usepackage{helvet}` + `\renewcommand{\familydefault}{\sfdefault}`).
+  - Tamaño base de `10pt` con márgenes equilibrados (`1.05 cm` a `1.25 cm`).
+  - Paleta corporativa sobria: Azul Marino Profundo (`#143769`), Slate Blue (`#2B6CB0`) y Carbón (`#1E293B`).
+  - Separación clara entre viñetas y títulos con línea divisoria fina (`titlerule`).
+  - Enlaces interactivos clickeables (`tel:`, `mailto:`, LinkedIn, GitHub).
+  - **Plantilla base:** Ubicada en `.agents/skills/latex-compiler/templates/plantilla-cv-ejecutivo-sans.tex`.
+
+---
+
+### Formato D: Currículum Vitae Moderno Visual (2 Columnas con Foto y QR)
+Estructura visual asimétrica de alto impacto para perfiles donde la presentación personal, diseño o consultoría comercial son prioritarios:
+* **Características:**
+  - Dos columnas balanceadas mediante el entorno `paracol` (`5.6 cm` lateral / `12.2 cm` principal).
+  - Columna lateral con fotografía de esquinas redondeadas en TikZ y código QR vectorizado.
+  - Íconos vectoriales y banderas de idiomas programados nativamente en TikZ (sin dependencias externas).
+  - Cajas de perfil profesional en `tcolorbox` con borde lateral sutil.
+  - **Plantilla base:** Ubicada en `.agents/skills/latex-compiler/templates/plantilla-cv-moderno-dos-columnas.tex`.
+
+---
+
 ## 4. Flujo de Compilación Paso a Paso
 
 ### Paso 1: Escritura del Código Fuente `.tex`

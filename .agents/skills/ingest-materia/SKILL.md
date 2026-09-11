@@ -16,6 +16,12 @@ Procedimiento maestro para procesar archivos crudos de la facultad y convertirlo
 - **REGLA ABSOLUTA:** Estas rutas son estrictamente de **SOLO LECTURA**. NUNCA debes modificar, mover, renombrar o borrar archivos originales allí.
 - Identifica los archivos clave: PDFs (teoría), PPTX (presentaciones), Código (.py, .c, .java) y enunciados de parciales/TPs.
 
+### 1.1. Consulta Previa al RAG (Grounded Generation)
+- Para materias indexadas en el servidor MCP `rag-materias`:
+  - Ejecutar `buscar_bibliografia` y `leer_pagina_completa` para recuperar la terminología oficial, analogías pedagógicas y taxonomías evaluadas por los docentes de la cátedra.
+  - Citar de forma transparente en la respuesta al usuario los documentos y páginas recuperados por el RAG.
+  - Si el RAG no estuviera accesible por red o falta de cobertura, continuar con el conocimiento local advirtiendo el fallback.
+
 ### 2. Creación de Notas Conceptuales
 - Por cada unidad, módulo o tema principal procesado, crea un archivo en:
   `/home/joaquin/Compartido/braind/brain/conceptos/<siglamateria>-u<numero>-<tema-corto>.md`

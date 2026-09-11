@@ -1,0 +1,319 @@
+% =========================================================================
+% PLANTILLA MAESTRA: CURRÍCULUM VITAE MODERNO (2 COLUMNAS / FOTO + QR)
+% =========================================================================
+% Características:
+% - Maquetación asimétrica a dos columnas balanceadas con `paracol`.
+% - Columna lateral con foto enmarcada en TikZ, idiomas, contacto y código QR.
+% - Tipografía limpia Sans-Serif (Helvetica / Arial).
+% - Íconos vectoriales y banderas diseñados nativamente en TikZ (sin dependencias).
+% - Ideal para puestos que valoran fuerte presencia visual o perfil comercial/tech.
+% =========================================================================
+
+\documentclass[10pt,a4paper]{article}
+
+% --- PAQUETES DE CONFIGURACIÓN Y TIPOGRAFÍA ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage[a4paper,top=1.15cm,bottom=1.15cm,left=1.2cm,right=1.2cm]{geometry}
+\usepackage{paracol}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usetikzlibrary{calc}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins}
+\usepackage{microtype}
+\usepackage{hyperref}
+
+\pagestyle{empty}
+
+% --- PALETA DE COLORES PROFESIONAL ---
+\definecolor{primary}{RGB}{26, 54, 93}       % Azul marino corporativo (#1A365D)
+\definecolor{secondary}{RGB}{43, 108, 176}   % Azul pizarra medio (#2B6CB0)
+\definecolor{darktext}{RGB}{30, 41, 59}      % Carbón oscuro para lectura (#1E293B)
+\definecolor{muted}{RGB}{100, 116, 139}      % Gris medio para fechas y metadatos (#64748B)
+\definecolor{lightbg}{RGB}{248, 250, 252}    % Fondo claro sutil (#F8FAFC)
+\definecolor{bordercolor}{RGB}{226, 232, 240}% Gris suave para divisores (#E2E8F0)
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=primary,
+    urlcolor=secondary,
+    pdfauthor={[NOMBRE CANDIDATO]},
+    pdftitle={CV - [NOMBRE CANDIDATO]},
+    pdfsubject={Curriculum Vitae},
+    pdfcreator={LaTeX - pdflatex}
+}
+
+% --- MACROS Y FORMATO DE SECCIONES ---
+\newcommand{\cvsection}[1]{%
+  \vspace{5pt}%
+  \noindent{\color{primary}\bfseries\large\MakeUppercase{#1}}\par%
+  \vspace{2pt}%
+  \noindent{\color{secondary}\rule{\linewidth}{1.2pt}}\par%
+  \vspace{4pt}%
+}
+
+\newcommand{\cvsidesection}[1]{%
+  \vspace{6pt}%
+  \noindent{\color{primary}\bfseries\normalsize\MakeUppercase{#1}}\par%
+  \vspace{2pt}%
+  \noindent{\color{secondary}\rule{\linewidth}{1.0pt}}\par%
+  \vspace{4pt}%
+}
+
+% --- ÍCONOS VECTORIALES TIKZ (NATIVOS Y ESCALABLES) ---
+\newcommand{\iconEmail}{%
+  \begin{tikzpicture}[x=0.07cm, y=0.07cm, baseline=-0.6ex]
+    \draw[fill=primary!12, draw=primary, line width=0.5pt, rounded corners=0.4pt] (0,0) rectangle (11,8);
+    \draw[primary, line width=0.5pt] (0,8) -- (5.5,3.8) -- (11,8);
+  \end{tikzpicture}%
+}
+
+\newcommand{\iconPhone}{%
+  \begin{tikzpicture}[x=0.07cm, y=0.07cm, baseline=-0.6ex]
+    \draw[fill=primary!12, draw=primary, line width=0.5pt, rounded corners=0.8pt] (0,0) rectangle (6.5,11);
+    \draw[primary, line width=0.5pt] (2,9.6) -- (4.5,9.6);
+    \fill[primary] (3.25,1.5) circle (0.6pt);
+    \draw[fill=white, draw=primary, line width=0.3pt] (0.9,2.8) rectangle (5.6,8.6);
+  \end{tikzpicture}%
+}
+
+\newcommand{\iconLocation}{%
+  \begin{tikzpicture}[x=0.07cm, y=0.07cm, baseline=-0.8ex]
+    \fill[primary] (3.5,8) circle (3);
+    \fill[white] (3.5,8) circle (1.1);
+    \fill[primary] (0.8,6.8) -- (3.5,0.5) -- (6.2,6.8) -- cycle;
+  \end{tikzpicture}%
+}
+
+\newcommand{\iconLink}{%
+  \begin{tikzpicture}[x=0.07cm, y=0.07cm, baseline=-0.6ex]
+    \draw[primary, line width=0.6pt, rounded corners=0.8pt] (0,2.5) rectangle (7,7);
+    \draw[primary, line width=0.6pt] (7,4.75) -- (10.5,4.75);
+    \draw[primary, line width=0.6pt, rounded corners=0.8pt] (3.5,0) rectangle (10.5,4.5);
+  \end{tikzpicture}%
+}
+
+\newcommand{\flagUS}{%
+  \begin{tikzpicture}[x=0.08cm, y=0.08cm, baseline=-0.5ex]
+    \draw[draw=gray!30, line width=0.3pt] (0,0) rectangle (11,7.5);
+    \clip (0,0) rectangle (11,7.5);
+    \foreach \i in {0,2,4,6} {
+      \fill[red!80!black] (0,\i) rectangle (11,\i+0.95);
+    }
+    \foreach \i in {1,3,5} {
+      \fill[white] (0,\i) rectangle (11,\i+0.95);
+    }
+    \fill[blue!70!black] (0,3.8) rectangle (5.5,7.5);
+  \end{tikzpicture}%
+}
+
+\newcommand{\flagES}{%
+  \begin{tikzpicture}[x=0.08cm, y=0.08cm, baseline=-0.5ex]
+    \draw[draw=gray!30, line width=0.3pt] (0,0) rectangle (11,7.5);
+    \fill[red!80!black] (0,0) rectangle (11,7.5);
+    \fill[yellow!90!black] (0,2) rectangle (11,5.5);
+  \end{tikzpicture}%
+}
+
+% --- MACROS DE ENTRADAS ---
+\newcommand{\cvexperience}[5]{%
+  \noindent{\color{primary}\textbf{\normalsize #1}}\hfill{\footnotesize\color{muted}\textbf{#2}}\par
+  \noindent{\small\color{secondary}\textbf{#3}}\par
+  \if\relax\detokenize{#4}\relax\else
+    \vspace{1.5pt}\noindent{\footnotesize\itshape\color{darktext}#4}\par
+  \fi
+  \vspace{2pt}
+  #5
+  \vspace{4.5pt}
+}
+
+\begin{document}
+\color{darktext}
+
+% ==============================================================================
+% PÁGINA 1
+% ==============================================================================
+
+\setcolumnwidth{5.6cm, 12.2cm}
+\setlength{\columnsep}{0.8cm}
+\setlength{\columnseprule}{0.5pt}
+\colseprulecolor{bordercolor}
+
+\begin{paracol}{2}
+
+% --- PÁGINA 1: COLUMNA IZQUIERDA ---
+
+% Fotografía de perfil enmarcada (reemplazar foto_perfil.png o comentar bloque)
+\begin{center}
+  \begin{tikzpicture}
+    \clip[rounded corners=6pt] (0,0) rectangle (4.2cm, 5.6cm);
+    \node[inner sep=0pt, anchor=south west] at (0,0) {%
+      \IfFileExists{foto_perfil.png}{\includegraphics[width=4.2cm, height=5.6cm]{foto_perfil.png}}{\rule{4.2cm}{5.6cm}}%
+    };
+  \end{tikzpicture}
+\end{center}
+\vspace{-4pt}
+
+% Formación Académica
+\cvsidesection{Formación}
+
+\noindent\textbf{\small [Título / Grado Académico]}\par
+\noindent{\footnotesize\color{secondary}[Universidad o Facultad]}\par
+\noindent{\scriptsize\color{muted}[Año / Estado]}\vspace{4pt}
+
+\noindent\textbf{\small [Título Secundario o Terciario]}\par
+\noindent{\footnotesize\color{secondary}[Institución Educativa]}\par
+\noindent{\scriptsize\color{muted}[Año]}\vspace{4pt}
+
+\noindent\textbf{\small [Certificación Clave]}\par
+\noindent{\footnotesize\color{secondary}[Entidad Emisora]}\par
+\noindent{\scriptsize\color{muted}[Año]}\vspace{4pt}
+
+% Idiomas
+\cvsidesection{Idiomas}
+\begin{itemize}[leftmargin=14pt, itemsep=2.5pt, topsep=1pt]
+  \item[\flagUS] \textbf{\small Inglés:} [Nivel / B2]
+  \item[\flagES] \textbf{\small Español:} Nativo
+\end{itemize}
+\vspace{2pt}
+
+% Contacto
+\cvsidesection{Contacto}
+\begin{itemize}[leftmargin=14pt, itemsep=3.5pt, topsep=1pt]
+  \item[\iconEmail] {\scriptsize\href{mailto:correo@ejemplo.com}{correo@ejemplo.com}}
+  \item[\iconPhone] {\scriptsize\href{tel:+549000000000}{(+54) 000-000000}}
+  \item[\iconLocation] {\scriptsize [Ciudad, País]}
+  \item[\iconLink] {\scriptsize\href{https://linktr.ee/usuario}{\textbf{Perfil / Portafolio}}}
+\end{itemize}
+
+\vspace{5pt}
+% Código QR
+\begin{center}
+  \begin{tikzpicture}
+    \node[draw=bordercolor, fill=white, rounded corners=4pt, inner sep=3pt] {
+      \IfFileExists{qr_linktree.png}{\includegraphics[width=2.2cm]{qr_linktree.png}}{\rule{2.2cm}{2.2cm}}
+    };
+  \end{tikzpicture}\par
+  \vspace{2pt}
+  {\scriptsize\color{muted}[Enlace o Portafolio]}
+\end{center}
+
+\switchcolumn
+
+% --- PÁGINA 1: COLUMNA DERECHA ---
+
+% Cabecera Principal
+{\fontsize{21}{25}\selectfont\color{primary}\textbf{[NOMBRE COMPLETO]}}\par
+\vspace{3pt}
+{\fontsize{10.5}{13}\selectfont\color{secondary}\textbf{[TÍTULO PROFESIONAL O ESPECIALIDAD]}}\par
+\vspace{5pt}
+
+% Acerca de Mí
+\cvsection{Acerca de Mí}
+\begin{tcolorbox}[
+  width=\linewidth,
+  colback=lightbg,
+  colframe=secondary!40,
+  boxrule=0pt,
+  leftrule=2.5pt,
+  arc=2pt,
+  top=4pt,bottom=4pt,left=6pt,right=6pt
+]
+  \small\itshape\color{darktext}
+  ``[Párrafo de presentación profesional destacando formación, habilidades técnicas diferenciales, enfoque metodológico y objetivos laborales clave].''
+\end{tcolorbox}
+\vspace{2pt}
+
+% Experiencia Profesional
+\cvsection{Experiencia Profesional}
+
+\cvexperience{[Puesto / Rol]}{[Periodo]}{[Empresa / Institución]}{[Resumen ejecutivo de la función y logros alcanzados]}{%
+  \begin{itemize}[leftmargin=11pt, itemsep=1.5pt, topsep=1pt]
+    \item [Responsabilidad o hito técnico clave cuantificado].
+    \item [Herramientas, tecnologías y metodologías aplicadas].
+    \item [Resultados de negocio o eficiencia operativa generada].
+  \end{itemize}
+}
+
+\cvexperience{[Puesto Anterior]}{[Periodo]}{[Empresa]}{[Descripción breve de funciones]}{%
+  \begin{itemize}[leftmargin=11pt, itemsep=1.5pt, topsep=1pt]
+    \item [Tarea o proyecto desempeñado].
+    \item [Resolución de problemas técnicos].
+  \end{itemize}
+}
+
+\end{paracol}
+
+% ==============================================================================
+% PÁGINA 2
+% ==============================================================================
+\newpage
+
+\begin{paracol}{2}
+
+% --- PÁGINA 2: COLUMNA IZQUIERDA ---
+
+\cvsidesection{Habilidades}
+
+\begin{itemize}[leftmargin=11pt, itemsep=4pt, topsep=2pt, label=\textcolor{secondary}{\scriptsize$\blacktriangleright$}]
+  \item \textbf{Habilidad Blanda 1:} [Descripción breve].
+  \item \textbf{Habilidad Blanda 2:} [Descripción breve].
+  \item \textbf{Habilidad Blanda 3:} [Descripción breve].
+  \item \textbf{Habilidad Blanda 4:} [Descripción breve].
+  \item \textbf{Habilidad Blanda 5:} [Descripción breve].
+  \item \textbf{Habilidad Blanda 6:} [Descripción breve].
+\end{itemize}
+
+\vspace{18pt}
+\cvsidesection{Contacto Rápido}
+
+\begin{itemize}[leftmargin=14pt, itemsep=4pt, topsep=1pt]
+  \item[\iconEmail] {\scriptsize\href{mailto:correo@ejemplo.com}{correo@ejemplo.com}}
+  \item[\iconPhone] {\scriptsize\href{tel:+549000000000}{(+54) 000-000000}}
+  \item[\iconLocation] {\scriptsize [Ciudad, País]}
+  \item[\iconLink] {\scriptsize\href{https://linktr.ee/usuario}{\textbf{Portafolio}}}
+\end{itemize}
+
+\switchcolumn
+
+% --- PÁGINA 2: COLUMNA DERECHA ---
+
+% Proyectos Destacados
+\cvsection{Proyectos Académicos y Personales}
+
+\noindent{\color{primary}\textbf{\normalsize [Nombre del Proyecto 1]}}\hfill{\footnotesize\color{muted}\textbf{[Año]}}\par
+\vspace{1.5pt}
+\begin{itemize}[leftmargin=11pt, itemsep=2pt, topsep=1pt]
+  \item \textbf{Objetivo y Diseño:} [Descripción del alcance y solución técnica].
+  \item \textbf{Tecnologías:} [Lenguajes, frameworks y bases de datos empleadas].
+\end{itemize}
+\vspace{5pt}
+
+% Conocimientos Técnicos
+\cvsection{Conocimientos Técnicos}
+
+\begin{tcolorbox}[
+  width=\linewidth,
+  colback=white,
+  colframe=bordercolor,
+  boxrule=0.6pt,
+  arc=3pt,
+  top=6pt,bottom=6pt,left=8pt,right=8pt
+]
+\small
+\noindent\textbf{\color{primary}Sistemas Operativos:} [Windows, Linux, macOS].\par\vspace{3.5pt}
+\noindent\textbf{\color{primary}Lenguajes de Programación:} [Python, Java, C++, etc.].\par\vspace{3.5pt}
+\noindent\textbf{\color{primary}Bases de Datos:} [PostgreSQL, MySQL, SQLite].\par\vspace{3.5pt}
+\noindent\textbf{\color{primary}Herramientas y DevOps:} [Docker, Git, Bash, etc.].
+\end{tcolorbox}
+
+\end{paracol}
+
+\end{document}

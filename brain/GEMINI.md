@@ -98,6 +98,19 @@ Cuando se pida verificar la salud, enlaces o estadísticas del cerebro:
 - El asistente puede leer, buscar y consultar libremente sus archivos (apuntes, libros, parciales, códigos) para responder preguntas, preparar resúmenes o sintetizar contenido hacia `/brain/` o `/archivos-generados/`.
 - **Prohibición Absoluta:** Queda terminantemente prohibido modificar, sobrescribir, mover o eliminar cualquier archivo dentro de estas rutas de referencia. Toda salida generada debe residir en `/brain/` o `/archivos-generados/`.
 
+## Uso del Servidor RAG y Generación Anclada (RAG-First Académico)
+- **Criterio RAG-First Obligatorio:** Siempre que el usuario solicite:
+  1. Redactar, estructurar o actualizar **apuntes maestros, compendios o tratados** (`/brain/apuntes/`).
+  2. Elaborar o profundizar **notas de concepto de unidades temáticas** (`/brain/conceptos/`).
+  3. Resolver cuestionarios, guías prácticas, trabajos prácticos o bancos de examen.
+  4. Responder con consignas como *"según la cátedra"*, *"con los apuntes"* o *"de acuerdo al profesor"*.
+  El asistente **debe consultar prioritariamente** el servidor MCP `rag-materias` (`buscar_bibliografia` y `leer_pagina_completa`) filtrando por la sigla de la materia para anclar la teoría, taxonomías, fórmulas y ejemplos a los PDFs reales de la facultad.
+- **Transparencia y Cita Obligatoria de Uso:** Siempre que se consulte el RAG para responder o elaborar material, el asistente **debe indicar explícitamente en la respuesta que se utilizó el RAG**, citando los documentos y páginas recuperados (ejemplo: `[📚 RAG: Consultado 'Apunte de Catedra. Unidad 1.pdf' (Pág. 19)]`).
+- **Resiliencia y Modo Fallback:** Si el servidor RAG está inaccesible (sin conexión a Ollama en el servidor personal o sin VPN activa) o la materia no posee cobertura suficiente:
+  - El asistente continuará la tarea utilizando las notas existentes en `/brain/` y su base conceptual.
+  - Advertirá explícitamente al usuario al inicio: `⚠️ Nota: RAG no disponible / sin cobertura para [Materia]; respondiendo con base conceptual de la bóveda local.`
+- **Consultas Rápidas Exentas:** Preguntas de definición puntual corta (ej. "¿Qué significa la sigla CIA?"), sintaxis de código o aclaraciones breves no requieren invocar el RAG obligatoriamente, respondiéndose de forma instantánea para evitar latencia innecesaria.
+
 ## Transparencia y Enrutamiento Dinámico de Modelos
 - **Evaluación Previa y Prioridad de Calidad (First-Time Right):** Para toda tarea que involucre generación de código, scripts, configuraciones Docker, arquitectura de sistemas o depuración, **priorizar siempre la máxima capacidad (Subagente PRO / Thinking)** sin escatimar en consumo de tokens. La meta absoluta es la precisión impecable al primer intento, evitando iteraciones o correcciones redundantes.
 - **Visibilidad Explícita:** Indicar al inicio o en el reporte de la operación qué motor/modelo está procesando la tarea (ej: `[⚡ Motor: Gemini 3.7 Flash]` o `[🧠 Subagente: Gemini Pro]`).

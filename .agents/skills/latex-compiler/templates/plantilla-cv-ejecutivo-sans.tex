@@ -1,0 +1,197 @@
+% =========================================================================
+% PLANTILLA MAESTRA: CURRÍCULUM VITAE EJECUTIVO SANS-SERIF (1 COLUMNA ATS-FRIENDLY)
+% =========================================================================
+% Características:
+% - Formato 100% compatible con ATS (Applicant Tracking Systems) y flujo lineal.
+% - Tipografía moderna Sans-Serif (Helvetica / Arial) de alta legibilidad.
+% - Tamaño base de 10pt con espaciados y márgenes calibrados (1.05 cm - 1.25 cm).
+% - Jerarquía cromática corporativa: Azul Marino Profundo (#143769) y Slate (#2B6CB0).
+% - Sin saturación visual: viñetas espaciadas, negritas selectivas y aire perimetral.
+% - Soporte nativo para enlaces interactivos (tel:, mailto:, LinkedIn, GitHub).
+% =========================================================================
+
+\documentclass[10pt,a4paper]{article}
+
+% --- PAQUETES DE CONFIGURACIÓN Y TIPOGRAFÍA ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage[a4paper,top=1.05cm,bottom=1.05cm,left=1.25cm,right=1.25cm]{geometry}
+\usepackage{xcolor}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{microtype}
+
+% --- PALETA DE COLORES PROFESIONAL ---
+\definecolor{primary}{RGB}{20, 55, 105}      % Azul corporativo profundo (#143769)
+\definecolor{secondary}{RGB}{43, 108, 176}   % Azul pizarra medio (#2B6CB0)
+\definecolor{darktext}{RGB}{30, 41, 59}      % Carbón suave para lectura óptima (#1E293B)
+\definecolor{muted}{RGB}{100, 116, 139}      % Gris medio para fechas y metadatos (#64748B)
+\definecolor{accentline}{RGB}{203, 213, 225} % Gris divisor suave (#CBD5E1)
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=secondary,
+    urlcolor=secondary,
+    pdftitle={Curriculum Vitae - [NOMBRE COMPLETO]},
+    pdfauthor={[NOMBRE COMPLETO]},
+    pdfsubject={Curriculum Vitae},
+    pdfcreator={LaTeX - pdflatex}
+}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1.5pt}
+
+% --- FORMATO DE TÍTULOS DE SECCIÓN ---
+\titleformat{\section}
+  {\color{primary}\large\bfseries}
+  {}{0em}
+  {\MakeUppercase}
+  [\vspace{1.5pt}{\color{secondary}\titlerule[1.1pt]}]
+\titlespacing*{\section}{0pt}{5pt}{2.5pt}
+
+% --- ESTILO DE LISTAS LIMPIAS Y LEGIBLES ---
+\setlist[itemize]{leftmargin=1.2em, itemsep=1.0pt, parsep=0pt, topsep=0.8pt, label=\textcolor{secondary}{\scriptsize$\blacksquare$}}
+
+\begin{document}
+\color{darktext}
+
+% ===============================================================================
+% ENCABEZADO PRINCIPAL
+% ===============================================================================
+\begin{center}
+    {\fontsize{21}{25}\selectfont \bfseries \color{primary} [NOMBRE COMPLETO]} \\[2.5pt]
+    {\normalsize \bfseries \color{darktext} [TÍTULO O CARRERA PRINCIPAL] \quad \textbar \quad [ESPECIALIZACIÓN O TITULACIÓN SECUNDARIA]} \\[2.0pt]
+    {\footnotesize \bfseries \color{secondary} [ÁREA CLAVE 1] \quad \textbar \quad [ÁREA CLAVE 2] \quad \textbar \quad [ÁREA CLAVE 3]} \\[3.5pt]
+    
+    \footnotesize
+    [Ciudad, Provincia, País] (Disponible Presencial / Remoto) \quad \textbar \quad
+    Tel / WhatsApp: \href{tel:+549000000000}{(+54) 000-000000} \\
+    Email: \href{mailto:correo@ejemplo.com}{correo@ejemplo.com} \quad \textbar \quad
+    DNI: [XX.XXX.XXX] \quad \textbar \quad
+    \textbf{Licencia de Conducir:} [Clase / Estado] \\
+    LinkedIn: \href{https://linkedin.com/in/usuario}{linkedin.com/in/usuario} \quad \textbar \quad
+    GitHub: \href{https://github.com/usuario}{github.com/usuario}
+\end{center}
+
+\vspace{-1pt}
+
+% ===============================================================================
+% PERFIL PROFESIONAL
+% ===============================================================================
+\section{Perfil Profesional}
+[Párrafo sintético y directo de 4 a 6 líneas describiendo formación técnica formal, nivel académico actual, experiencia destacada y propuesta de valor clave. Evitar clichés y destacar tecnologías reales, orientación a resultados y capacidades operativas demostrables].
+
+% ===============================================================================
+% COMPETENCIAS TÉCNICAS CLAVE
+% ===============================================================================
+\section{Competencias Técnicas Clave}
+\begin{itemize}
+    \item \textbf{[Categoría 1 - Ej. Sistemas Operativos \& Servidores]:} [Detalle de sistemas, herramientas de línea de comandos, scripting, automatización y protocolos].
+    \item \textbf{[Categoría 2 - Ej. Redes \& Telecomunicaciones]:} [Protocolos TCP/IP, direccionamiento, VLANs, hardware administrable, routers, firewalls, VPNs].
+    \item \textbf{[Categoría 3 - Ej. DevOps \& Contenedores]:} [Docker, Docker Compose, Git, CI/CD, tareas cron, virtualización y orquestación].
+    \item \textbf{[Categoría 4 - Ej. Soporte Técnico \& Hardware]:} [Diagnóstico a nivel componente, mantenimiento térmico, recuperación de datos, instrumental de taller].
+    \item \textbf{[Categoría 5 - Ej. Ciberseguridad \& Auditoría]:} [Tríada CIA, escaneo Nmap, análisis con Wireshark, gestión de riesgos, normativas ISO/IRAM].
+    \item \textbf{[Categoría 6 - Ej. Programación \& Bases de Datos]:} [Lenguajes de programación principales, SQL, APIs REST, librerías y frameworks utilizados].
+\end{itemize}
+
+% ===============================================================================
+% EXPERIENCIA LABORAL
+% ===============================================================================
+\section{Experiencia Laboral}
+
+\noindent\textbf{\color{primary}\normalsize [Puesto o Rol Desempeñado]}\hfill{\footnotesize\color{muted}\textbf{[Mes AAAA -- Mes AAAA / Presente]}}\par
+\noindent{\small\color{secondary}\textit{[Nombre de Empresa, Institución o Modo Independiente] \hfill [Ciudad, País]}}\par
+\vspace{0.5pt}
+\begin{itemize}
+    \item [Logro, tarea técnica o responsabilidad concreta cuantificada con métricas o impacto demostrable].
+    \item [Implementación técnica, stack de herramientas aplicado y resolución de contingencias].
+    \item [Mejora operativa, mantenimiento continuo, atención a clientes internos o despliegue de infraestructura].
+\end{itemize}
+
+\vspace{3pt}
+
+\noindent\textbf{\color{primary}\normalsize [Puesto Anterior o Proyecto Operativo]}\hfill{\footnotesize\color{muted}\textbf{[AAAA -- AAAA]}}\par
+\noindent{\small\color{secondary}\textit{[Entorno de Producción o Empresa] \hfill [Ubicación]}}\par
+\vspace{0.5pt}
+\begin{itemize}
+    \item [Descripción precisa de arquitectura, administración y soporte continuo].
+    \item [Servicios configurados, monitoreo proactivo y seguridad aplicada].
+\end{itemize}
+
+% ===============================================================================
+% SALTO DE PÁGINA (OPCIONAL: ELIMINAR SI EL CV ES DE 1 PÁGINA)
+% ===============================================================================
+\newpage
+
+% Cabecera discreta de segunda página
+\noindent{\footnotesize\color{muted}[NOMBRE COMPLETO] \quad \textbar \quad CURRÍCULUM VITAE}\hfill{\footnotesize\color{muted}PÁGINA 2 DE 2}\par
+\vspace{1.5pt}
+{\color{accentline}\hrule height 0.6pt}\par
+\vspace{3pt}
+
+% ===============================================================================
+% PROYECTOS TÉCNICOS DESTACADOS
+% ===============================================================================
+\section{Proyectos Técnicos Destacados}
+
+\noindent\textbf{\color{primary}\normalsize [Nombre del Proyecto de Software o Infraestructura]}\hfill{\footnotesize\color{muted}\textbf{[Año]}}\par
+\noindent{\small\color{secondary}\textit{[Subtítulo descriptivo o arquitectura general]}}\par
+\vspace{0.5pt}
+\begin{itemize}
+    \item [Problema abordado, tecnología empleada, diseño de la solución y métrica de desempeño alcanzada].
+\end{itemize}
+
+% ===============================================================================
+% FORMACIÓN ACADÉMICA
+% ===============================================================================
+\section{Formación Académica}
+
+\noindent\textbf{\color{primary}\normalsize [Carrera de Grado o Universitaria]}\hfill{\footnotesize\color{muted}\textbf{[Año Inicio -- En curso / Graduado]}}\par
+\noindent{\small\color{secondary}\textit{[Institución Educativa / Facultad]}}\par
+\vspace{0.5pt}
+\begin{itemize}
+    \item [Descripción del perfil formativo y orientación de la carrera].
+    \item \textbf{Materias Troncales Promocionadas con Rendimiento Destacado:}
+    \begin{itemize}[label=\textcolor{secondary}{\scriptsize$\circ$}, itemsep=1.0pt]
+        \item \textbf{[Materia 1]} (\textbf{Nota X}) \quad \textbar \quad \textbf{[Materia 2]} (\textbf{Nota X}) \quad \textbar \quad \textbf{[Materia 3]} (\textbf{Nota X})
+        \item \textbf{[Materia 4]} (\textbf{Nota X}) \quad \textbar \quad \textbf{[Materia 5]} (\textbf{Nota X}) \quad \textbar \quad \textbf{[Materia 6]} (\textbf{Nota X})
+    \end{itemize}
+    \item \textbf{Asignaturas Actuales en Curso:} [Listado conciso de materias avanzadas cursadas actualmente].
+\end{itemize}
+
+\vspace{2.5pt}
+
+\noindent\textbf{\color{primary}\normalsize [Título Técnico Secundario o Terciario]}\hfill{\footnotesize\color{muted}\textbf{[Año Inicio -- Año Fin]}}\par
+\noindent{\small\color{secondary}\textit{[Escuela Técnica / Instituto]}}\par
+\vspace{0.5pt}
+\begin{itemize}
+    \item [Duración formal del ciclo técnico y especialidades principales adquiridas].
+\end{itemize}
+
+% ===============================================================================
+% CERTIFICACIONES Y CAPACITACIONES DESTACADAS
+% ===============================================================================
+\section{Certificaciones y Cursos Universitarios}
+
+\begin{itemize}
+    \item \textbf{[Nombre de Certificación Oficial] ([Carga Horaria]):} [Institución Emisora]. [Resolución o Código CUV si aplica]. [Resumen conciso de contenidos técnicos y tecnologías evaluadas].
+    \item \textbf{[Curso de Especialización] ([Horas]):} [Institución / Plataforma]. [Temario práctico y proyectos validados].
+    \item \textbf{Capacitación en Idioma Inglés:} [Institución / Nivel formal alcanzado (ej. B2 Técnico) y capacidad de lectura de manuales técnicos, RFCs y documentación en inglés].
+\end{itemize}
+
+% ===============================================================================
+% DISPONIBILIDAD Y MODALIDAD OPERATIVA
+% ===============================================================================
+\section{Disponibilidad y Modalidad Operativa}
+\begin{itemize}
+    \item \textbf{Disponibilidad \& Movilidad:} Inmediata, dedicación Full-Time, adaptabilidad a turnos rotativos y guardias operativas 24/7. Licencia de conducir [Clase / Vigencia].
+    \item \textbf{Modalidad \& Equipamiento Propio:} Presencial en [Ciudad] o Remota / Híbrida. Equipado con hardware dedicado, enlace de conectividad estable y entornos Linux/Windows para soporte, pruebas y desarrollo continuo.
+\end{itemize}
+
+\end{document}
