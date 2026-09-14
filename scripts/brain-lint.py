@@ -196,7 +196,7 @@ def audit_brain(verbose=False, brain_dir=None):
     # 1. Archivos no indexados
     unindexed = [
         name for name in all_md_files 
-        if name not in index_wikilinks and not (name == 'index' or name == 'GEMINI' or name.startswith('index-') or name == 'Tablero-Pendientes')
+        if name not in index_wikilinks and not (name == 'index' or name.startswith('index-') or name == 'Tablero-Pendientes')
     ]
 
     # 2. Enlaces rotos y backticks
@@ -207,8 +207,6 @@ def audit_brain(verbose=False, brain_dir=None):
     total_wikilinks = 0
 
     for name, rel_path in all_md_files.items():
-        if name == 'GEMINI':
-            continue
         full_path = os.path.join(target_dir, rel_path)
         try:
             with open(full_path, "r", encoding="utf-8", errors="replace") as f:
@@ -217,7 +215,7 @@ def audit_brain(verbose=False, brain_dir=None):
             yaml_errors[rel_path] = [f"Error de lectura: {e}"]
             continue
 
-        if not (name == 'index' or name == 'GEMINI' or name.startswith('index-') or name == 'Tablero-Pendientes'):
+        if not (name == 'index' or name.startswith('index-') or name == 'Tablero-Pendientes'):
             y_errs = validate_frontmatter(content, rel_path)
             if y_errs:
                 yaml_errors[rel_path] = y_errs

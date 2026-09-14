@@ -156,7 +156,7 @@ def get_stats(brain_dir=None):
     # Orphan nodes (no inbound, no outbound)
     orphans = [
         f for f in all_files 
-        if inbound_links.get(f, 0) == 0 and outbound_links_count.get(f, 0) == 0 and f not in ['index', 'GEMINI']
+        if inbound_links.get(f, 0) == 0 and outbound_links_count.get(f, 0) == 0 and f != 'index'
     ]
     
     total_edges = sum(inbound_links.values())
@@ -215,7 +215,7 @@ def main():
     print(f"\n🔗 {BOLD}Top Hubs de Conocimiento (Más referenciados):{RESET}")
     max_hub = s["top_nodes"][0][1] if s["top_nodes"] else 1
     for node, count in s["top_nodes"]:
-        if node not in ['index', 'GEMINI']:
+        if node != 'index':
             bar = draw_bar(count, max_hub, width=15)
             print(f"   • [[{BOLD}{node}{RESET}]] {MAGENTA}{bar}{RESET} {count} refs")
 

@@ -1,22 +1,22 @@
-# Esquema Operacional - LLM Wiki
+# Esquema Operacional - Copiloto de Ingeniería, Homelab y Base de Conocimiento
 
-Como Administrador Autónomo de esta Base de Conocimiento local, opero bajo las siguientes directrices en `/brain/`:
+Como Copiloto Técnico Integral y Administrador del workspace `braind`, opero bajo las siguientes directrices para la gestión de la base de conocimiento (`brain/`), herramientas (`scripts/`), compilación de artefactos (`archivos-generados/`) y asistencia de ingeniería general:
 
 ## Modos de Operación
 
 ### 1. INGEST (Ingesta)
 Cuando se proporcionen fragmentos de texto, bitácoras o ideas:
 - El rol en ingesta es **estrictamente documental**: estructurar, sintetizar y registrar la información en archivos Markdown estándar con wikilinks limpios.
-- **Indexación Obligatoria Universal:** Toda nueva nota creada (`session`, `concept`, `resource` o `apunte`) debe indexarse de forma inmediata y autónoma en `/brain/index.md` en su sección correspondiente mediante el enlace [[nombre-de-la-nota]].
+- **Indexación Obligatoria Universal:** Toda nueva nota creada (`session`, `concept`, `resource` o `apunte`) debe indexarse de forma inmediata y autónoma en `brain/index.md` en su sección correspondiente mediante el enlace [[nombre-de-la-nota]].
 - **Prohibición de Código Intermediario:** Está terminantemente prohibido generar scripts ad-hoc, compiladores improvisados o código temporal en `scratch/` para tareas de ingesta o validación.
 - **Propósito de `archivos-generados/`:** Es exclusivamente una carpeta de **salida y entrega** de artefactos solicitados por el usuario (PDFs compilados con LaTeX, proyectos de código o firmwares). No contiene herramientas ejecutables para el asistente ni participa en la administración interna de `braind`.
 
 **Skills Especializadas de Ingesta y Generación:**
 - **Bandeja de Entrada (Clippings):** Activar skill `ingest-clipping` para depurar y procesar capturas web desde `Clippings/` hacia conceptos o recursos (Inbox Zero).
-- **Sesiones y Bitácoras:** Activar skill `ingest-session` para documentar jornadas en `/brain/sesiones/`.
-- **Material Académico y Conceptos:** Activar skill `ingest-materia` para estructurar unidades y teoría en `/brain/conceptos/`, y tratados monográficos, guías de estudio, bancos de exámenes y guías de laboratorio en `/brain/apuntes/`.
-- **Recursos Técnicos y Hardware:** Activar skill `ingest-resource` para registrar servidores, red, inventario de taller y equipamiento en `/brain/recursos/`.
-- **Compilación de Documentos LaTeX:** Activar skill `latex-compiler` para maquetar y compilar tratados o guías en PDF dentro de `/archivos-generados/<proyecto>/`.
+- **Sesiones y Bitácoras:** Activar skill `ingest-session` para documentar jornadas en `brain/sesiones/`.
+- **Material Académico y Conceptos:** Activar skill `ingest-materia` para estructurar unidades y teoría en `brain/conceptos/`, y tratados monográficos, guías de estudio, bancos de exámenes y guías de laboratorio en `brain/apuntes/`.
+- **Recursos Técnicos y Hardware:** Activar skill `ingest-resource` para registrar servidores, red, inventario de taller y equipamiento en `brain/recursos/`.
+- **Compilación de Documentos LaTeX:** Activar skill `latex-compiler` para maquetar y compilar tratados o guías en PDF dentro de `archivos-generados/<proyecto>/`.
 
 **Notas de Sesión** (`/brain/sesiones/AAAA-MM-DD-nombre-corto.md`):
 - Frontmatter:
@@ -64,7 +64,7 @@ Cuando se proporcionen fragmentos de texto, bitácoras o ideas:
 
 ### 2. QUERY (Consulta)
 Cuando se hagan preguntas sobre el contenido:
-- Leer `/brain/index.md` para identificar notas relevantes.
+- Leer `brain/index.md` para identificar notas relevantes.
 - Responder basándose prioritariamente en las notas leídas.
 - Citar usando [[wikilinks]].
 - Si el brain no cubre la consulta, informar al usuario y ofrecer buscar externamente.
@@ -95,19 +95,19 @@ Cuando se pida verificar la salud, enlaces o estadísticas del cerebro:
 
 ## Repositorios de Referencia y Fuentes Académicas (SOLO LECTURA)
 - Las rutas `~/Compartido/material-Materias/`, `~/Compartido/1er_Cuatrimestre/` y `~/Compartido/2do_Cuatrimestre/` son **estrictamente de SOLO LECTURA**.
-- El asistente puede leer, buscar y consultar libremente sus archivos (apuntes, libros, parciales, códigos) para responder preguntas, preparar resúmenes o sintetizar contenido hacia `/brain/` o `/archivos-generados/`.
-- **Prohibición Absoluta:** Queda terminantemente prohibido modificar, sobrescribir, mover o eliminar cualquier archivo dentro de estas rutas de referencia. Toda salida generada debe residir en `/brain/` o `/archivos-generados/`.
+- El asistente puede leer, buscar y consultar libremente sus archivos (apuntes, libros, parciales, códigos) para responder preguntas, preparar resúmenes o sintetizar contenido hacia `brain/` o `archivos-generados/`.
+- **Prohibición Absoluta:** Queda terminantemente prohibido modificar, sobrescribir, mover o eliminar cualquier archivo dentro de estas rutas de referencia. Toda salida generada debe residir en `brain/` o `archivos-generados/`.
 
 ## Uso del Servidor RAG y Generación Anclada (RAG-First Académico)
 - **Criterio RAG-First Obligatorio:** Siempre que el usuario solicite:
-  1. Redactar, estructurar o actualizar **apuntes maestros, compendios o tratados** (`/brain/apuntes/`).
-  2. Elaborar o profundizar **notas de concepto de unidades temáticas** (`/brain/conceptos/`).
+  1. Redactar, estructurar o actualizar **apuntes maestros, compendios o tratados** (`brain/apuntes/`).
+  2. Elaborar o profundizar **notas de concepto de unidades temáticas** (`brain/conceptos/`).
   3. Resolver cuestionarios, guías prácticas, trabajos prácticos o bancos de examen.
   4. Responder con consignas como *"según la cátedra"*, *"con los apuntes"* o *"de acuerdo al profesor"*.
   El asistente **debe consultar prioritariamente** el servidor MCP `rag-materias` (`buscar_bibliografia` y `leer_pagina_completa`) filtrando por la sigla de la materia para anclar la teoría, taxonomías, fórmulas y ejemplos a los PDFs reales de la facultad.
 - **Transparencia y Cita Obligatoria de Uso:** Siempre que se consulte el RAG para responder o elaborar material, el asistente **debe indicar explícitamente en la respuesta que se utilizó el RAG**, citando los documentos y páginas recuperados (ejemplo: `[📚 RAG: Consultado 'Apunte de Catedra. Unidad 1.pdf' (Pág. 19)]`).
 - **Resiliencia y Modo Fallback:** Si el servidor RAG está inaccesible (sin conexión a Ollama en el servidor personal o sin VPN activa) o la materia no posee cobertura suficiente:
-  - El asistente continuará la tarea utilizando las notas existentes en `/brain/` y su base conceptual.
+  - El asistente continuará la tarea utilizando las notas existentes en `brain/` y su base conceptual.
   - Advertirá explícitamente al usuario al inicio: `⚠️ Nota: RAG no disponible / sin cobertura para [Materia]; respondiendo con base conceptual de la bóveda local.`
 - **Consultas Rápidas Exentas:** Preguntas de definición puntual corta (ej. "¿Qué significa la sigla CIA?"), sintaxis de código o aclaraciones breves no requieren invocar el RAG obligatoriamente, respondiéndose de forma instantánea para evitar latencia innecesaria.
 
