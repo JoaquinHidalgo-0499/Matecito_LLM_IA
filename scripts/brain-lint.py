@@ -157,6 +157,13 @@ def audit_brain(verbose=False, brain_dir=None):
                 base_name = os.path.splitext(f)[0]
                 all_md_files[base_name] = rel_path
 
+    # Destinos de wikilinks válidos (notas del cerebro + markdown en raíz como GEMINI o README)
+    valid_targets = set(all_md_files.keys())
+    if os.path.exists(WORKSPACE_ROOT):
+        for f in os.listdir(WORKSPACE_ROOT):
+            if f.endswith('.md') and os.path.isfile(os.path.join(WORKSPACE_ROOT, f)):
+                valid_targets.add(os.path.splitext(f)[0])
+
     index_wikilinks = set()
     indexes_to_process = ["index"]
     processed_indexes = set()
@@ -235,7 +242,7 @@ def audit_brain(verbose=False, brain_dir=None):
                 continue
             total_wikilinks += 1
             target = l.split('|')[0].split('#')[0].strip()
-            if target and target not in all_md_files:
+            if target and target not in valid_targets:
                 broken_links.setdefault(rel_path, []).append(l.strip())
 
     return {

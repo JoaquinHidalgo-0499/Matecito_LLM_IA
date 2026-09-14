@@ -10,10 +10,8 @@
 !README.md
 !GEMINI.md
 
-# 3. Carpeta de Reglas del Asistente (Permitir destino de symlink GEMINI.md)
-!/brain/
+# 3. Contenido del Cerebro (Sincronizado vía Syncthing, ignorado en Git)
 /brain/*
-!/brain/GEMINI.md
 
 # 4. Carpeta de Scripts oficiales
 !/scripts/
