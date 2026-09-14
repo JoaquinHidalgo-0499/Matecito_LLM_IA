@@ -1,0 +1,259 @@
+% =========================================================================
+% PLANTILLA MAESTRA: APUNTES TÉCNICOS PARA IMPRESIÓN LÁSER MONOCROMÁTICA
+% =========================================================================
+% Optimizada específicamente para impresoras láser monocromo con tóner (HP LaserJet P1006 / CB435A).
+%
+% Criterios de Ingeniería y Tipografía:
+% 1. Cero tramado sucio: Todo el texto es 100% negro puro (#000000). Sin texto gris.
+% 2. Ahorro de tóner y prevención de ondulación: Cero fondos negros plenos ni
+%    tramados densos. Cajas con fondo blanco y barra lateral de alto contraste.
+% 3. Ergonomía de lectura física: Formato a dos columnas (twocolumn) en A4 para
+%    mantener entre 55 y 68 caracteres por línea (regla de oro de Bringhurst).
+% 4. Encuadernación física y doble faz: Modo 'twoside' con 'bindingoffset' de 7 mm
+%    para perforado de ganchos o anillado espiral sin perforar el texto.
+% 5. Tipografía láser robusta: Bitstream Charter para el cuerpo (diseñada
+%    específicamente para impresoras láser de 300-600 DPI, con serifas fuertes
+%    que no se desvanecen en el tóner) y TeX Gyre Heros (Helvetica) para títulos.
+% 6. Numeración exterior: Números de página en los bordes externos (LE,RO) para
+%    localización rápida al hojear el apunte impreso con el pulgar.
+% =========================================================================
+
+\documentclass[9pt,a4paper,twoside]{extarticle}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+% --- Tipografía de Alto Rendimiento para Tóner ---
+\usepackage{charter}                         % Serif robusta para lectura a 600 DPI
+\usepackage{tgheros}                         % Sans-Serif nítida para títulos
+\usepackage{courier}                         % Monospaced estándar legible para código
+\usepackage[spanish,es-tabla,es-noquoting]{babel}
+\usepackage{microtype}                       % Ajuste óptico de márgenes y espaciado
+\usepackage{multicol}                        % Entorno de columnas profesional y flexible
+
+% --- Geometría con Compensación de Encuadernación ---
+\usepackage{geometry}
+\geometry{
+    top=1.3cm,
+    bottom=1.3cm,
+    inner=1.4cm,                             % Margen interno base
+    outer=1.2cm,                             % Margen externo
+    bindingoffset=7mm,                       % Espacio reservado para anillado o perforado
+    headheight=11pt,
+    headsep=4mm,
+    footskip=6mm
+}
+\setlength{\columnsep}{6mm}                  % Separación clara entre columnas
+
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{listings}
+\usepackage[many]{tcolorbox}
+\usepackage{hyperref}
+
+% --- Espaciados y Párrafos ---
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2.5pt}
+
+% --- Encabezados y Pies para Impresión Doble Faz (Duplex) ---
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[LE]{\fontsize{7.5pt}{9pt}\selectfont\sffamily\color{black!80} \nouppercase{\leftmark}}
+\fancyhead[RO]{\fontsize{7.5pt}{9pt}\selectfont\sffamily\color{black!80} \nouppercase{\rightmark}}
+\fancyfoot[LE,RO]{\fontsize{8pt}{9.5pt}\selectfont\sffamily\bfseries \thepage}
+\fancyfoot[RE,LO]{\fontsize{7pt}{8.5pt}\selectfont\sffamily\color{black!60} Apuntes de Cátedra -- Uso Personal}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.3pt}
+
+% Estilo para primera página (sin encabezado superior)
+\fancypagestyle{firstpage}{
+    \fancyhf{}
+    \fancyfoot[C]{\fontsize{8pt}{9.5pt}\selectfont\sffamily\bfseries \thepage}
+    \renewcommand{\headrulewidth}{0pt}
+    \renewcommand{\footrulewidth}{0.3pt}
+}
+
+% --- Formato de Títulos (Sans-Serif y Líneas Finas en Negro Puro) ---
+\titleformat{\section}
+  {\fontsize{10pt}{12pt}\bfseries\sffamily\color{black}}
+  {\thesection.}{0.4em}{}
+  [\vspace{1pt}\titlerule]
+
+\titlespacing*{\section}{0pt}{5pt}{2.5pt}
+
+\titleformat{\subsection}
+  {\fontsize{8.8pt}{10.8pt}\bfseries\sffamily\color{black!90}}
+  {\thesubsection}{0.4em}{}
+
+\titlespacing*{\subsection}{0pt}{3.5pt}{1.5pt}
+
+\titleformat{\subsubsection}
+  {\fontsize{8.2pt}{9.8pt}\bfseries\sffamily\color{black!80}}
+  {\thesubsubsection}{0.4em}{}
+
+\titlespacing*{\subsubsection}{0pt}{2.5pt}{1pt}
+
+% --- Listas Compactas ---
+\setlist[itemize]{leftmargin=*,noitemsep,topsep=1.5pt,label=\tiny$\blacksquare$}
+\setlist[enumerate]{leftmargin=*,noitemsep,topsep=1.5pt}
+
+% --- Entornos TColorBox Monocromáticos de Alto Contraste ---
+% 1. Caja de Concepto / Teorema (Borde izquierdo grueso, fondo blanco puro)
+\newtcolorbox{laserbox}[1][]{
+    enhanced,
+    breakable,
+    colback=white,
+    colframe=black,
+    arc=0.8mm,
+    boxrule=0.5pt,
+    leftrule=3.2pt,
+    title={\fontsize{8pt}{9.5pt}\selectfont\sffamily\bfseries #1},
+    coltitle=black,
+    attach boxed title to top left={yshift=-2mm, xshift=2mm},
+    boxed title style={colback=white, boxrule=0.4pt, arc=0.5mm, top=1pt, bottom=1pt, left=3pt, right=3pt},
+    left=5pt, right=5pt, top=4pt, bottom=3pt,
+    before skip=3pt, after skip=3pt,
+    fontupper=\fontsize{8pt}{9.8pt}\selectfont
+}
+
+% 2. Caja de Resumen / Examen (Trama sutil al 4% de gris, no genera ruido visual)
+\newtcolorbox{summarybox}[1][]{
+    enhanced,
+    breakable,
+    colback=black!4,
+    colframe=black!80,
+    arc=0.8mm,
+    boxrule=0.6pt,
+    title={\fontsize{8pt}{9.5pt}\selectfont\sffamily\bfseries $\blacktriangleright$\ #1},
+    coltitle=black,
+    left=5pt, right=5pt, top=3pt, bottom=3pt,
+    before skip=3pt, after skip=3pt,
+    fontupper=\fontsize{8pt}{9.8pt}\selectfont
+}
+
+% 3. Caja de Fórmula / Ecuación Destacada
+\newtcolorbox{mathbox}[1][]{
+    enhanced,
+    colback=white,
+    colframe=black,
+    arc=0.5mm,
+    boxrule=0.5pt,
+    left=4pt, right=4pt, top=3pt, bottom=3pt,
+    before skip=2pt, after skip=2pt
+}
+
+% --- Configuración de Código (Listings en Blanco y Negro) ---
+\lstdefinestyle{laserstyle}{
+    basicstyle=\ttfamily\fontsize{7.5pt}{9pt}\selectfont\color{black},
+    keywordstyle=\bfseries\color{black},
+    stringstyle=\itshape\color{black!90},
+    commentstyle=\itshape\color{black!60},
+    frame=single,
+    framerule=0.4pt,
+    rulecolor=\color{black!70},
+    backgroundcolor=\color{white},
+    breaklines=true,
+    breakatwhitespace=false,
+    tabsize=2,
+    showstringspaces=false,
+    aboveskip=2pt,
+    belowskip=2pt,
+    xleftmargin=3pt,
+    xrightmargin=3pt
+}
+
+% Hipervínculos discretos para impresión (texto negro con línea de enlace punteada o invisible)
+\hypersetup{
+    colorlinks=false,
+    pdfborder={0 0 0},
+    pdfauthor={Hugo Joaquín Hidalgo},
+    pdfcreator={Antigravity Laser Engine}
+}
+
+% =========================================================================
+% INICIO DEL DOCUMENTO
+% =========================================================================
+\begin{document}
+\thispagestyle{firstpage}
+
+% --- Banner Superior de Ancho Completo ---
+\begin{tcolorbox}[
+    enhanced,
+    colback=white,
+    colframe=black,
+    arc=1mm,
+    boxrule=0.8pt,
+    left=8pt, right=8pt, top=5pt, bottom=5pt,
+    before skip=0pt, after skip=6pt
+]
+    \begin{minipage}[c]{0.74\textwidth}
+        {\fontsize{12pt}{14pt}\selectfont\bfseries\sffamily [TÍTULO DEL APUNTE O MATERIA]}\\[2pt]
+        {\fontsize{8.5pt}{10.5pt}\selectfont\sffamily [Subtítulo o Compendio de Unidades Temáticas]}
+    \end{minipage}
+    \hfill
+    \begin{minipage}[c]{0.24\textwidth}
+        \raggedleft\fontsize{7.5pt}{9pt}\selectfont\sffamily
+        \textbf{UNJu} -- Facultad de Ingeniería\\
+        \textbf{Edición:} Impresión Láser B/N\\
+        \textbf{Fecha:} \today
+    \end{minipage}
+\end{tcolorbox}
+
+% =========================================================================
+% CONTENIDO A DOBLE COLUMNA
+% =========================================================================
+\begin{multicols*}{2}
+
+\section{Introducción al Módulo}
+Texto introductorio maquetado en dos columnas con tipografía Charter. Observe la longitud equilibrada de las líneas que facilita el escaneo visual rápido sin forzar la trayectoria ocular.
+
+\begin{laserbox}[Concepto Clave / Definición]
+Aquí se describe una definición de examen o principio fundamental. La caja posee un fondo blanco puro que no gasta tóner ni genera manchas de tramado en la impresora láser, y destaca mediante una línea negra lateral sólida de 3.2pt.
+\end{laserbox}
+
+\subsection{Ecuaciones y Fórmulas Numéricas}
+Las ecuaciones matemáticas renderizan con total precisión gracias al motor AMS-LaTeX:
+\begin{mathbox}
+$$S(p) = \frac{T(1)}{T(p)} = \frac{1}{(1-f) + \frac{f}{p}} \le \frac{1}{s}$$
+\end{mathbox}
+Donde $s = 1 - f$ representa la fracción estrictamente secuencial del algoritmo.
+
+\subsection{Bloque de Comandos o Algoritmos}
+El resaltado de sintaxis para impresión láser monocromática prescinde de colores y utiliza \textbf{negritas} para palabras clave e \textit{itálicas} para comentarios:
+
+\begin{lstlisting}[style=laserstyle,language=bash]
+# Sincronizacion de datos hacia el servidor
+rsync -avz --delete /origen/ joaquin@192.168.20.200:/destino/
+\end{lstlisting}
+
+\section{Tablas y Comparativas de Cátedra}
+Las tablas utilizan la directriz tipográfica de \textit{Tufte} y \textit{Booktabs}: líneas horizontales limpias con grosores jerárquicos y ausencia total de líneas verticales que ensucien la lectura.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.15}
+\fontsize{7.5pt}{9pt}\selectfont
+\begin{tabularx}{\columnwidth}{l c X}
+\toprule
+\textbf{Elemento} & \textbf{Nivel} & \textbf{Impacto Operativo} \\
+\midrule
+Servidor Principal & Crítico & Caída total del sistema ERP. \\
+Red LAN / WiFi & Alto & Afecta a terminales de cobro. \\
+Backup en Disco & Medio & Permite recuperación DRP. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{summarybox}[Puntos Clave para Examen Oral]
+\begin{itemize}
+    \item Primer punto crítico evaluado por el docente.
+    \item Segundo punto referente a la justificación técnica.
+    \item Tercer punto con foco en normativa o cálculo.
+\end{itemize}
+\end{summarybox}
+
+\end{multicols*}
+
+\end{document}
