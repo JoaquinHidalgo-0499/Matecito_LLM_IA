@@ -86,6 +86,18 @@ Formato de alta densidad de información para apuntes de estudio, guías de labo
 
 ---
 
+### Formato B2: Apuntes Técnicos Monocromo Láser (1 Columna Sin Margen ni Encabezado)
+Formato de alta legibilidad optimizado para impresión física en impresoras láser monocromo (HP LaserJet / tóner 600 DPI):
+* **Características:**
+  - Tipografía sobria y robusta: **Bitstream Charter** a `10pt` para el cuerpo, **TeX Gyre Heros** para títulos sans-serif y **Courier** para código.
+  - **1 Columna Completa (`162 mm`):** Sin columna lateral exterior de notas (`marginparwidth = 0mm`), maximizando el espacio para tablas, fórmulas y definiciones.
+  - **Sin Encabezado Superior:** Cero running headers (`\fancyhead{}` vacío, `headheight=0pt`, `\headrulewidth=0pt`), maximizando la altura útil de lectura.
+  - **Compensación de Anillado Dúplex:** `bindingoffset = 6mm` para perforado mecánico seguro de 2 o 3 ganchos o espiral sin tocar el texto.
+  - **Cajas Técnicas Anti-Solapamiento:** Cajas `definicion`, `alertaparcial` y `formulabox` en blanco y negro con títulos integrados en el flujo superior interno para evitar cruces con bordes.
+  - **Plantilla base:** Ubicada en `.agents/skills/latex-compiler/templates/plantilla-apuntes-laser-1columna.tex` y en `archivos-generados/plantillas-impresion/plantilla-apuntes-laser-1columna.tex`.
+
+---
+
 ### Formato C: Currículum Vitae Ejecutivo Sans-Serif (1 Columna ATS-Friendly)
 Estructura lineal optimizada para roles de ingeniería, infraestructura, desarrollo y máxima compatibilidad con motores ATS:
 * **Características:**
