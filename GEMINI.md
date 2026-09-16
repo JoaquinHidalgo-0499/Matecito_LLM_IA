@@ -139,13 +139,29 @@ Cuando se pida verificar la salud, enlaces o estadísticas del cerebro:
 - **Visibilidad Explícita:** Indicar al inicio o en el reporte de la operación qué motor/modelo está procesando la tarea (ej: `[⚡ Motor: Gemini 3.7 Flash]` o `[🧠 Subagente: Gemini Pro]`).
 
 ## Normalización de Tags (Vocabulario Controlado)
-Al crear o editar notas, usar siempre las formas canónicas. Está **prohibido** usar las formas alternativas:
+Al crear o editar notas, usar siempre las formas canónicas. Las categorías documentales y formatos van siempre en **plural**. Está **prohibido** usar las formas alternativas:
 
-| ✅ Tag Canónico | ❌ Forma Prohibida |
-|---|---|
-| `ingesta` | `ingest` |
-| `clippings` | `clipping` |
+| ✅ Tag Canónico | ❌ Forma Prohibida | Justificación / Dominio |
+|---|---|---|
+| `ingesta` | `ingest` | Idioma español canónico |
+| `clippings` | `clipping` | Pluralización canónica |
+| `parciales` | `parcial` | Evaluaciones en plural |
+| `examenes` | `examen` | Evaluaciones en plural |
+| `cuestionarios` | `cuestionario` | Evaluaciones en plural |
+| `apuntes` | `apunte` | Alineado a carpeta `apuntes/` |
+| `conceptos` | `concepto` | Alineado a carpeta `conceptos/` |
+| `sesiones` | `sesion` | Alineado a carpeta `sesiones/` |
+| `clases` | `clase` | Clases de cátedra en plural |
+| `guias` | `guia` | Material de estudio en plural |
+| `resumenes` | `resumen` | Material de estudio en plural |
+| `actividades` | `actividad` | Prácticas y ejercitación en plural |
+| `laboratorios` | `laboratorio` | Prácticas en plural |
+| `redes` | `red` | Infraestructura / Cátedra en plural |
+| `herramientas` | `herramienta` | Recursos / Taller en plural |
+| `procesos` | `proceso` | Gestión y sistemas en plural |
+| `articulos` | `articles` | Normalización idiomática al español |
 
-- Si al hacer LINT o INGEST se detecta un tag no canónico, corregirlo en el archivo afectado antes de continuar.
+- Si al hacer LINT o INGEST se detecta un tag no canónico, corregirlo en el archivo afectado antes de continuar (o usar `scripts/brain-lint.py --fix-tags`).
 - El vocabulario controlado puede crecer: agregar nuevas filas a esta tabla cuando se detecten duplicados semánticos.
 - `brain-lint.py` valida automáticamente el cumplimiento estricto de este vocabulario.
+

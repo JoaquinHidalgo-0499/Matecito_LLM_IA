@@ -15,8 +15,24 @@ BRAIN_DIR = os.environ.get("BRAIN_DIR", os.path.join(WORKSPACE_ROOT, "brain"))
 # Vocabulario Controlado de Tags
 FORBIDDEN_TAGS = {
     "ingest": "ingesta",
-    "clipping": "clippings"
+    "clipping": "clippings",
+    "parcial": "parciales",
+    "examen": "examenes",
+    "cuestionario": "cuestionarios",
+    "apunte": "apuntes",
+    "concepto": "conceptos",
+    "sesion": "sesiones",
+    "clase": "clases",
+    "guia": "guias",
+    "resumen": "resumenes",
+    "actividad": "actividades",
+    "laboratorio": "laboratorios",
+    "red": "redes",
+    "herramienta": "herramientas",
+    "proceso": "procesos",
+    "articles": "articulos",
 }
+
 
 # Colores ANSI
 BLUE = "\033[1;34m"
@@ -143,7 +159,70 @@ def validate_session_sections(content, filepath):
 
     return warnings
 
+def fix_tags(brain_dir=None):
+    """Corrige automáticamente en el frontmatter de todas las notas los tags no canónicos."""
+    target_dir = os.path.abspath(brain_dir) if brain_dir else BRAIN_DIR
+    fixed_files = []
+
+    for root, _, files in os.walk(target_dir):
+        for f in files:
+            if f.endswith('.md'):
+                filepath = os.path.join(root, f)
+                try:
+                    with open(filepath, 'r', encoding='utf-8', errors='replace') as fh:
+                        content = fh.read()
+                except Exception:
+                    continue
+
+                lines = content.splitlines(keepends=True)
+                if not lines or lines[0].strip() != '---':
+                    continue
+
+                changed = False
+                new_lines = []
+                in_frontmatter = False
+
+                for i, line in enumerate(lines):
+                    if i == 0 and line.strip() == '---':
+                        in_frontmatter = True
+                        new_lines.append(line)
+                        continue
+                    if in_frontmatter and line.strip() == '---':
+                        in_frontmatter = False
+                        new_lines.append(line)
+                        continue
+
+                    if in_frontmatter and line.strip().startswith('tags:'):
+                        raw = line.split('tags:', 1)[1].strip()
+                        if raw.startswith('[') and raw.endswith(']'):
+                            inside = raw[1:-1]
+                            tags = [t.strip().strip('"\'') for t in inside.split(',') if t.strip()]
+                            updated_tags = []
+                            seen = set()
+                            tag_changed = False
+                            for t in tags:
+                                tl = t.lower()
+                                target = FORBIDDEN_TAGS.get(tl, tl)
+                                if target != tl:
+                                    tag_changed = True
+                                if target not in seen:
+                                    seen.add(target)
+                                    updated_tags.append(target)
+                            if tag_changed:
+                                changed = True
+                                line = f"tags: [{', '.join(updated_tags)}]\n"
+                    new_lines.append(line)
+
+                if changed:
+                    with open(filepath, 'w', encoding='utf-8') as fh:
+                        fh.writelines(new_lines)
+                    rel = os.path.relpath(filepath, target_dir)
+                    fixed_files.append(rel)
+
+    return fixed_files
+
 def audit_brain(verbose=False, brain_dir=None):
+
     target_dir = os.path.abspath(brain_dir) if brain_dir else BRAIN_DIR
     if not os.path.exists(target_dir):
         print(f"{RED}❌ Error: No se encontró el directorio {target_dir}{RESET}")
@@ -259,10 +338,23 @@ def main():
     parser = argparse.ArgumentParser(description="Auditor de Salud del Cerebro (brain-lint)")
     parser.add_argument("-v", "--verbose", action="store_true", help="Modo detallado")
     parser.add_argument("-j", "--json", action="store_true", help="Salida en JSON")
+    parser.add_argument("--fix-tags", action="store_true", help="Corrige automáticamente los tags no canónicos en todas las notas")
     parser.add_argument("--brain-dir", default=BRAIN_DIR, help="Ruta al directorio brain (por defecto: entorno local)")
     args = parser.parse_args()
 
+    if args.fix_tags:
+        fixed = fix_tags(brain_dir=args.brain_dir)
+        if fixed:
+            print(f"\n{GREEN}✔ Se corrigieron tags no canónicos en {len(fixed)} notas:{RESET}")
+            for f_rel in fixed[:10]:
+                print(f"   • {f_rel}")
+            if len(fixed) > 10:
+                print(f"   • ... y {len(fixed) - 10} notas más.")
+        else:
+            print(f"\n{GREEN}✔ Todos los tags ya están normalizados (cero correcciones necesarias).{RESET}")
+
     res = audit_brain(verbose=args.verbose, brain_dir=args.brain_dir)
+
 
     if args.json:
         out = {
