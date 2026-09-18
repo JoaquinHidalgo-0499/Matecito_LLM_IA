@@ -102,11 +102,11 @@ Formato de alta legibilidad optimizado para impresión física en impresoras lá
 Estructura lineal optimizada para roles de ingeniería, infraestructura, desarrollo y máxima compatibilidad con motores ATS:
 * **Características:**
   - Tipografía moderna Sans-Serif (`\usepackage{helvet}` + `\renewcommand{\familydefault}{\sfdefault}`).
-  - Tamaño base de `10pt` con márgenes equilibrados (`1.05 cm` a `1.25 cm`).
-  - Paleta corporativa sobria: Azul Marino Profundo (`#143769`), Slate Blue (`#2B6CB0`) y Carbón (`#1E293B`).
-  - Separación clara entre viñetas y títulos con línea divisoria fina (`titlerule`).
+  - Paleta corporativa sobria: Azul Marino Profundo (`#143769` / `#0F2A5B`), Slate Blue (`#2B6CB0` / `#2563EB`) y Carbón (`#1E293B`).
+  - **Macro Anti-Solapamiento:** Uso de `\cvsection` determinista con `\hrule` nativo en lugar del frágil `\titlerule` de `titlesec` para garantizar cero cruce de líneas sobre el contenido.
   - Enlaces interactivos clickeables (`tel:`, `mailto:`, LinkedIn, GitHub).
-  - **Plantilla base:** Ubicada en `.agents/skills/latex-compiler/templates/plantilla-cv-ejecutivo-sans.tex`.
+  - **Variante Estándar (1-2 Páginas a 10pt):** Márgenes `1.05 cm` a `1.25 cm`. Ubicada en `.agents/skills/latex-compiler/templates/plantilla-cv-ejecutivo-sans.tex`.
+  - **Variante Compacta (1 Página A4 Estricta a 9pt):** Clase `extarticle` a 9pt, márgenes calibrados (`top=0.7cm`, `bottom=0.55cm`, `sides=1.15cm`). Ubicada en `.agents/skills/latex-compiler/templates/plantilla-cv-ejecutivo-compacto-1pagina.tex`.
 
 ---
 

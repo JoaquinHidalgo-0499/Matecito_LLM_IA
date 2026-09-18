@@ -47,13 +47,12 @@
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{1.5pt}
 
-% --- FORMATO DE TÍTULOS DE SECCIÓN ---
-\titleformat{\section}
-  {\color{primary}\large\bfseries}
-  {}{0em}
-  {\MakeUppercase}
-  [\vspace{1.5pt}{\color{secondary}\titlerule[1.1pt]}]
-\titlespacing*{\section}{0pt}{5pt}{2.5pt}
+% --- MACRO DE SECCIÓN ROBUSTA SIN SOLAPAMIENTO (ANTI-OVERLAP) ---
+\newcommand{\cvsection}[1]{%
+  \vspace{5pt}%
+  {\color{primary}\large\bfseries\MakeUppercase{#1}}\par\vspace{1.5pt}%
+  {\color{secondary}\hrule height 0.9pt}\par\vspace{3pt}%
+}
 
 % --- ESTILO DE LISTAS LIMPIAS Y LEGIBLES ---
 \setlist[itemize]{leftmargin=1.2em, itemsep=1.0pt, parsep=0pt, topsep=0.8pt, label=\textcolor{secondary}{\scriptsize$\blacksquare$}}
@@ -84,13 +83,13 @@
 % ===============================================================================
 % PERFIL PROFESIONAL
 % ===============================================================================
-\section{Perfil Profesional}
+\cvsection{Perfil Profesional}
 [Párrafo sintético y directo de 4 a 6 líneas describiendo formación técnica formal, nivel académico actual, experiencia destacada y propuesta de valor clave. Evitar clichés y destacar tecnologías reales, orientación a resultados y capacidades operativas demostrables].
 
 % ===============================================================================
 % COMPETENCIAS TÉCNICAS CLAVE
 % ===============================================================================
-\section{Competencias Técnicas Clave}
+\cvsection{Competencias Técnicas Clave}
 \begin{itemize}
     \item \textbf{[Categoría 1 - Ej. Sistemas Operativos \& Servidores]:} [Detalle de sistemas, herramientas de línea de comandos, scripting, automatización y protocolos].
     \item \textbf{[Categoría 2 - Ej. Redes \& Telecomunicaciones]:} [Protocolos TCP/IP, direccionamiento, VLANs, hardware administrable, routers, firewalls, VPNs].
@@ -103,7 +102,7 @@
 % ===============================================================================
 % EXPERIENCIA LABORAL
 % ===============================================================================
-\section{Experiencia Laboral}
+\cvsection{Experiencia Laboral}
 
 \noindent\textbf{\color{primary}\normalsize [Puesto o Rol Desempeñado]}\hfill{\footnotesize\color{muted}\textbf{[Mes AAAA -- Mes AAAA / Presente]}}\par
 \noindent{\small\color{secondary}\textit{[Nombre de Empresa, Institución o Modo Independiente] \hfill [Ciudad, País]}}\par
@@ -138,7 +137,7 @@
 % ===============================================================================
 % PROYECTOS TÉCNICOS DESTACADOS
 % ===============================================================================
-\section{Proyectos Técnicos Destacados}
+\cvsection{Proyectos Técnicos Destacados}
 
 \noindent\textbf{\color{primary}\normalsize [Nombre del Proyecto de Software o Infraestructura]}\hfill{\footnotesize\color{muted}\textbf{[Año]}}\par
 \noindent{\small\color{secondary}\textit{[Subtítulo descriptivo o arquitectura general]}}\par
@@ -150,7 +149,7 @@
 % ===============================================================================
 % FORMACIÓN ACADÉMICA
 % ===============================================================================
-\section{Formación Académica}
+\cvsection{Formación Académica}
 
 \noindent\textbf{\color{primary}\normalsize [Carrera de Grado o Universitaria]}\hfill{\footnotesize\color{muted}\textbf{[Año Inicio -- En curso / Graduado]}}\par
 \noindent{\small\color{secondary}\textit{[Institución Educativa / Facultad]}}\par
@@ -177,7 +176,7 @@
 % ===============================================================================
 % CERTIFICACIONES Y CAPACITACIONES DESTACADAS
 % ===============================================================================
-\section{Certificaciones y Cursos Universitarios}
+\cvsection{Certificaciones y Cursos Universitarios}
 
 \begin{itemize}
     \item \textbf{[Nombre de Certificación Oficial] ([Carga Horaria]):} [Institución Emisora]. [Resolución o Código CUV si aplica]. [Resumen conciso de contenidos técnicos y tecnologías evaluadas].
@@ -188,7 +187,7 @@
 % ===============================================================================
 % DISPONIBILIDAD Y MODALIDAD OPERATIVA
 % ===============================================================================
-\section{Disponibilidad y Modalidad Operativa}
+\cvsection{Disponibilidad y Modalidad Operativa}
 \begin{itemize}
     \item \textbf{Disponibilidad \& Movilidad:} Inmediata, dedicación Full-Time, adaptabilidad a turnos rotativos y guardias operativas 24/7. Licencia de conducir [Clase / Vigencia].
     \item \textbf{Modalidad \& Equipamiento Propio:} Presencial en [Ciudad] o Remota / Híbrida. Equipado con hardware dedicado, enlace de conectividad estable y entornos Linux/Windows para soporte, pruebas y desarrollo continuo.

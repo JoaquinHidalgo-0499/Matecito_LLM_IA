@@ -1,0 +1,166 @@
+% =========================================================================
+% PLANTILLA MAESTRA: CURRÍCULUM VITAE EJECUTIVO COMPACTO (1 PÁGINA A4)
+% =========================================================================
+% Características:
+% - Formato 100% compatible con ATS (Applicant Tracking Systems) y flujo lineal.
+% - Tipografía moderna Sans-Serif (Helvetica) en escala real de 9pt (extarticle).
+% - Cero solapamientos: macro de sección determinista (\cvsection) con \hrule nativo.
+% - Presupuesto vertical calibrado: encaja rigurosamente en 1 página A4 sin desbordes.
+% - Jerarquía cromática corporativa: Azul Marino Profundo (#0F2A5B) y Azul Tecnológico (#2563EB).
+% - Secciones: Perfil, Experiencia Profesional, Proyectos Destacados, Competencias, Educación y Certificaciones.
+% =========================================================================
+
+\documentclass[9pt,a4paper]{extarticle}
+
+% --- PAQUETES DE CONFIGURACIÓN Y TIPOGRAFÍA ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage[a4paper,top=0.7cm,bottom=0.55cm,left=1.15cm,right=1.15cm]{geometry}
+\usepackage{xcolor}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{microtype}
+
+% --- PALETA DE COLORES PROFESIONAL ---
+\definecolor{primary}{RGB}{15, 42, 91}       % Azul corporativo profundo (#0F2A5B)
+\definecolor{secondary}{RGB}{37, 99, 235}    % Azul tecnológico (#2563EB)
+\definecolor{darktext}{RGB}{30, 41, 59}      % Carbón para lectura óptima (#1E293B)
+\definecolor{muted}{RGB}{100, 116, 139}      % Gris medio para fechas (#64748B)
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=secondary,
+    urlcolor=secondary,
+    pdftitle={Curriculum Vitae - [NOMBRE COMPLETO]},
+    pdfauthor={[NOMBRE COMPLETO]},
+    pdfsubject={Curriculum Vitae}
+}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+
+% --- MACRO DE SECCIÓN ROBUSTA SIN SOLAPAMIENTO (ANTI-OVERLAP) ---
+\newcommand{\cvsection}[1]{%
+  \vspace{4.5pt}%
+  {\color{primary}\normalsize\bfseries\MakeUppercase{#1}}\par\vspace{1.5pt}%
+  {\color{secondary}\hrule height 0.8pt}\par\vspace{3pt}%
+}
+
+% --- ESTILO DE LISTAS COMPACTO Y ELEGANTE ---
+\setlist[itemize]{leftmargin=1.15em, itemsep=0.4pt, parsep=0pt, topsep=1pt, label=\textcolor{secondary}{\tiny$\blacksquare$}}
+
+\begin{document}
+\color{darktext}
+
+% ===============================================================================
+% ENCABEZADO PRINCIPAL
+% ===============================================================================
+\begin{center}
+    {\fontsize{17}{20}\selectfont \bfseries \color{primary} [NOMBRE COMPLETO]} \\[1.5pt]
+    {\footnotesize \bfseries \color{darktext} [TÍTULO / CARRERA UNIVERSITARIA] \quad \textbar \quad [ESPECIALIZACIÓN O TITULACIÓN BASE]} \\[1.2pt]
+    {\scriptsize \bfseries \color{secondary} [TECNOLOGÍA 1] \quad \textbar \quad [TECNOLOGÍA 2] \quad \textbar \quad [TECNOLOGÍA 3] \quad \textbar \quad [TECNOLOGÍA 4]} \\[2.5pt]
+    
+    \scriptsize
+    [Ciudad, Provincia, País] (Disponible Remoto / Presencial) \quad \textbar \quad
+    Tel / WhatsApp: \href{tel:+549000000000}{(+54) 000-000000} \quad \textbar \quad
+    Email: \href{mailto:correo@ejemplo.com}{correo@ejemplo.com} \\
+    LinkedIn: \href{https://linkedin.com/in/usuario}{linkedin.com/in/usuario} \quad \textbar \quad
+    GitHub: \href{https://github.com/usuario}{github.com/usuario}
+\end{center}
+
+\vspace{-6pt}
+
+% ===============================================================================
+% PERFIL PROFESIONAL
+% ===============================================================================
+\cvsection{Perfil Profesional}
+[Párrafo sintético de 4 a 5 líneas describiendo formación técnica formal, nivel académico, especialización en tecnologías clave y orientación a resultados demostrables. Enfatizar capacidades operativas, resolución de problemas y enfoque en arquitecturas robustas y escalables].
+
+% ===============================================================================
+% EXPERIENCIA TÉCNICA & PROFESIONAL
+% ===============================================================================
+\cvsection{Experiencia Técnica \& Profesional}
+
+\noindent\textbf{\color{primary}\footnotesize [Puesto o Rol Principal Desempeñado]}\hfill{\scriptsize\color{muted}\textbf{[Año Inicio -- Presente]}}\par
+\noindent{\scriptsize\color{secondary}\textit{[Empresa, Consultora o Modalidad Independiente \hfill Ciudad, País / Remoto]}}\par
+\begin{itemize}
+    \item [Logro técnico concreto: desarrollo de software, automatización, infraestructura o procesos implementados].
+    \item [Administración técnica, despliegue de sistemas, seguridad o gestión de bases de datos orientadas al negocio].
+    \item [Trato directo con clientes/equipos, negociación de requerimientos técnicos, documentación y soporte operativo].
+\end{itemize}
+
+\vspace{1.0pt}
+
+\noindent\textbf{\color{primary}\footnotesize [Puesto Secundario, Rol de Mentoría o Soporte]}\hfill{\scriptsize\color{muted}\textbf{[Año Inicio -- Año Fin / Presente]}}\par
+\noindent{\scriptsize\color{secondary}\textit{[Institución Educativa, Comunidad o PyME \hfill Ciudad, País]}}\par
+\begin{itemize}
+    \item [Mentoría, capacitación, soporte técnico especializado o resolución de contingencias críticas].
+    \item [Elaboración de material técnico, guías operativas o documentación de soporte de alto impacto].
+\end{itemize}
+
+% ===============================================================================
+% PROYECTOS DESTACADOS DE SOFTWARE & TECNOLOGÍA
+% ===============================================================================
+\cvsection{Proyectos Destacados de Software \& Tecnología}
+
+\noindent\textbf{\color{primary}\footnotesize [Nombre del Proyecto Estrella 1]}\hfill{\scriptsize\color{muted}\textbf{[Año]}}\par
+\noindent{\scriptsize\color{secondary}\textit{[Arquitectura técnica, stack utilizado y objetivo central]}}\par
+\begin{itemize}
+    \item [Diseño e implementación de arquitectura técnica, componentes clave y métricas de rendimiento].
+    \item [Integración de APIs, persistencia, automatización o despliegue contenerizado].
+    \item [Herramientas de testing, observabilidad o integración continua empleadas].
+\end{itemize}
+
+\vspace{1.0pt}
+
+\noindent\textbf{\color{primary}\footnotesize [Nombre del Proyecto Estrella 2]}\hfill{\scriptsize\color{muted}\textbf{[Año]}}\par
+\noindent{\scriptsize\color{secondary}\textit{[Arquitectura técnica, automatización o infraestructura]}}\par
+\begin{itemize}
+    \item [Desarrollo de módulos funcionales, eventos asíncronos o securización de sistemas].
+    \item [Gestión de infraestructura, optimización de recursos y manejo de excepciones].
+\end{itemize}
+
+% ===============================================================================
+% COMPETENCIAS TÉCNICAS CLAVE
+% ===============================================================================
+\cvsection{Competencias Técnicas Clave}
+\begin{itemize}
+    \item \textbf{[Área 1 - Ej. IA Aplicada \& Modelos]:} [Pipelines RAG, embeddings vectoriales, orquestación LLMs, frameworks, prompts estructurados].
+    \item \textbf{[Área 2 - Ej. Desarrollo Backend \& APIs]:} [Lenguajes principales, frameworks web, APIs RESTful, persistencia SQL/NoSQL].
+    \item \textbf{[Área 3 - Ej. Infraestructura, Cloud \& DevOps]:} [Linux, Docker, Docker Compose, redes TCP/IP, VPNs, Git/GitHub, CI/CD].
+    \item \textbf{[Área 4 - Ej. Calidad \& Ciberseguridad]:} [Testing unitario/funcional, métricas ISO, modelos de amenaza, escaneo de red, análisis forense].
+\end{itemize}
+
+% ===============================================================================
+% FORMACIÓN ACADÉMICA
+% ===============================================================================
+\cvsection{Formación Académica}
+
+\noindent\textbf{\color{primary}\footnotesize [Carrera de Grado o Universitaria]}\hfill{\scriptsize\color{muted}\textbf{[Año Inicio -- En curso / Graduado]}}\par
+\noindent{\scriptsize\color{secondary}\textit{[Universidad / Facultad \hfill Ciudad, País]}}\par
+\begin{itemize}
+    \item Materias troncales promocionadas o áreas de especialización destacadas.
+    \item Estado actual de avance curricular y proyectos académicos relevantes.
+\end{itemize}
+
+\vspace{1.0pt}
+
+\noindent\textbf{\color{primary}\footnotesize [Título Técnico o Secundario de Base]}\hfill{\scriptsize\color{muted}\textbf{[Año Inicio -- Año Fin]}}\par
+\noindent{\scriptsize\color{secondary}\textit{[Institución Educativa \hfill Ciudad, País]}}\par
+
+% ===============================================================================
+% CERTIFICACIONES PROFESIONALES & IDIOMAS
+% ===============================================================================
+\cvsection{Certificaciones Profesionales \& Idiomas}
+\begin{itemize}
+    \item \textbf{[Certificación 1]:} [Institución Emisora] ([Año]) -- [Detalle técnico o código de validación].
+    \item \textbf{[Certificación 2]:} [Institución Emisora] ([Año]) -- [Carga horaria y tecnologías evaluadas].
+    \item \textbf{Idioma Inglés:} [Nivel - Ej. Nivel B2 (Intermedio-Avanzado)] -- [Certificaciones o acreditaciones].
+\end{itemize}
+
+\end{document}
