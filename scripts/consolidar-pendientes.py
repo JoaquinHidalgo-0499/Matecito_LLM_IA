@@ -55,6 +55,8 @@ def extract_pendientes(content):
 def main():
     parser = argparse.ArgumentParser(description="Consolidar pendientes de sesiones de braind.")
     parser.add_argument('--output', default='brain/Tablero-Pendientes.md', help='Archivo de salida Markdown (relativo a braind_dir si no es absoluto).')
+    parser.add_argument('--archive-output', default='brain/Tablero-Pendientes-Archivo.md', help='Archivo Markdown para pendientes archivados.')
+    parser.add_argument('--meses-activos', type=int, default=2, help='Cantidad de meses más recientes a conservar en el tablero activo (default: 2, el resto se archiva).')
     parser.add_argument('--json', action='store_true', help='Generar salida en formato JSON en lugar de Markdown (hacia stdout).')
     parser.add_argument('-v', '--verbose', action='store_true', help='Habilitar logs detallados.')
     parser.add_argument('--braind-dir', default=str(Path(__file__).resolve().parent.parent), help='Ruta raíz de la base de conocimiento.')
@@ -147,11 +149,16 @@ def main():
         print(json.dumps(out_data, indent=2, ensure_ascii=False))
         return
 
+    # Separar meses activos de archivados
+    meses_activos_keys = meses_ordenados[:args.meses_activos] if args.meses_activos > 0 else meses_ordenados
+    meses_archivo_keys = meses_ordenados[args.meses_activos:] if args.meses_activos > 0 else []
+
+    pendientes_activos = sum(len(tareas_por_mes[m]) for m in meses_activos_keys)
+    pendientes_archivados = sum(len(tareas_por_mes[m]) for m in meses_archivo_keys)
+
     output_path = Path(args.output)
     if not output_path.is_absolute():
         output_path = braind_dir / output_path
-        
-    # Create parent dirs if necessary
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     with open(output_path, 'w', encoding='utf-8') as f:
@@ -163,25 +170,56 @@ def main():
         f.write("# Tablero de Pendientes\n\n")
         
         f.write(f"**Última actualización:** {datetime.now().strftime('%Y-%m-%d %H:%M')}\n")
-        f.write(f"**Navegación:** [[index]] | [[index-sesiones]]\n\n")
+        nav_extra = " | [[Tablero-Pendientes-Archivo]]" if meses_archivo_keys else ""
+        f.write(f"**Navegación:** [[index]] | [[index-sesiones]]{nav_extra}\n\n")
         
         f.write(f"**Métricas:**\n")
         f.write(f"- Sesiones analizadas: {total_sesiones}\n")
-        f.write(f"- Pendientes activos: {total_pendientes}\n")
+        f.write(f"- Pendientes activos: {pendientes_activos}\n")
+        if pendientes_archivados > 0:
+            f.write(f"- Pendientes en archivo histórico: {pendientes_archivados} (ver [[Tablero-Pendientes-Archivo]])\n")
         if duplicados_eliminados > 0:
             f.write(f"- Duplicados consolidados: {duplicados_eliminados}\n")
         f.write("\n")
         
-        for mes in meses_ordenados:
+        for mes in meses_activos_keys:
             f.write(f"## {mes}\n\n")
-            # sort tasks by date descending within month
             tareas = sorted(tareas_por_mes[mes], key=lambda x: x['fecha'], reverse=True)
             for t in tareas:
                 refs = ', '.join(f"[[{s}]]" for s in t['sesiones'])
                 f.write(f"- [ ] {t['tarea']} (en {refs})\n")
             f.write("\n")
             
-    logging.info(f"Tablero generado en {output_path} ({total_pendientes} pendientes, {duplicados_eliminados} duplicados consolidados)")
+    logging.info(f"Tablero activo generado en {output_path} ({pendientes_activos} pendientes activos)")
+
+    # Generar archivo histórico si corresponde
+    if meses_archivo_keys and args.archive_output:
+        archive_path = Path(args.archive_output)
+        if not archive_path.is_absolute():
+            archive_path = braind_dir / archive_path
+        archive_path.parent.mkdir(parents=True, exist_ok=True)
+
+        with open(archive_path, 'w', encoding='utf-8') as f:
+            f.write("---\n")
+            f.write("type: board\n")
+            f.write("title: Tablero de Pendientes (Archivo Histórico)\n")
+            f.write("tags: [gestion, pendientes]\n")
+            f.write("---\n\n")
+            f.write("# Tablero de Pendientes (Archivo Histórico)\n\n")
+            f.write(f"**Navegación:** [[Tablero-Pendientes]] — Volver al Tablero Activo | [[index]] | [[index-sesiones]]\n\n")
+            f.write(f"**Métricas:**\n")
+            f.write(f"- Pendientes archivados: {pendientes_archivados}\n")
+            f.write(f"- Período histórico: {meses_archivo_keys[-1]} a {meses_archivo_keys[0]}\n\n")
+
+            for mes in meses_archivo_keys:
+                f.write(f"## {mes}\n\n")
+                tareas = sorted(tareas_por_mes[mes], key=lambda x: x['fecha'], reverse=True)
+                for t in tareas:
+                    refs = ', '.join(f"[[{s}]]" for s in t['sesiones'])
+                    f.write(f"- [ ] {t['tarea']} (en {refs})\n")
+                f.write("\n")
+
+        logging.info(f"Archivo de pendientes generado en {archive_path} ({pendientes_archivados} pendientes archivados)")
 
 if __name__ == '__main__':
     main()
