@@ -41,49 +41,18 @@ Cuando se proporcionen fragmentos de texto, bitácoras o ideas:
 - **Recursos Técnicos y Hardware:** Activar skill `ingest-resource` para registrar servidores, red, inventario de taller y equipamiento en `brain/recursos/`.
 - **Compilación de Documentos LaTeX:** Activar skill `latex-compiler` para maquetar y compilar tratados o guías en PDF dentro de `archivos-generados/<proyecto>/`.
 
-**Notas de Sesión** (`/brain/sesiones/AAAA-MM-DD-nombre-corto.md`):
-- Frontmatter:
-  ```yaml
-  ---
-  type: session
-  date: AAAA-MM-DD
-  title: "Título descriptivo"
-  tags: [etiquetas]
-  status: active
-  ---
-  ```
-- Estructurar con secciones: `## Contexto`, `## Decisiones`, `## Pendientes`.
+**Tipos de Nota y Frontmatter:**
 
-**Notas de Concepto** (`/brain/conceptos/nombre-descriptivo.md`):
-- Frontmatter:
-  ```yaml
-  ---
-  type: concept
-  title: "Título descriptivo"
-  tags: [etiquetas]
-  ---
-  ```
+| Tipo | Ruta | Campos Requeridos |
+|:---|:---|:---|
+| `session` | `brain/sesiones/AAAA-MM-DD-nombre-corto.md` | `type`, `date`, `title`, `tags`, `status: active` |
+| `concept` | `brain/conceptos/nombre-descriptivo.md` | `type`, `title`, `tags` |
+| `resource` | `brain/recursos/recursos-nombre-descriptivo.md` | `type`, `title`, `tags` |
+| `apunte` | `brain/apuntes/nombre-descriptivo.md` | `type`, `title`, `tags` |
 
-**Notas de Recurso** (`/brain/recursos/recursos-nombre-descriptivo.md`):
-- Frontmatter:
-  ```yaml
-  ---
-  type: resource
-  title: "Título descriptivo"
-  tags: [etiquetas]
-  ---
-  ```
-
-**Notas de Apunte** (`/brain/apuntes/nombre-descriptivo.md`):
-- Frontmatter:
-  ```yaml
-  ---
-  type: apunte
-  title: "Título descriptivo"
-  tags: [etiquetas]
-  ---
-  ```
-- Alberga compendios y tratados de estudio para exámenes, guías integradoras, bancos de preguntas/parciales y manuales/consignas de laboratorios de cátedra.
+- Sesiones: secciones obligatorias `## Contexto`, `## Decisiones`, `## Pendientes`.
+- Apuntes: compendios de estudio, bancos de examen, guías de laboratorio.
+- Especificaciones detalladas de frontmatter y estructura en cada skill de ingesta (`ingest-session`, `ingest-materia`, `ingest-resource`, `ingest-clipping`).
 
 ### 2. QUERY (Consulta)
 Cuando se hagan preguntas sobre el contenido:
@@ -135,33 +104,12 @@ Cuando se pida verificar la salud, enlaces o estadísticas del cerebro:
 - **Consultas Rápidas Exentas:** Preguntas de definición puntual corta (ej. "¿Qué significa la sigla CIA?"), sintaxis de código o aclaraciones breves no requieren invocar el RAG obligatoriamente, respondiéndose de forma instantánea para evitar latencia innecesaria.
 
 ## Transparencia y Enrutamiento Dinámico de Modelos
-- **Evaluación Previa y Prioridad de Calidad (First-Time Right):** Para toda tarea que involucre generación de código, scripts, configuraciones Docker, arquitectura de sistemas o depuración, **priorizar siempre la máxima capacidad (Subagente PRO / Thinking)** sin escatimar en consumo de tokens. La meta absoluta es la precisión impecable al primer intento, evitando iteraciones o correcciones redundantes.
-- **Visibilidad Explícita:** Indicar al inicio o en el reporte de la operación qué motor/modelo está procesando la tarea (ej: `[⚡ Motor: Gemini 3.7 Flash]` o `[🧠 Subagente: Gemini Pro]`).
+- **Prioridad de Calidad (First-Time Right):** Para refactors de más de 100 líneas, arquitectura de sistemas, depuración multi-archivo o generación de documentos complejos, priorizar subagentes PRO. Para tareas puntuales (crear notas, ejecutar scripts, greps, consultas rápidas), Flash es suficiente.
+- **Visibilidad de Motor:** Indicar el motor/modelo **solo cuando sea conocido con certeza** por el agente (ej: al delegar a un subagente con modelo explícito). No fabricar encabezados de motor cuando el agente desconoce su propio runtime.
 
 ## Normalización de Tags (Vocabulario Controlado)
-Al crear o editar notas, usar siempre las formas canónicas. Las categorías documentales y formatos van siempre en **plural**. Está **prohibido** usar las formas alternativas:
-
-| ✅ Tag Canónico | ❌ Forma Prohibida | Justificación / Dominio |
-|---|---|---|
-| `ingesta` | `ingest` | Idioma español canónico |
-| `clippings` | `clipping` | Pluralización canónica |
-| `parciales` | `parcial` | Evaluaciones en plural |
-| `examenes` | `examen` | Evaluaciones en plural |
-| `cuestionarios` | `cuestionario` | Evaluaciones en plural |
-| `apuntes` | `apunte` | Alineado a carpeta `apuntes/` |
-| `conceptos` | `concepto` | Alineado a carpeta `conceptos/` |
-| `sesiones` | `sesion` | Alineado a carpeta `sesiones/` |
-| `clases` | `clase` | Clases de cátedra en plural |
-| `guias` | `guia` | Material de estudio en plural |
-| `resumenes` | `resumen` | Material de estudio en plural |
-| `actividades` | `actividad` | Prácticas y ejercitación en plural |
-| `laboratorios` | `laboratorio` | Prácticas en plural |
-| `redes` | `red` | Infraestructura / Cátedra en plural |
-| `herramientas` | `herramienta` | Recursos / Taller en plural |
-| `procesos` | `proceso` | Gestión y sistemas en plural |
-| `articulos` | `articles` | Normalización idiomática al español |
-
+Al crear o editar notas, tags siempre en **plural español canónico**. Formas obligatorias: `ingesta`, `clippings`, `parciales`, `examenes`, `cuestionarios`, `apuntes`, `conceptos`, `sesiones`, `clases`, `guias`, `resumenes`, `actividades`, `laboratorios`, `redes`, `herramientas`, `procesos`, `articulos`. Prohibidas sus formas singulares o en inglés (ej: `parcial`, `sesion`, `ingest`, `articles`).
 - Si al hacer LINT o INGEST se detecta un tag no canónico, corregirlo en el archivo afectado antes de continuar (o usar `scripts/brain-lint.py --fix-tags`).
-- El vocabulario controlado puede crecer: agregar nuevas filas a esta tabla cuando se detecten duplicados semánticos.
+- El vocabulario puede crecer: agregar nuevas formas cuando se detecten duplicados semánticos.
 - `brain-lint.py` valida automáticamente el cumplimiento estricto de este vocabulario.
 
