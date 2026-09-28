@@ -27,48 +27,14 @@ Procedimiento estandarizado para la redacción, maquetación y compilación de d
 
 ## 3. Plantillas y Estructuras Estándar Recomendadas
 
-### Formato A: Tratado Académico Formal / Tesis
-Para documentos extensos, monografías o informes formales con portada, resumen y tabla de contenidos:
-
-```latex
-\documentclass[11pt,a4paper]{article}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage[spanish,es-tabla]{babel}
-\usepackage{geometry}
-\geometry{top=2.5cm,bottom=2.5cm,left=2.5cm,right=2.5cm}
-\usepackage{amsmath,amssymb,amsfonts}
-\usepackage{graphicx}
-\usepackage{booktabs}
-\usepackage{xcolor}
-\usepackage{microtype}
-\usepackage{hyperref}
-\hypersetup{
-    colorlinks=true,
-    linkcolor=blue!80!black,
-    urlcolor=blue!80!black,
-    citecolor=blue!80!black
-}
-
-\title{\textbf{Título del Documento}}
-\author{Hugo Joaquín Hidalgo}
-\date{\today}
-
-\begin{document}
-\maketitle
-
-\begin{abstract}
-Resumen ejecutivo del documento o guía técnica.
-\end{abstract}
-
-\tableofcontents
-\newpage
-
-\section{Introducción}
-Contenido del documento...
-
-\end{document}
-```
+### Formato A: Tratado Académico Formal / Tesis / Monografía
+Para documentos extensos, monografías, informes de investigación formales o tesis con portada institucional, resumen ejecutivo y tabla de contenidos:
+* **Características:**
+  - Tipografía clásica a `11pt` con clase `article` y microtipografía activa.
+  - Márgenes estándar ISO de `2.5 cm` con `geometry`.
+  - Portada formal con metadatos completos (`\maketitle`), bloque de resumen (`abstract`) y tabla de contenidos interactiva (`\tableofcontents`).
+  - Tablas limpias con `booktabs` / `tabularx` y soporte matemático robusto (`amsmath`, `amssymb`).
+  - **Plantilla base:** Ubicada en `.agents/skills/latex-compiler/templates/plantilla-tratado-formal.tex` y en `archivos-generados/plantillas/plantilla-tratado-formal.tex`.
 
 ---
 
@@ -84,11 +50,11 @@ Formato de alta densidad de información para apuntes de estudio, guías de labo
   - **Cajas explicativas (`conceptbox`):** Fondo blanco puro (`colback=white`) para ahorro crítico de tóner, marco fino (`boxrule=0.4pt`), línea lateral cromática (`leftrule=3.5pt`) y título en acento de color integrado.
   - **Tablas Limpias y Estructuradas:** Uso de `booktabs` (`\toprule`, `\midrule`, `\bottomrule`) con `tabularx`. Queda prohibido usar rellenos oscuros en cabeceras de tabla; los títulos de columna van en negrita con texto negro puro.
   - **Cajas de código (`codebox`):** `tcolorbox` con `listings` y estilo `bashstyle`.
-  - **Plantilla base:** Ubicada en `.agents/skills/latex-compiler/templates/plantilla-apuntes-compactos-pastel.tex` y en `archivos-generados/plantillas-impresion/plantilla-apuntes-compactos-pastel.tex`.
+  - **Plantilla base:** Ubicada en `.agents/skills/latex-compiler/templates/plantilla-apuntes-pastel.tex` y en `archivos-generados/plantillas/plantilla-apuntes-pastel.tex`.
 
 ---
 
-### Formato B2: Apuntes Técnicos Monocromo Láser (1 Columna Sin Margen ni Encabezado)
+### Formato B2: Apuntes Técnicos Monocromática (1 Columna Sin Margen ni Encabezado)
 Formato de alta legibilidad optimizado para impresión física en impresoras láser monocromo (HP LaserJet / tóner 600 DPI):
 * **Características:**
   - Tipografía sobria y robusta: **Bitstream Charter** a `10pt` para el cuerpo, **TeX Gyre Heros** para títulos sans-serif y **Courier** para código.
@@ -96,7 +62,7 @@ Formato de alta legibilidad optimizado para impresión física en impresoras lá
   - **Sin Encabezado Superior:** Cero running headers (`\fancyhead{}` vacío, `headheight=0pt`, `\headrulewidth=0pt`), maximizando la altura útil de lectura.
   - **Compensación de Anillado Dúplex:** `bindingoffset = 6mm` para perforado mecánico seguro de 2 o 3 ganchos o espiral sin tocar el texto.
   - **Cajas Técnicas Anti-Solapamiento:** Cajas `definicion`, `alertaparcial` y `formulabox` en blanco y negro con títulos integrados en el flujo superior interno para evitar cruces con bordes.
-  - **Plantilla base:** Ubicada en `.agents/skills/latex-compiler/templates/plantilla-apuntes-laser-1columna.tex` y en `archivos-generados/plantillas-impresion/plantilla-apuntes-laser-1columna.tex`.
+  - **Plantilla base:** Ubicada en `.agents/skills/latex-compiler/templates/plantilla-apuntes-monocromatica.tex` y en `archivos-generados/plantillas/plantilla-apuntes-monocromatica.tex`.
 
 ---
 
@@ -120,6 +86,19 @@ Estructura visual asimétrica de alto impacto para perfiles donde la presentaci�
   - Íconos vectoriales y banderas de idiomas programados nativamente en TikZ (sin dependencias externas).
   - Cajas de perfil profesional en `tcolorbox` con borde lateral sutil.
   - **Plantilla base:** Ubicada en `.agents/skills/latex-compiler/templates/plantilla-cv-moderno-dos-columnas.tex`.
+
+---
+
+### Formato E: Transcripción de Diapositivas y Texto Ultra-Denso (2 Columnas Continuas)
+Formato de compresión de superficie diseñado para vaciar presentaciones de PowerPoint (PPT de 30-80 filminas), guías infladas o apuntes largos sin resumir:
+* **Características:**
+  - Formato a 2 columnas continuas (`twocolumn`) con regla divisoria sutil (`0.3pt`) para empaquetar viñetas breves a longitud de línea ergonómica (55–65 caracteres).
+  - Geometría extrema de `1.0 cm` en todos los bordes (92% de superficie útil aprovechada).
+  - Cero páginas de portada ni banners iniciales: cabecera mínima de 1 renglón e inicio inmediato en página 1.
+  - Macro `\filmina{N}{Título}`: Marcador inline sin salto de página que permite conservar la referencia de la diapositiva original en lectura corrida continua.
+  - Tipografía Bitstream Charter a `9pt` monocromo 600 DPI, ultra económica en tóner y de alta nitidez en papel.
+  - Pie de página compacto con contador dinámico (`Pág. X de Y`).
+  - **Plantilla base:** Ubicada en `.agents/skills/latex-compiler/templates/plantilla-transcripcion-diapositivas.tex` y en `archivos-generados/plantillas/plantilla-transcripcion-diapositivas.tex`.
 
 ---
 

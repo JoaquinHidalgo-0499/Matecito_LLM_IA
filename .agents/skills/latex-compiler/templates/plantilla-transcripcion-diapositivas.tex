@@ -1,0 +1,194 @@
+% =========================================================================
+% PLANTILLA MAESTRA: TRANSCRIPCIÓN DE DIAPOSITIVAS Y TEXTO ULTRA-DENSO
+% =========================================================================
+% Optimizada para vaciar presentaciones de PowerPoint (PPT/PDF de 30-80 filminas),
+% guías infladas o transcripciones completas sin resumir, maximizando la
+% superficie útil de papel A4 y reduciendo drásticamente el número de páginas.
+%
+% Principios de Diseño Editorial:
+% 1. Formato a 2 Columnas Continuas (twocolumn): Longitud de línea ergonómica
+%    (55-65 caracteres) perfecta para viñetas breves y oraciones cortas de PPT.
+% 2. Geometría Extrema (Márgenes de 1.0 cm): Cero desperdicio de papel (92% de
+%    superficie útil aprovechada).
+% 3. Cero Desperdicio Inicial: Sin portada separada, sin índice y sin banners
+%    pesados. El texto comienza en el renglón 1 de la página 1.
+% 4. Macro \filmina{N}{Título}: Marcador de diapositiva inline sin salto de
+%    página, permitiendo ubicar el contenido de la presentación en lectura continua.
+% 5. Tipografía Láser Monocromo 600 DPI: Bitstream Charter a 9pt con microtype
+%    para empaquetado perfecto sin huérfanas ni desbordes.
+% =========================================================================
+
+\documentclass[9pt,a4paper,twocolumn]{extarticle}
+
+% --- Codificación y Lenguaje ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-tabla,es-noquoting]{babel}
+
+% --- Tipografía Láser de Alto Rendimiento ---
+\usepackage{charter}                         % Bitstream Charter: Excelente visibilidad con tóner
+\usepackage{tgheros}                         % TeX Gyre Heros para títulos sans-serif
+\usepackage{courier}                         % Courier para parámetros y comandos monoespaciados
+\usepackage{microtype}                       % Justificación óptica de alta densidad
+
+% --- Geometría Extrema ---
+\usepackage{geometry}
+\geometry{
+    top=1.0cm,
+    bottom=1.1cm,
+    left=1.0cm,
+    right=1.0cm,
+    columnsep=6mm,                           % Separación compacta entre columnas
+    headheight=0pt,                          % Cero encabezado superior
+    headsep=0pt,                             % Cero separación de encabezado
+    footskip=6mm                             % Pie de página ultra compacto
+}
+
+% Regla divisoria vertical sutil entre columnas
+\setlength{\columnseprule}{0.3pt}
+
+% --- Interlineado y Párrafos ---
+\linespread{1.08}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2pt}
+\raggedbottom
+
+% --- Paquetes Complementarios ---
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{lastpage}
+\usepackage{hyperref}
+
+% --- Listas Ultra-Compactas para Viñetas de PPT ---
+\setlist[itemize]{leftmargin=1.1em, itemsep=1.2pt, parsep=0pt, topsep=1.5pt, label=\raisebox{0.15ex}{\tiny$\blacktriangleright$}}
+\setlist[enumerate]{leftmargin=1.3em, itemsep=1.2pt, parsep=0pt, topsep=1.5pt}
+
+% --- Configuración de Código / Comandos ---
+\lstdefinestyle{compactcode}{
+    basicstyle=\ttfamily\fontsize{7.5pt}{9pt}\selectfont\color{black},
+    keywordstyle=\bfseries\color{black},
+    commentstyle=\itshape\color{black!70},
+    stringstyle=\color{black!90},
+    showstringspaces=false,
+    frame=single,
+    framerule=0.3pt,
+    rulecolor=\color{black!60},
+    backgroundcolor=\color{white},
+    breaklines=true,
+    tabsize=2,
+    aboveskip=3pt,
+    belowskip=3pt,
+    xleftmargin=4pt,
+    xrightmargin=4pt
+}
+
+% --- Pie de Página Minimalista ---
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[C]{\fontsize{7.5pt}{9pt}\selectfont\color{black!70} Pág. \thepage\ de \pageref{LastPage}}
+
+% --- Macro de Diapositiva / Filmina ---
+\newcommand{\filmina}[2]{%
+  \par\vspace{3.5pt}%
+  \noindent\textbf{\sffamily\fontsize{8.5pt}{10.5pt}\selectfont $\blacksquare$\ Diapo #1: #2}%
+  \par\vspace{1.5pt}%
+}
+
+% --- Macro de Énfasis / Definición Inline ---
+\newcommand{\destacado}[1]{%
+  \par\vspace{2.5pt}%
+  \noindent\textit{\textbf{#1}}%
+  \par\vspace{1pt}%
+}
+
+\hypersetup{
+    colorlinks=false,
+    pdfborder={0 0 0}
+}
+
+% =========================================================================
+% CUERPO DEL DOCUMENTO
+% =========================================================================
+\begin{document}
+
+% --- Cabecera de 1 sola línea (Cero desperdicio vertical) ---
+\noindent
+{\fontsize{11pt}{13pt}\selectfont\sffamily\bfseries [ASIGNATURA] -- [UNIDAD / TEMA]}\hfill
+{\fontsize{7.5pt}{9.5pt}\selectfont\sffamily\color{black!75} Transcripción de Presentación / Cátedra}\\[1pt]
+\rule{\linewidth}{0.6pt}\vspace{1.5mm}
+
+% =========================================================================
+% EJEMPLO DE TRANSCRIPCIÓN SECUENCIAL DE FILMINAS
+% =========================================================================
+
+\filmina{1}{Carátula e Introducción al Módulo}
+\begin{itemize}
+    \item Presentación de la unidad temática: Fundamentos de Arquitectura de Sistemas Distribuidos.
+    \item Objetivos del módulo: Comprender modelos de consistencia, latencia de red y particionamiento.
+    \item Bibliografía obligatoria: Tanenbaum, Cap. 4; Coulouris, Cap. 2 y 3.
+\end{itemize}
+
+\filmina{2}{¿Qué es un Sistema Distribuido?}
+\begin{itemize}
+    \item Colección de computadoras independientes que aparecen ante los usuarios como un sistema único y coherente.
+    \item \textbf{Características fundamentales:}
+    \begin{itemize}
+        \item Ausencia de reloj global compartido.
+        \item Memoria físicamente distribuida (paso de mensajes).
+        \item Concurrencia inherente de procesos y componentes.
+        \item Fallas independientes y parciales de nodos.
+    \end{itemize}
+\end{itemize}
+
+\filmina{3}{Transparencia en Sistemas Distribuidos}
+\begin{itemize}
+    \item Ocultar al usuario final la naturaleza distribuida de los recursos:
+    \item \textbf{Acceso:} Misma sintaxis para recursos locales y remotos.
+    \item \textbf{Ubicación:} El usuario desconoce la máquina física donde reside el dato.
+    \item \textbf{Migración:} Los recursos se reubican sin cambiar su nombre lógico.
+    \item \textbf{Replicación:} Múltiples copias concurrentes invisibles al cliente.
+    \item \textbf{Falla:} Tolerancia y recuperación automática sin aviso al usuario.
+\end{itemize}
+
+\filmina{4}{Teorema CAP (Brewer, 2000)}
+\destacado{Principio Fundamental de Particionamiento:}
+En un sistema distribuido asíncrono con tolerancia a particiones de red, es matemáticamente imposible garantizar simultáneamente más de dos de las siguientes tres propiedades:
+\begin{enumerate}
+    \item \textbf{Consistency (C):} Todos los nodos leen el valor más reciente en todo momento.
+    \item \textbf{Availability (A):} Cada petición sin fallo recibe una respuesta no bloqueante.
+    \item \textbf{Partition Tolerance (P):} El sistema sigue funcionando pese a pérdida de mensajes entre nodos.
+\end{enumerate}
+
+\filmina{5}{Modelos de Consistencia}
+\begin{itemize}
+    \item \textbf{Consistencia Estricta:} Toda lectura refleja inmediatamente la escritura más reciente en tiempo absoluto (físicamente irrealizable en sistemas distribuidos).
+    \item \textbf{Consistencia Secuencial:} Todos los procesos observan las mismas operaciones en el mismo orden lógico (Lamport).
+    \item \textbf{Consistencia Causal:} Las operaciones con relación causal se observan en igual orden; las concurrentes pueden diferir.
+    \item \textbf{Consistencia Eventual:} Si cesan las escrituras, todas las réplicas convergen al mismo estado final (Dynamo, Cassandra).
+\end{itemize}
+
+\filmina{6}{Ecuación de Tiempo de Comunicación}
+El retardo total $T_{\text{msg}}$ para enviar un paquete de $S$ bytes sobre un enlace físico con ancho de banda $B$ y latencia de propagación $L$ se calcula:
+$$T_{\text{msg}} = \alpha + \frac{S}{B} + L$$
+Donde $\alpha$ es la sobrecarga del software en el emisor y receptor (\textit{software overhead}).
+
+\filmina{7}{Resumen y Puntos Clave de Examen}
+\begin{itemize}
+    \item En redes WAN, la partición de red ($P$) es inevitable; la elección real en ingeniería siempre es $CP$ vs. $AP$.
+    \item Los sistemas $CP$ sacrifican disponibilidad para evitar datos obsoletos (bancos, transacciones ACID).
+    \item Los sistemas $AP$ sacrifican consistencia para mantener servicio continuo (redes sociales, DNS, caches).
+\end{itemize}
+
+\begin{lstlisting}[style=compactcode, language=bash]
+# Monitoreo de latencia y paquetes perdidos entre nodos
+ping -c 100 -i 0.2 192.168.20.200 | tail -n 2
+mtr --report --report-cycles 10 192.168.20.200
+\end{lstlisting}
+
+\end{document}

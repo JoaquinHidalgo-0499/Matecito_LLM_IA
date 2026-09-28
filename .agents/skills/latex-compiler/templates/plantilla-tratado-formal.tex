@@ -1,0 +1,142 @@
+% =========================================================================
+% PLANTILLA MAESTRA: TRATADO ACADÉMICO FORMAL / TESIS / MONOGRAFÍA
+% =========================================================================
+% Optimizada para monografías formales, informes de investigación, tesis
+% de grado y publicaciones académicas tradicionales.
+%
+% Características Editoriales:
+% 1. Portada formal institucional con metadatos (\maketitle).
+% 2. Resumen ejecutivo estructurado (\begin{abstract}).
+% 3. Tabla de contenidos interactiva (\tableofcontents).
+% 4. Geometría estándar ISO A4 con márgenes de 2.5 cm.
+% 5. Tipografía clara a 11pt con soporte microtipográfico.
+% 6. Tablas limpias con booktabs y soporte matemático robusto (amsmath/amssymb).
+% =========================================================================
+
+\documentclass[11pt,a4paper]{article}
+
+% --- Codificación y Lenguaje ---
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-tabla,es-noquoting]{babel}
+
+% --- Geometría y Márgenes ---
+\usepackage{geometry}
+\geometry{
+    top=2.5cm,
+    bottom=2.5cm,
+    left=2.5cm,
+    right=2.5cm
+}
+
+% --- Matemáticas y Símbolos ---
+\usepackage{amsmath,amssymb,amsfonts}
+
+% --- Gráficos y Tablas ---
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{xcolor}
+
+% --- Microtipografía y Legibilidad ---
+\usepackage{microtype}
+
+% --- Enlaces y Metadatos del PDF ---
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!80!black,
+    urlcolor=blue!80!black,
+    citecolor=blue!80!black,
+    pdfauthor={Hugo Joaquín Hidalgo},
+    pdftitle={Tratado Académico Formal},
+    pdfsubject={Monografía / Tesis / Informe de Investigación},
+    pdfcreator={pdflatex}
+}
+
+% --- Metadatos del Documento ---
+\title{\vspace{-1cm}\textbf{\LARGE Tratado Académico Formal}\\[0.5em] \large Subtítulo Descriptivo o Alcance del Trabajo}
+\author{\textbf{Hugo Joaquín Hidalgo}\\[0.2em]
+\small Facultad de Ingeniería --- Universidad Nacional de Jujuy\\
+\small \texttt{contacto@ejemplo.com}}
+\date{\today}
+
+% =========================================================================
+% CUERPO DEL DOCUMENTO
+% =========================================================================
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Este documento ejemplifica la estructura formal requerida para monografías académicas, informes técnicos de investigación y proyectos finales de grado. Se presenta un resumen ejecutivo conciso del contexto problemático, los objetivos metodológicos, los resultados analíticos cuantitativos y las conclusiones principales alcanzadas, permitiendo al evaluador una rápida comprensión de la contribución técnica.
+\end{abstract}
+
+\vspace{1em}
+\noindent\textbf{Palabras clave:} Computación de Alto Rendimiento, Redes de Interconexión, Latencia, Arquitectura de Sistemas, Rendimiento.
+
+\newpage
+\tableofcontents
+\newpage
+
+% --- SECCIÓN 1: INTRODUCCIÓN ---
+\section{Introducción}
+La creciente demanda de procesamiento en sistemas de cómputo modernos exige arquitecturas capaces de mitigar el cuello de botella de la memoria mediante topologías de comunicación escalables y jerarquías de almacenamiento optimizadas.
+
+\subsection{Motivación y Contexto}
+El modelado analítico de redes de interconexión en multiprocesadores de chip (CMP) permite predecir el comportamiento del sistema ante saturación de tráfico, optimizando la asignación de buffers y el consumo energético de los enrutadores.
+
+\subsection{Objetivos del Trabajo}
+\begin{itemize}
+    \item Formalizar el modelo matemático de latencia de red en topologías de malla 2D y torus.
+    \item Evaluar el impacto de la contención de buffers mediante análisis estocástico.
+    \item Sintetizar recomendaciones directas de diseño para implementaciones en silicio.
+\end{itemize}
+
+% --- SECCIÓN 2: MARCO TEÓRICO ---
+\section{Marco Teórico y Fundamentos Matemáticos}
+La latencia base de transporte $T_{\text{base}}$ de un paquete de $L$ flits en una red con $H$ saltos promedio se modela formalmente como:
+
+\begin{equation}
+    T_{\text{base}} = H \cdot t_r + \frac{L}{W} + H \cdot t_w
+\end{equation}
+
+\noindent donde:
+\begin{itemize}
+    \item $H$: Número medio de saltos de la topología (\textit{hop count}).
+    \item $t_r$: Latencia interna del pipeline del router (ciclos de reloj).
+    \item $W$: Ancho de canal por enlace (bits/ciclo).
+    \item $t_w$: Retardo de propagación por el cable físico entre nodos adyacentes.
+\end{itemize}
+
+% --- SECCIÓN 3: RESULTADOS Y COMPARATIVA ---
+\section{Evaluación y Resultados Experimentales}
+La Tabla~\ref{tab:topologias} resume las métricas topológicas fundamentales comparando configuraciones estándar para $N = 64$ nodos.
+
+\begin{table}[htbp]
+\centering
+\caption{Comparativa analítica de topologías de interconexión ($N=64$).}
+\label{tab:topologias}
+\begin{tabularx}{\textwidth}{Xcccc}
+\toprule
+\textbf{Topología} & \textbf{Grado ($d$)} & \textbf{Diámetro ($D$)} & \textbf{Bisección ($B$)} & \textbf{Complejidad Cableado} \\
+\midrule
+Malla 2D ($8 \times 8$) & 4 & 14 & 8 & Baja (Planar) \\
+Torus 2D ($8 \times 8$) & 4 & 8  & 16 & Media (Enlaces envolventes) \\
+Hipercubo ($n=6$)      & 6 & 6  & 32 & Alta (Logarítmica) \\
+Crossbar Centralizado   & 64 & 1 & 64 & Muy Alta ($\mathcal{O}(N^2)$) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+% --- SECCIÓN 4: CONCLUSIONES ---
+\section{Conclusiones}
+La topología de malla 2D ofrece el balance óptimo entre complejidad de enrutamiento físico sobre el die y rendimiento para tamaños de clúster moderados. Para escalas mayores a 64 nodos, el torus doblado (\textit{folded torus}) reduce el diámetro a la mitad sin introducir enlaces largos asimétricos.
+
+% --- REFERENCIAS BIBLIOGRÁFICAS ---
+\begin{thebibliography}{99}
+\bibitem{dally2004} Dally, W. J., \& Towles, B. (2004). \textit{Principles and Practices of Interconnection Networks}. Morgan Kaufmann Publishers.
+\bibitem{hennessy2019} Hennessy, J. L., \& Patterson, D. A. (2019). \textit{Computer Architecture: A Quantitative Approach} (6th ed.). Elsevier.
+\end{thebibliography}
+
+\end{document}
