@@ -11,11 +11,13 @@ import json
 import argparse
 import datetime
 
-MANIFEST_PATH = "/home/joaquin/Compartido/braind/.manifest-materias.json"
+_script_dir = os.path.dirname(os.path.abspath(__file__))
+_project_root = os.path.dirname(_script_dir)
+MANIFEST_PATH = os.path.join(_project_root, ".manifest-materias.json")
+_compartido_dir = os.path.dirname(_project_root)
+
 SCAN_DIRS = [
-    "/home/joaquin/Compartido/2do_Cuatrimestre",
-    "/home/joaquin/Compartido/material-Materias",
-    "/home/joaquin/Compartido/1er_Cuatrimestre"
+    os.path.join(_compartido_dir, "material-academico")
 ]
 
 IGNORED_PATTERNS = [
@@ -53,13 +55,16 @@ def scan_current_state():
                 full_path = os.path.join(root, f)
                 try:
                     stat = os.stat(full_path)
-                    rel_path = os.path.relpath(full_path, "/home/joaquin/Compartido")
+                    rel_path = os.path.relpath(full_path, _compartido_dir)
+                    parts = rel_path.split(os.sep)
+                    group = parts[1] if len(parts) > 1 else parts[0]
+                    subject = parts[2] if len(parts) > 2 else "General"
                     state[rel_path] = {
                         "size": stat.st_size,
                         "mtime": stat.st_mtime,
                         "full_path": full_path,
-                        "group": rel_path.split(os.sep)[0],
-                        "subject": rel_path.split(os.sep)[1] if len(rel_path.split(os.sep)) > 1 else "Raiz",
+                        "group": group,
+                        "subject": subject,
                         "file": f
                     }
                 except OSError:
@@ -142,7 +147,7 @@ def main():
     print(f"\n{BOLD}{CYAN}┌──────────────────────────────────────────────────────────┐{RESET}")
     print(f"{BOLD}{CYAN}│        ESCÁNER DE NOVEDADES ACADÉMICAS - BRAIN           │{RESET}")
     print(f"{BOLD}{CYAN}└──────────────────────────────────────────────────────────┘{RESET}")
-    print(f"📁 Monitoreando: {BOLD}2do_Cuatrimestre{RESET}, {BOLD}material-Materias{RESET}")
+    print(f"📁 Monitoreando: {BOLD}material-academico{RESET}")
     print(f"📊 Total de archivos en disco: {BOLD}{len(current_state)}{RESET}\n")
 
     if total_new == 0 and total_mod == 0 and len(deleted_files) == 0:

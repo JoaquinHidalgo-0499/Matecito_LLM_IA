@@ -2,7 +2,10 @@ import os
 import re
 import json
 
-brain_dir = "/home/joaquin/Compartido/braind/brain"
+# Derivar brain_dir desde la ubicación del script (portabilidad)
+_script_dir = os.path.dirname(os.path.abspath(__file__))
+_project_root = os.path.dirname(_script_dir)  # .agents/ -> raíz del proyecto
+brain_dir = os.path.join(_project_root, "brain")
 backticked_wikilink_re = re.compile(r"`\[\[([^\]`]+)\]\]`")
 
 

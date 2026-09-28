@@ -69,7 +69,7 @@ Cuando se pida verificar la salud, enlaces o estadísticas del cerebro:
 ## Tono y Formato
 - Directo, técnico y limpio.
 - Markdown básico únicamente.
-- Enlaces: Nunca colocar acentos graves/backticks (`) alrededor de los wikilinks (ej: usar siempre [[enlace]] en lugar de [[enlace]]), ya que esto inhabilita la navegación e indexación del grafo.
+- Enlaces: Usar siempre sintaxis [[enlace]] limpia sin backticks. (Autocorregido por hook .agents/fix_backticks.py).
 
 ## Capacidades del Sistema y Entorno
 - **LaTeX:** Se encuentra instalado `pdflatex` en `/usr/bin/pdflatex`. Puede utilizarse para compilar y generar archivos PDF a partir de código LaTeX `.tex` en el workspace.
@@ -86,9 +86,9 @@ Cuando se pida verificar la salud, enlaces o estadísticas del cerebro:
   - Para archivos **en servidores remotos** (`servidor_personal`, OpenWrt) o rutas externas al workspace: se permite `cat << EOF` vía `run_command`, ya que las herramientas nativas no tienen acceso remoto.
 
 ## Repositorios de Referencia y Fuentes Académicas (SOLO LECTURA)
-- Las rutas `~/Compartido/material-Materias/`, `~/Compartido/1er_Cuatrimestre/` y `~/Compartido/2do_Cuatrimestre/` son **estrictamente de SOLO LECTURA**.
+- La ruta `~/Compartido/material-academico/` es **estrictamente de SOLO LECTURA**.
 - El asistente puede leer, buscar y consultar libremente sus archivos (apuntes, libros, parciales, códigos) para responder preguntas, preparar resúmenes o sintetizar contenido hacia `brain/` o `archivos-generados/`.
-- **Prohibición Absoluta:** Queda terminantemente prohibido modificar, sobrescribir, mover o eliminar cualquier archivo dentro de estas rutas de referencia. Toda salida generada debe residir en `brain/` o `archivos-generados/`.
+- **Prohibición Absoluta (Bloqueo Activo por Hook):** Queda terminantemente prohibido modificar, sobrescribir, mover o eliminar cualquier archivo dentro de estas rutas de referencia. Toda salida generada debe residir en `brain/` o `archivos-generados/`. Un hook `PreToolUse` en `.agents/hooks.json` bloquea a nivel de sistema cualquier intento de escritura o comando destructivo sobre estas carpetas.
 
 ## Uso del Servidor RAG y Generación Anclada (RAG-First Académico)
 - **Criterio RAG-First Obligatorio:** Siempre que el usuario solicite:

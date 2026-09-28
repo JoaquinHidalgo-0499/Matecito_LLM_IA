@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "shell",
-            "command": "python3 /home/joaquin/Compartido/braind/.agents/fix_backticks.py"
+            "command": "python3 .agents/fix_backticks.py"
           }
         ]
       },
@@ -15,7 +15,7 @@
         "hooks": [
           {
             "type": "shell",
-            "command": "python3 /home/joaquin/Compartido/braind/.agents/fix_backticks.py"
+            "command": "python3 .agents/fix_backticks.py"
           }
         ]
       },
@@ -24,7 +24,20 @@
         "hooks": [
           {
             "type": "shell",
-            "command": "python3 /home/joaquin/Compartido/braind/.agents/fix_backticks.py"
+            "command": "python3 .agents/fix_backticks.py"
+          }
+        ]
+      }
+    ]
+  },
+  "protect-readonly-repos": {
+    "PreToolUse": [
+      {
+        "matcher": "write_to_file|replace_file_content|multi_replace_file_content|run_command",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .agents/protect_readonly.py"
           }
         ]
       }
