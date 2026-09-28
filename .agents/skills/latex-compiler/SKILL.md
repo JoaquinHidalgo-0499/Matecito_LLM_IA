@@ -72,17 +72,19 @@ Contenido del documento...
 
 ---
 
-### Formato B: Guía de Apuntes Técnicos Compactos (Estilo Pastel)
+### Formato B: Guía de Apuntes Técnicos Compactos (Estilo Pastel - Alto Contraste y Apto Impresión)
 Formato de alta densidad de información para apuntes de estudio, guías de laboratorio, cheat-sheets y resúmenes técnicos operativos:
-* **Características:**
-  - Márgenes chicos (`1.25 cm`) con `geometry`.
+* **Características y Principios de Diseño:**
+  - Márgenes reducidos (`1.25 cm`) con `geometry`.
   - Tipografía compacta (`\documentclass[9pt,a4paper]{extarticle}` + `\usepackage{lmodern}`).
   - **Sin encabezado superior** (`\pagestyle{plain}`), **sin portada separada** y **sin índice** (`\tableofcontents` omitido).
-  - **Banner superior compacto** en la primera página con título, subtítulo e institución.
-  - **Paleta pastel armónica por bloques/módulos:** Azul Pastel (`#EBF4FA` / `#2B6CB0`), Verde Pastel (`#EAF7ED` / `#2F855A`), Ámbar Pastel (`#FEF3E9` / `#C05621`), Púrpura Pastel (`#F6EEFB` / `#6B46C1`).
-  - **Cajas explicativas:** `conceptbox` / `whybox` con fondo pastel y barra lateral para fundamentaciones ("Por qué").
-  - **Cajas de código:** `codebox` (`tcolorbox` con `listings` y estilo `bashstyle`).
-  - **Plantilla base:** Ubicada en `.agents/skills/latex-compiler/templates/plantilla-apuntes-compactos-pastel.tex`.
+  - **Banner superior compacto:** Fondo blanco con borde sutil (`colback=white, colframe=gray!60`) y tabla en dos columnas con título y metadatos.
+  - **Paleta pastel armónica de alto contraste (95-97% brillo):** Azul Claro (`#F0F7FF`), Verde Menta (`#F0FDF4`), Ámbar Claro (`#FFFBEB`), Rojo Suave (`#FEF2F2`), Teal (`#F0FDFA`), Púrpura (`#FAF5FF`).
+  - **Regla Anti-Empaste de Títulos:** Queda estrictamente prohibido usar barras de título con fondos oscuros y texto saturado (que empastan y se imprimen en negro sólido). Los títulos de `bloqueheader` usan `attach title to upper`, fondo idéntico al bloque, acento lateral (`leftrule=4.5pt`) y tipografía en negro puro (`\color{black}`).
+  - **Cajas explicativas (`conceptbox`):** Fondo blanco puro (`colback=white`) para ahorro crítico de tóner, marco fino (`boxrule=0.4pt`), línea lateral cromática (`leftrule=3.5pt`) y título en acento de color integrado.
+  - **Tablas Limpias y Estructuradas:** Uso de `booktabs` (`\toprule`, `\midrule`, `\bottomrule`) con `tabularx`. Queda prohibido usar rellenos oscuros en cabeceras de tabla; los títulos de columna van en negrita con texto negro puro.
+  - **Cajas de código (`codebox`):** `tcolorbox` con `listings` y estilo `bashstyle`.
+  - **Plantilla base:** Ubicada en `.agents/skills/latex-compiler/templates/plantilla-apuntes-compactos-pastel.tex` y en `archivos-generados/plantillas-impresion/plantilla-apuntes-compactos-pastel.tex`.
 
 ---
 
