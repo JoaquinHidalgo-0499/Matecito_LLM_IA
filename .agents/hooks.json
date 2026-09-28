@@ -2,29 +2,11 @@
   "autofix-wikilinks-formatting": {
     "PostToolUse": [
       {
-        "matcher": "write_to_file",
+        "matcher": "write_to_file|replace_file_content|multi_replace_file_content",
         "hooks": [
           {
-            "type": "shell",
-            "command": "python3 .agents/fix_backticks.py"
-          }
-        ]
-      },
-      {
-        "matcher": "replace_file_content",
-        "hooks": [
-          {
-            "type": "shell",
-            "command": "python3 .agents/fix_backticks.py"
-          }
-        ]
-      },
-      {
-        "matcher": "multi_replace_file_content",
-        "hooks": [
-          {
-            "type": "shell",
-            "command": "python3 .agents/fix_backticks.py"
+            "type": "command",
+            "command": "python3 fix_backticks.py"
           }
         ]
       }
@@ -37,7 +19,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .agents/protect_readonly.py"
+            "command": "python3 protect_readonly.py"
           }
         ]
       }

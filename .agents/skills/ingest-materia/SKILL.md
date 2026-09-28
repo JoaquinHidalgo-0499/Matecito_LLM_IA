@@ -12,8 +12,8 @@ Procedimiento maestro para procesar archivos crudos de la facultad y convertirlo
 ## Procedimiento Paso a Paso
 
 ### 1. Escaneo y Clasificación (Modo Seguro)
-- Accede al directorio indicado por el usuario, típicamente en `~/Compartido/material-Materias/<materia>/`, `1er_Cuatrimestre/` o `2do_Cuatrimestre/`.
-- **REGLA ABSOLUTA:** Estas rutas son estrictamente de **SOLO LECTURA**. NUNCA debes modificar, mover, renombrar o borrar archivos originales allí.
+- Accede al directorio indicado por el usuario, típicamente en `~/Compartido/material-academico/<materia>/`.
+- **REGLA ABSOLUTA:** Esta ruta es estrictamente de **SOLO LECTURA**. NUNCA debes modificar, mover, renombrar o borrar archivos originales allí.
 - Identifica los archivos clave: PDFs (teoría), PPTX (presentaciones), Código (.py, .c, .java) y enunciados de parciales/TPs.
 
 ### 1.1. Consulta Previa al RAG (Grounded Generation)
@@ -30,7 +30,7 @@ Procedimiento maestro para procesar archivos crudos de la facultad y convertirlo
   ---
   type: concept
   title: "Título descriptivo de la unidad"
-  tags: [siglamateria, unju, concepto]
+  tags: [siglamateria, unju, conceptos]
   ---
   ```
 - **Nota:** No incluyas los campos `date` ni `status` en notas de concepto, el linter de la bóveda fallará si los pones o si omites los 3 campos obligatorios (`type`, `title`, `tags`).
@@ -44,7 +44,7 @@ Procedimiento maestro para procesar archivos crudos de la facultad y convertirlo
   ---
   type: apunte
   title: "Título descriptivo del apunte, tratado o banco de examen"
-  tags: [siglamateria, unju, apunte]
+  tags: [siglamateria, unju, apuntes]
   ---
   ```
 - **Nota:** Al igual que en conceptos, no incluyas campos `date` ni `status`. El linter validará que tenga `type: apunte` por residir en `apuntes/`.

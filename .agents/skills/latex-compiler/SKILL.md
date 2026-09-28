@@ -14,7 +14,7 @@ Procedimiento estandarizado para la redacción, maquetación y compilación de d
 ## 1. Reglas de Ubicación y Propósito
 * **Carpeta Exclusiva de Salida:** Todo archivo `.tex`, archivo auxiliar y `.pdf` compilado debe generarse **única y exclusivamente** dentro de:
   `/home/joaquin/Compartido/braind/archivos-generados/<nombre-proyecto>/`
-* **Prohibición:** Está terminantemente prohibido generar artefactos LaTeX dentro de `/brain/` o en las carpetas académicas de sólo lectura (`material-Materias/`, `1er_Cuatrimestre/`, `2do_Cuatrimestre/`).
+* **Prohibición:** Está terminantemente prohibido generar artefactos LaTeX dentro de `/brain/` o en las carpetas académicas de sólo lectura (`~/Compartido/material-academico/`).
 * **Propósito:** `archivos-generados/` es exclusivamente una carpeta de salida y entrega de entregables para el usuario. No participa en la administración interna de `braind`.
 
 ---

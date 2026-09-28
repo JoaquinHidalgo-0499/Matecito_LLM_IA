@@ -342,25 +342,27 @@ def main():
     parser.add_argument("--brain-dir", default=BRAIN_DIR, help="Ruta al directorio brain (por defecto: entorno local)")
     args = parser.parse_args()
 
+    fixed = []
     if args.fix_tags:
         fixed = fix_tags(brain_dir=args.brain_dir)
-        if fixed:
-            print(f"\n{GREEN}✔ Se corrigieron tags no canónicos en {len(fixed)} notas:{RESET}")
-            for f_rel in fixed[:10]:
-                print(f"   • {f_rel}")
-            if len(fixed) > 10:
-                print(f"   • ... y {len(fixed) - 10} notas más.")
-        else:
-            print(f"\n{GREEN}✔ Todos los tags ya están normalizados (cero correcciones necesarias).{RESET}")
+        if not args.json:
+            if fixed:
+                print(f"\n{GREEN}✔ Se corrigieron tags no canónicos en {len(fixed)} notas:{RESET}")
+                for f_rel in fixed[:10]:
+                    print(f"   • {f_rel}")
+                if len(fixed) > 10:
+                    print(f"   • ... y {len(fixed) - 10} notas más.")
+            else:
+                print(f"\n{GREEN}✔ Todos los tags ya están normalizados (cero correcciones necesarias).{RESET}")
 
     res = audit_brain(verbose=args.verbose, brain_dir=args.brain_dir)
-
 
     if args.json:
         out = {
             "target_dir": res["target_dir"],
             "total_files": res["total_files"],
             "total_wikilinks": res["total_wikilinks"],
+            "fixed_tags": fixed,
             "unindexed_count": len(res["unindexed"]),
             "broken_count": sum(len(v) for v in res["broken_links"].values()),
             "session_warnings_count": sum(len(v) for v in res["session_warnings"].values()),
@@ -378,7 +380,17 @@ def main():
     print(f"{BOLD}{CYAN}└──────────────────────────────────────────────────────────┘{RESET}")
     print(f"📁 Ruta: {BOLD}{res['target_dir']}{RESET}")
     print(f"📊 Total de notas evaluadas: {BOLD}{res['total_files']}{RESET}")
-    print(f"🔗 Total de wikilinks activos: {BOLD}{res['total_wikilinks']}{RESET}\n")
+    print(f"🔗 Total de wikilinks activos: {BOLD}{res['total_wikilinks']}{RESET}")
+
+    if args.verbose:
+        categories = {}
+        for rel in res["all_files"].values():
+            folder = rel.split(os.sep)[0] if os.sep in rel else "raíz"
+            categories[folder] = categories.get(folder, 0) + 1
+        print(f"\n{CYAN}📂 Distribución por carpetas:{RESET}")
+        for cat, count in sorted(categories.items()):
+            print(f"   • {cat}: {count} notas")
+    print()
 
     has_errors = False
 
