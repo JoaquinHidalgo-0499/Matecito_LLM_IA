@@ -7,7 +7,7 @@ PROTECTED_PATTERNS = [
 ]
 
 DANGEROUS_CMD_REGEX = re.compile(
-    r"\b(rm|mv|cp|touch|chmod|chown|sed\s+-i|truncate|dd)\b|>{1,2}",
+    r"\b(rm|mv|cp|touch|chmod|chown|sed\s+-i|truncate|dd|tee|rsync|unlink|shred)\b|>{1,2}",
     re.IGNORECASE
 )
 
@@ -19,7 +19,7 @@ def is_protected_path(path: str) -> bool:
 
 
 def check_pre_tool_use(payload: dict) -> dict:
-    tool_call = payload.get("toolCall", {})
+    tool_call = payload.get("toolCall") or payload.get("tool_call") or {}
     tool_name = tool_call.get("name", "")
     args = tool_call.get("args", {})
 
@@ -35,7 +35,8 @@ def check_pre_tool_use(payload: dict) -> dict:
     # 2. Comandos de consola mediante run_command
     elif tool_name == "run_command":
         cmd = args.get("CommandLine", "")
-        if any(p in cmd for p in PROTECTED_PATTERNS):
+        cwd = args.get("Cwd", "")
+        if is_protected_path(cmd) or is_protected_path(cwd):
             if DANGEROUS_CMD_REGEX.search(cmd):
                 return {
                     "decision": "deny",

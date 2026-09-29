@@ -22,6 +22,8 @@ FORBIDDEN_TAGS = {
     "apunte": "apuntes",
     "concepto": "conceptos",
     "sesion": "sesiones",
+    "session": "sesiones",
+    "sessions": "sesiones",
     "clase": "clases",
     "guia": "guias",
     "resumen": "resumenes",
@@ -29,7 +31,10 @@ FORBIDDEN_TAGS = {
     "laboratorio": "laboratorios",
     "red": "redes",
     "herramienta": "herramientas",
+    "recurso": "recursos",
+    "resource": "recursos",
     "proceso": "procesos",
+    "articulo": "articulos",
     "articles": "articulos",
 }
 
@@ -77,18 +82,28 @@ def validate_frontmatter(content, filepath):
 
     frontmatter = lines[1:end_idx]
     fields_found = {}
+    list_values = {}
+    current_key = None
 
     for i, line in enumerate(frontmatter, start=2):
         line_s = line.strip()
         if not line_s or line_s.startswith('#'):
             continue
         if line.startswith(' ') or line.startswith('\t'):
+            if current_key and line_s.startswith('-'):
+                item_val = line_s[1:].strip().strip('"\'')
+                list_values.setdefault(current_key, []).append(item_val)
             continue
         if ':' in line_s:
             key = line_s.split(':', 1)[0].strip()
             value = line_s.split(':', 1)[1].strip()
+            current_key = key
             if not key.startswith('-'):
                 fields_found[key] = value
+
+    # Si hay listas indentadas (ej: tags en formato YAML - item)
+    if 'tags' in list_values and not fields_found.get('tags'):
+        fields_found['tags'] = ', '.join(list_values['tags'])
 
     # Campos mínimos universales para cualquier nota
     base_required = {'type', 'title', 'tags'}
@@ -123,7 +138,10 @@ def validate_frontmatter(content, filepath):
     # Validación de Vocabulario Controlado de Tags
     raw_tags = fields_found.get('tags', '')
     extracted_tags = re.findall(r'[\w\-]+', raw_tags)
-    for tag in extracted_tags:
+    if 'tags' in list_values:
+        for t in list_values['tags']:
+            extracted_tags.extend(re.findall(r'[\w\-]+', t))
+    for tag in set(extracted_tags):
         tag_lower = tag.lower()
         if tag_lower in FORBIDDEN_TAGS:
             errors.append(f"Línea 2-{end_idx+1}: Tag no canónico '{tag}' (debe ser '{FORBIDDEN_TAGS[tag_lower]}')")
@@ -211,6 +229,16 @@ def fix_tags(brain_dir=None):
                             if tag_changed:
                                 changed = True
                                 line = f"tags: [{', '.join(updated_tags)}]\n"
+
+                    # Soporte para tags en formato lista YAML (- item)
+                    if in_frontmatter and (line.startswith(' ') or line.startswith('\t')) and line.strip().startswith('-'):
+                        stripped_item = line.strip()[1:].strip().strip('"\'')
+                        tl = stripped_item.lower()
+                        target = FORBIDDEN_TAGS.get(tl, tl)
+                        if target != tl:
+                            changed = True
+                            indent = line[:line.index('-')]
+                            line = f"{indent}- {target}\n"
                     new_lines.append(line)
 
                 if changed:
@@ -269,13 +297,13 @@ def audit_brain(verbose=False, brain_dir=None):
                     clean = l.split('|')[0].split('#')[0].strip()
                     if clean:
                         index_wikilinks.add(clean)
-                        if clean.startswith("index-") or clean == "Tablero-Pendientes":
+                        if clean.startswith("index-") or clean.startswith("Tablero-Pendientes"):
                             indexes_to_process.append(clean)
 
     # 1. Archivos no indexados
     unindexed = [
         name for name in all_md_files 
-        if name not in index_wikilinks and not (name == 'index' or name.startswith('index-') or name == 'Tablero-Pendientes')
+        if name not in index_wikilinks and not (name == 'index' or name.startswith('index-') or name.startswith('Tablero-Pendientes'))
     ]
 
     # 2. Enlaces rotos y backticks

@@ -7,16 +7,30 @@ import json
 _script_dir = os.path.dirname(os.path.abspath(__file__))
 _project_root = os.path.dirname(_script_dir)  # .agents/ -> raíz del proyecto
 brain_dir = os.path.join(_project_root, "brain")
-backticked_wikilink_re = re.compile(r"`\[\[([^\]`]+)\]\]`")
+def strip_backticks_from_content(content):
+    # Proteger bloques de código cercados (```...```) para no alterar sintaxis de ejemplos
+    parts = re.split(r"(```[\s\S]*?```)", content)
+    total_count = 0
+    for i in range(0, len(parts), 2):
+        # 1. Caso: `[[enlace]]`
+        parts[i], c1 = re.subn(r"`\[\[([^\]`]+)\]\]`", r"[[\1]]", parts[i])
+        # 2. Caso: [[`enlace`]] o [[`enlace`|alias]]
+        parts[i], c2 = re.subn(
+            r"\[\[`([^\]`|]+)`(?:\|([^\]]+))?\]\]",
+            lambda m: f"[[{m.group(1)}|{m.group(2)}]]" if m.group(2) else f"[[{m.group(1)}]]",
+            parts[i]
+        )
+        total_count += c1 + c2
+    return "".join(parts), total_count
 
 
 def fix_file(path):
-    """Corrige wikilinks rodeados de backticks en un solo archivo."""
+    """Corrige wikilinks con backticks en un solo archivo sin alterar bloques de código."""
     if not os.path.isfile(path):
         return 0
     with open(path, "r", encoding="utf-8") as f:
         content = f.read()
-    new_content, count = backticked_wikilink_re.subn(r"[[\1]]", content)
+    new_content, count = strip_backticks_from_content(content)
     if count > 0:
         with open(path, "w", encoding="utf-8") as f:
             f.write(new_content)

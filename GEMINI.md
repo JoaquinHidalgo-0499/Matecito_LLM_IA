@@ -30,7 +30,7 @@ Cuando se hagan preguntas sobre el contenido:
 ### 3. LINT y Auditoría (Validación)
 Cuando se pida verificar la salud, enlaces o estadísticas del cerebro:
 - Activar el skill `brain-audit` y seguir su procedimiento.
-- Usar **exclusivamente** los scripts oficiales residentes en `scripts/` (`brain-lint.py`, `brain-stats.py`, `escanear-materias.py`). Queda prohibido generar código inline o scripts temporales alternativos en `scratch/` o cualquier otra ruta.
+- Usar **exclusivamente** los scripts oficiales residentes en `scripts/` (`brain-lint.py`, `brain-stats.py`, `escanear-materias.py`, `consolidar-pendientes.py`). Queda prohibido generar código inline o scripts temporales alternativos en `scratch/` o cualquier otra ruta.
 
 ## Tono, Formato y Normalización de Tags
 - **Tono y Estilo:** Directo, técnico y limpio. Markdown básico únicamente.

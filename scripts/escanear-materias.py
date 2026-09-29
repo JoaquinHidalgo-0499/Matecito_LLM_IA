@@ -101,13 +101,24 @@ def main():
     current_state = scan_current_state()
     manifest = load_manifest()
 
-    if args.update or not manifest:
+    if args.update:
+        if not current_state and manifest:
+            print(f"{RED}⚠️ Advertencia: No se detectaron archivos en el material académico. El directorio podría estar desmontado. Manifiesto NO modificado.{RESET}", file=sys.stderr)
+            sys.exit(1)
         save_manifest(current_state)
         if args.json:
             print(json.dumps({"status": "updated", "total_files": len(current_state)}))
         else:
             print(f"{GREEN}✔ Manifiesto actualizado exitosamente.{RESET}")
             print(f"📊 Total de archivos registrados: {BOLD}{len(current_state)}{RESET}")
+        return
+
+    if not manifest:
+        if args.json:
+            print(json.dumps({"status": "no_manifest", "message": "Manifiesto no encontrado. Ejecutar con --update para crearlo."}))
+        else:
+            print(f"{YELLOW}⚠️ No se encontró manifiesto previo ({MANIFEST_FILE}).{RESET}")
+            print(f"Para inicializar el manifiesto por primera vez, ejecuta: {BOLD}python3 scripts/escanear-materias.py --update{RESET}")
         return
 
     # Comparar estados
@@ -119,9 +130,13 @@ def main():
         if rel_path not in manifest:
             subj = f"{info['group']}/{info['subject']}"
             new_files.setdefault(subj, []).append(info)
-        elif abs(info['mtime'] - manifest[rel_path]['mtime']) > 1.0 or info['size'] != manifest[rel_path]['size']:
-            subj = f"{info['group']}/{info['subject']}"
-            modified_files.setdefault(subj, []).append(info)
+        else:
+            prev_info = manifest[rel_path]
+            prev_mtime = prev_info.get('mtime', 0.0)
+            prev_size = prev_info.get('size', -1)
+            if abs(info['mtime'] - prev_mtime) > 1.0 or info['size'] != prev_size:
+                subj = f"{info['group']}/{info['subject']}"
+                modified_files.setdefault(subj, []).append(info)
 
     for rel_path in manifest:
         if rel_path not in current_state:

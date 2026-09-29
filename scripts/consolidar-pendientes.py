@@ -10,8 +10,8 @@ from collections import defaultdict
 from pathlib import Path
 
 def parse_frontmatter(content):
-    """Extrae el frontmatter YAML de un string."""
-    match = re.match(r'^---\n(.*?)\n---', content, re.DOTALL)
+    """Extrae el frontmatter YAML de un string soportando saltos LF y CRLF."""
+    match = re.match(r'^---\r?\n(.*?)\r?\n---', content, re.DOTALL)
     if match:
         try:
             return yaml.safe_load(match.group(1))
@@ -75,7 +75,7 @@ def main():
     total_sesiones = 0
     total_pendientes = 0
 
-    for file_path in sesiones_dir.glob('*.md'):
+    for file_path in sorted(sesiones_dir.glob('*.md')):
         try:
             with open(file_path, 'r', encoding='utf-8') as f:
                 content = f.read()
@@ -113,8 +113,9 @@ def main():
             })
             total_pendientes += 1
 
-    # Sort months descending
-    meses_ordenados = sorted(tareas_por_mes.keys(), reverse=True)
+    # Sort months descending (manteniendo 'Desconocido' al final si existiera)
+    meses_validos = sorted([m for m in tareas_por_mes.keys() if m != 'Desconocido'], reverse=True)
+    meses_ordenados = meses_validos + (['Desconocido'] if 'Desconocido' in tareas_por_mes else [])
 
     # Deduplicación: consolidar tareas idénticas (case-insensitive) en una sola entrada
     total_antes_dedup = total_pendientes
