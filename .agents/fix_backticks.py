@@ -32,8 +32,10 @@ def fix_file(path):
         content = f.read()
     new_content, count = strip_backticks_from_content(content)
     if count > 0:
-        with open(path, "w", encoding="utf-8") as f:
+        temp_path = path + ".tmp"
+        with open(temp_path, "w", encoding="utf-8") as f:
             f.write(new_content)
+        os.replace(temp_path, path)
         rel = os.path.relpath(path, brain_dir)
         print(f"[Autofix] {rel}: {count} backticked wikilinks removed", file=sys.stderr)
     return count
@@ -63,25 +65,9 @@ def main():
             except Exception:
                 pass
 
-    # 3. Procesar archivo o fallback
+    # 3. Procesar archivo si pertenece a brain/
     if target_file and target_file.startswith(brain_dir) and target_file.endswith(".md"):
-        # Caso óptimo: procesar exclusivamente el archivo modificado
         fix_file(target_file)
-    elif target_file:
-        # Archivo fuera de brain/ o no es .md — no requiere acción
-        pass
-    else:
-        # Fallback de seguridad: si no se pudo determinar el archivo, escaneo completo
-        modified_files = {}
-        for root, dirs, files in os.walk(brain_dir):
-            for f in files:
-                if f.endswith(".md"):
-                    path = os.path.join(root, f)
-                    count = fix_file(path)
-                    if count > 0:
-                        modified_files[os.path.relpath(path, brain_dir)] = count
-        if modified_files:
-            print(f"[Autofix] Fallback scan: {len(modified_files)} files corrected", file=sys.stderr)
 
     # PostToolUse espera {} en stdout
     print(json.dumps({}))
