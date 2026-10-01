@@ -6,7 +6,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 fix_backticks.py"
+            "command": "python3 fix_backticks.py",
+            "timeout": 5
           }
         ]
       }
@@ -19,7 +20,8 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 protect_readonly.py"
+            "command": "python3 protect_readonly.py",
+            "timeout": 5
           }
         ]
       }
