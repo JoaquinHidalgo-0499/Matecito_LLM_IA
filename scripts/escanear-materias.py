@@ -117,7 +117,7 @@ def main():
         if args.json:
             print(json.dumps({"status": "no_manifest", "message": "Manifiesto no encontrado. Ejecutar con --update para crearlo."}))
         else:
-            print(f"{YELLOW}⚠️ No se encontró manifiesto previo ({MANIFEST_FILE}).{RESET}")
+            print(f"{YELLOW}⚠️ No se encontró manifiesto previo ({MANIFEST_PATH}).{RESET}")
             print(f"Para inicializar el manifiesto por primera vez, ejecuta: {BOLD}python3 scripts/escanear-materias.py --update{RESET}")
         return
 
