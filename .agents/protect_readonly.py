@@ -1,4 +1,5 @@
 import sys
+import os
 import json
 import re
 
@@ -15,7 +16,13 @@ DANGEROUS_CMD_REGEX = re.compile(
 def is_protected_path(path: str) -> bool:
     if not path:
         return False
-    return any(p in path for p in PROTECTED_PATTERNS)
+    if any(p in path for p in PROTECTED_PATTERNS):
+        return True
+    try:
+        real = os.path.realpath(os.path.expanduser(path))
+        return any(p in real for p in PROTECTED_PATTERNS)
+    except Exception:
+        return False
 
 
 def check_pre_tool_use(payload: dict) -> dict:
