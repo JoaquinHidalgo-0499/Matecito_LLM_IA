@@ -16,6 +16,7 @@
 # 4. Carpeta de Scripts oficiales
 !/scripts/
 !/scripts/**
+scripts/extraer-siu.py
 
 # 5. Carpeta de Skills y Configuración de Agentes
 !/.agents/
