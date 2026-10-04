@@ -3,8 +3,8 @@ import os
 import json
 import re
 
-PROTECTED_PATTERNS = [
-    "material-academico",
+PROTECTED_DIRS = [
+    os.path.realpath(os.path.expanduser("~/Compartido/material-academico")),
 ]
 
 DANGEROUS_CMD_REGEX = re.compile(
@@ -12,17 +12,31 @@ DANGEROUS_CMD_REGEX = re.compile(
     re.IGNORECASE
 )
 
+CMD_TARGETS_REGEX = re.compile(
+    r"(?:^|[\s\"'/])(?:[^\s\"']*/)?material-academico(?:/|[\s\"']|$)",
+    re.IGNORECASE
+)
 
-def is_protected_path(path: str) -> bool:
+
+def is_protected_file(path: str) -> bool:
     if not path:
         return False
-    if any(p in path for p in PROTECTED_PATTERNS):
-        return True
     try:
         real = os.path.realpath(os.path.expanduser(path))
-        return any(p in real for p in PROTECTED_PATTERNS)
+        for pdir in PROTECTED_DIRS:
+            if real == pdir or real.startswith(pdir + os.sep):
+                return True
     except Exception:
-        return False
+        pass
+    return False
+
+
+def is_protected_command(cmd: str, cwd: str) -> bool:
+    if is_protected_file(cwd):
+        return True
+    if CMD_TARGETS_REGEX.search(cmd):
+        return True
+    return False
 
 
 def check_pre_tool_use(payload: dict) -> dict:
@@ -33,7 +47,7 @@ def check_pre_tool_use(payload: dict) -> dict:
     # 1. Herramientas nativas de edición/escritura de archivos
     if tool_name in ("write_to_file", "replace_file_content", "multi_replace_file_content"):
         target_file = args.get("TargetFile", "")
-        if is_protected_path(target_file):
+        if is_protected_file(target_file):
             return {
                 "decision": "deny",
                 "reason": f"Acceso denegado por política de seguridad: La ruta '{target_file}' pertenece a un repositorio de SOLO LECTURA."
@@ -43,7 +57,7 @@ def check_pre_tool_use(payload: dict) -> dict:
     elif tool_name == "run_command":
         cmd = args.get("CommandLine", "")
         cwd = args.get("Cwd", "")
-        if is_protected_path(cmd) or is_protected_path(cwd):
+        if is_protected_command(cmd, cwd):
             if DANGEROUS_CMD_REGEX.search(cmd):
                 return {
                     "decision": "deny",
