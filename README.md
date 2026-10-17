@@ -39,11 +39,13 @@ Receptor de capturas web, artículos o notas móviles para su posterior cataloga
   * `ingest-clipping`: Procesamiento y vaciado de notas en bandeja de entrada hacia la base de conocimiento.
   * `latex-compiler`: Maquetación y compilación de documentos profesionales en PDF mediante `pdflatex`.
 * **Hooks de Ciclo de Vida (`hooks.json`):**
-  * `protect_readonly.py` (`PreToolUse`): Bloqueo activo de comandos destructivos y escrituras sobre `~/Compartido/material-academico/`.
+  * `protect_readonly.py` (`PreToolUse`): Bloqueo preventivo de comandos destructivos y escrituras sobre el repositorio de material académico de referencia.
   * `fix_backticks.py` (`PostToolUse`): Saneamiento automático de wikilinks con comillas invertidas preservando bloques de código.
 
 ### 5. Herramientas Operativas Residentes (`scripts/`)
-Utilidades centralizadas en Python para administración y validación del workspace:
+Utilidades centralizadas en Python estándar para administración, diagnóstico y validación:
+* `config.py`: Módulo central de resolución de rutas dinámicas y carga de variables de entorno (`.env`).
+* `doctor.py`: Diagnóstico integral de entorno, dependencias del sistema y estado de herramientas para skills.
 * `brain-lint.py`: Validador estricto de Frontmatter YAML, vocabulario controlado de tags, enlaces rotos e indexación.
 * `brain-stats.py`: Analizador de métricas de red, densidad del grafo, volumen léxico y topología de hubs.
 * `escanear-materias.py`: Escáner de novedades y control de cambios en repositorios académicos de referencia.
@@ -58,3 +60,40 @@ Reglas rectoras del asistente, principio de honestidad radical y anti-complacenc
 
 * **Control de Versiones (Git):** Resguarda y versiona el motor de ejecución, directrices del copiloto, hooks, skills y scripts operativos (`.agents/`, `scripts/`, `GEMINI.md`, `README.md`).
 * **Sincronización en Tiempo Real (Syncthing):** Las carpetas de datos dinámicos (`brain/`, `archivos-generados/`, `Clippings/`) se replican de forma continua y bidireccional entre la estación local y el servidor personal (`192.168.20.200`).
+
+---
+
+## 🚀 Requisitos del Sistema y Guía de Inicio Rápido
+
+### 1. Dependencias del Sistema
+
+| Herramienta | Requerido por | Propósito | Paquete (Arch Linux) | Paquete (Debian/Ubuntu) |
+| :--- | :--- | :--- | :--- | :--- |
+| **Python $\ge$ 3.10** | *Obligatorio* | Ejecución de scripts y hooks | `python` | `python3` |
+| **Git** | *Obligatorio* | Control de versiones | `git` | `git` |
+| **Poppler Utils** | `ingest-materia` | Extracción de texto de PDFs | `poppler` | `poppler-utils` |
+| **TeX Live (`pdflatex`)** | `latex-compiler` | Compilación de PDFs | `texlive-basic texlive-latexextra` | `texlive-latex-base texlive-latex-extra` |
+
+> [!NOTE]
+> Todos los scripts internos de `scripts/` y hooks de `.agents/` están programados exclusivamente con la **biblioteca estándar de Python**, por lo que **no** requieren dependencias adicionales de `pip` para funcionar.
+
+### 2. Primeros Pasos al Clonar el Repositorio
+
+1. **Clonar el repositorio:**
+   ```bash
+   git clone <URL_DEL_REPOSITORIO> braind
+   cd braind
+   ```
+
+2. **Configurar el entorno local (Opcional):**
+   Si tu carpeta de material académico se encuentra en una ubicación distinta a la carpeta hermana `../material-academico/`, crea tu archivo `.env`:
+   ```bash
+   cp .env.example .env
+   # Edita .env con tu editor favorito y ajusta MATERIAL_ACADEMICO_PATH
+   ```
+
+3. **Ejecutar el Diagnóstico de Salud:**
+   ```bash
+   python3 scripts/doctor.py
+   ```
+   El script auditará el sistema en menos de un segundo y te indicará si tu entorno cuenta con todas las herramientas para operar con la totalidad de las skills.

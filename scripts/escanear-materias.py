@@ -13,12 +13,18 @@ import datetime
 
 _script_dir = os.path.dirname(os.path.abspath(__file__))
 _project_root = os.path.dirname(_script_dir)
-MANIFEST_PATH = os.path.join(_project_root, ".manifest-materias.json")
-_compartido_dir = os.path.dirname(_project_root)
+if _project_root not in sys.path:
+    sys.path.insert(0, _project_root)
 
-SCAN_DIRS = [
-    os.path.join(_compartido_dir, "material-academico")
-]
+try:
+    from scripts.config import MATERIAL_ACADEMICO_DIR, WORKSPACE_ROOT
+    MANIFEST_PATH = os.path.join(str(WORKSPACE_ROOT), ".manifest-materias.json")
+    _material_parent = os.path.dirname(str(MATERIAL_ACADEMICO_DIR))
+    SCAN_DIRS = [str(MATERIAL_ACADEMICO_DIR)]
+except Exception:
+    MANIFEST_PATH = os.path.join(_project_root, ".manifest-materias.json")
+    _material_parent = os.path.dirname(_project_root)
+    SCAN_DIRS = [os.path.join(_material_parent, "material-academico")]
 
 IGNORED_PATTERNS = [
     ".directory", ".stfolder", ".syncthing", ".git", ".swp", ".tmp",
@@ -55,7 +61,7 @@ def scan_current_state():
                 full_path = os.path.join(root, f)
                 try:
                     stat = os.stat(full_path)
-                    rel_path = os.path.relpath(full_path, _compartido_dir)
+                    rel_path = os.path.relpath(full_path, _material_parent)
                     parts = rel_path.split(os.sep)
                     group = parts[1] if len(parts) > 1 else parts[0]
                     subject = parts[2] if len(parts) > 2 else "General"
