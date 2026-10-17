@@ -120,19 +120,35 @@ def run_diagnostics() -> dict:
         )
 
     # 3. Herramientas para Skills
-    # 3.1. LaTeX (latex-compiler)
+    # 3.1. Compiladores PDF (compilador-pdf: Typst y pdflatex)
+    typst_ok, typst_path = check_command("typst")
+    typst_ver = get_cmd_version("typst") if typst_ok else ""
     pdflatex_ok, pdflatex_path = check_command("pdflatex")
-    diag["tools"]["pdflatex"] = {
-        "ok": pdflatex_ok,
-        "path": pdflatex_path,
-        "skill": "latex-compiler",
+    pdflatex_ver = get_cmd_version("pdflatex") if pdflatex_ok else ""
+
+    pdf_skill_ok = typst_ok or pdflatex_ok
+    diag["tools"]["compilador_pdf"] = {
+        "ok": pdf_skill_ok,
+        "typst": {"ok": typst_ok, "path": typst_path, "version": typst_ver},
+        "pdflatex": {"ok": pdflatex_ok, "path": pdflatex_path, "version": pdflatex_ver},
+        "skill": "compilador-pdf",
     }
-    if not pdflatex_ok:
+    if not pdf_skill_ok:
         diag["suggestions"].append(
-            "Para habilitar la compilación de PDFs con la skill 'latex-compiler', instala TeX Live:\n"
-            "       • Arch Linux:    sudo pacman -S texlive-basic texlive-latexextra\n"
-            "       • Ubuntu/Debian: sudo apt install texlive-latex-base texlive-latex-extra\n"
-            "       • Fedora:        sudo dnf install texlive-scheme-basic"
+            "Para habilitar la generación de PDFs con la skill 'compilador-pdf', instala al menos un motor:\n"
+            "       • Typst (Recomendado, ultraligero y rápido en Rust ~45MB):\n"
+            "           - Arch Linux:    sudo pacman -S typst\n"
+            "           - Ubuntu/Debian: sudo apt install typst (o snap install --classic typst)\n"
+            "           - Cargo (Rust):  cargo install --locked typst-cli\n"
+            "       • TeX Live (LaTeX tradicional):\n"
+            "           - Arch Linux:    sudo pacman -S texlive-basic texlive-latexextra\n"
+            "           - Ubuntu/Debian: sudo apt install texlive-latex-base texlive-latex-extra"
+        )
+    elif not typst_ok:
+        diag["suggestions"].append(
+            "Sugerencia: Tienes 'pdflatex' pero no 'typst'. Instalar Typst te permite compilar documentos 10x más rápido sin overhead de TeX Live:\n"
+            "       • Arch Linux: sudo pacman -S typst\n"
+            "       • Cargo:      cargo install --locked typst-cli"
         )
 
     # 3.2. Poppler Utils (pdftotext, pdfinfo para ingest-materia)
@@ -231,11 +247,22 @@ def print_human_report(diag: dict):
     else:
         print(f"  {YELLOW}⚠️{RESET} Poppler Utils no instalado           → {YELLOW}Limitación en lectura de PDFs{RESET}")
 
-    latex = diag["tools"]["pdflatex"]
-    if latex["ok"]:
-        print(f"  {GREEN}✔{RESET} pdflatex (TeX Live)                → {CYAN}Habilita 'latex-compiler'{RESET}")
+    pdf_tool = diag["tools"]["compilador_pdf"]
+    typst_info = pdf_tool["typst"]
+    pdflatex_info = pdf_tool["pdflatex"]
+    if typst_info["ok"]:
+        ver = f" ({typst_info['version']})" if typst_info["version"] else ""
+        print(f"  {GREEN}✔{RESET} Typst (Rust Engine){ver}            → {CYAN}Habilita 'compilador-pdf' (Ultrarrápido){RESET}")
     else:
-        print(f"  {YELLOW}⚠️{RESET} pdflatex NO encontrado             → {YELLOW}Skill 'latex-compiler' deshabilitada{RESET}")
+        print(f"  {YELLOW}ℹ{RESET} Typst no instalado                  → {YELLOW}Disponible para compilación instantánea (pacman -S typst){RESET}")
+
+    if pdflatex_info["ok"]:
+        print(f"  {GREEN}✔{RESET} pdflatex (TeX Live)                → {CYAN}Habilita 'compilador-pdf' (LaTeX tradicional){RESET}")
+    else:
+        print(f"  {YELLOW}ℹ{RESET} pdflatex no instalado               → {YELLOW}LaTeX tradicional no disponible{RESET}")
+
+    if not pdf_tool["ok"]:
+        print(f"  {RED}❌{RESET} {BOLD}Sin motores PDF instalados{RESET}         → {RED}Skill 'compilador-pdf' deshabilitada{RESET}")
 
     # 4. Hooks
     print(f"\n{BOLD}[4] HOOKS Y SEGURIDAD{RESET}")

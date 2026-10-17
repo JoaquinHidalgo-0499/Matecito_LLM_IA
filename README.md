@@ -23,7 +23,7 @@ Bóveda de notas interconectadas en Markdown estándar con hipervínculos bidire
 
 ### 2. Salida y Entrega de Artefactos (`archivos-generados/`)
 Directorio exclusivo para alojar entregables solicitados por el usuario. Mantiene una jerarquía plana por proyecto (`<proyecto>/`):
-* Documentos técnicos y guías de estudio compiladas en LaTeX (`.tex` y `.pdf`).
+* Documentos técnicos y guías de estudio compiladas en PDF mediante Typst o LaTeX (`.typ`, `.tex` y `.pdf`).
 * Entregables de código final y firmwares para microcontroladores (CircuitPython/KMK).
 * No contiene herramientas de soporte ni scripts temporales del asistente.
 
@@ -37,7 +37,7 @@ Receptor de capturas web, artículos o notas móviles para su posterior cataloga
   * `ingest-resource`: Registro técnico de infraestructura, hardware, servidores y fichas de equipamiento.
   * `ingest-session`: Documentación estructurada de jornadas de desarrollo y bitácoras técnicas.
   * `ingest-clipping`: Procesamiento y vaciado de notas en bandeja de entrada hacia la base de conocimiento.
-  * `latex-compiler`: Maquetación y compilación de documentos profesionales en PDF mediante `pdflatex`.
+  * `compilador-pdf`: Maquetación y compilación de documentos profesionales en PDF mediante Typst (Rust) o LaTeX (`pdflatex`).
 * **Hooks de Ciclo de Vida (`hooks.json`):**
   * `protect_readonly.py` (`PreToolUse`): Bloqueo preventivo de comandos destructivos y escrituras sobre el repositorio de material académico de referencia.
   * `fix_backticks.py` (`PostToolUse`): Saneamiento automático de wikilinks con comillas invertidas preservando bloques de código.
@@ -72,7 +72,8 @@ Reglas rectoras del asistente, principio de honestidad radical y anti-complacenc
 | **Python $\ge$ 3.10** | *Obligatorio* | Ejecución de scripts y hooks | `python` | `python3` |
 | **Git** | *Obligatorio* | Control de versiones | `git` | `git` |
 | **Poppler Utils** | `ingest-materia` | Extracción de texto de PDFs | `poppler` | `poppler-utils` |
-| **TeX Live (`pdflatex`)** | `latex-compiler` | Compilación de PDFs | `texlive-basic texlive-latexextra` | `texlive-latex-base texlive-latex-extra` |
+| **Typst** | `compilador-pdf` *(Recomendado)* | Compilación ultra-rápida de PDFs (Rust ~45MB) | `typst` | `typst` (o snap / cargo) |
+| **TeX Live (`pdflatex`)** | `compilador-pdf` *(Tradicional)* | Compilación de plantillas LaTeX clásicas | `texlive-basic texlive-latexextra` | `texlive-latex-base texlive-latex-extra` |
 
 > [!NOTE]
 > Todos los scripts internos de `scripts/` y hooks de `.agents/` están programados exclusivamente con la **biblioteca estándar de Python**, por lo que **no** requieren dependencias adicionales de `pip` para funcionar.

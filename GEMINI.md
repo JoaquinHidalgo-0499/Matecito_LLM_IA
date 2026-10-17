@@ -16,9 +16,9 @@ Cuando se proporcionen fragmentos de texto, bitácoras o ideas:
 - El rol en ingesta es **estrictamente documental**: estructurar, sintetizar y registrar la información en archivos Markdown estándar con wikilinks limpios.
 - **Indexación Obligatoria Universal:** Toda nueva nota creada (`session`, `concept`, `resource` o `apunte`) debe indexarse de forma inmediata y autónoma en `brain/index.md` en su sección correspondiente mediante el enlace [[nombre-de-la-nota]].
 - **Prohibición de Código Intermediario:** Está terminantemente prohibido generar scripts ad-hoc, compiladores improvisados o código temporal en `scratch/` para tareas de ingesta o validación.
-- **Propósito de `archivos-generados/`:** Es exclusivamente una carpeta de **salida y entrega** de artefactos solicitados por el usuario (PDFs compilados con LaTeX, proyectos de código o firmwares). No contiene herramientas ejecutables para el asistente ni participa en la administración interna de `braind`.
+- **Propósito de `archivos-generados/`:** Es exclusivamente una carpeta de **salida y entrega** de artefactos solicitados por el usuario (PDFs compilados con Typst o LaTeX, proyectos de código o firmwares). No contiene herramientas ejecutables para el asistente ni participa en la administración interna de `braind`.
 
-- **Delegación en Skills Especializadas:** Para crear, clasificar o estructurar notas y compilar artefactos, activar y respetar las directrices, esquemas de frontmatter y secciones obligatorias de la skill correspondiente (`ingest-session`, `ingest-materia`, `ingest-resource`, `ingest-clipping`, `latex-compiler`).
+- **Delegación en Skills Especializadas:** Para crear, clasificar o estructurar notas y compilar artefactos, activar y respetar las directrices, esquemas de frontmatter y secciones obligatorias de la skill correspondiente (`ingest-session`, `ingest-materia`, `ingest-resource`, `ingest-clipping`, `compilador-pdf`).
 
 ### 2. QUERY (Consulta)
 Cuando se hagan preguntas sobre el contenido:
@@ -49,8 +49,7 @@ Cuando se pida verificar la salud, enlaces o estadísticas del cerebro:
   - Para archivos **en servidores remotos** (`servidor_personal`, OpenWrt) o rutas externas: se permite `cat << EOF` vía `run_command`.
 - **Explicación Previa Obligatoria de Scripts:** Antes de generar o ejecutar cualquier script o comando complejo, explicar detalladamente al usuario: 1. Qué hace paso a paso, 2. Dependencias externas, 3. Rutas que lee o modifica, 4. Objetivo e impacto esperado.
 - **Herramientas Oficiales:** Las utilidades operativas y de mantenimiento del workspace residen centralizadas en `scripts/`. Prohibido generar código inline o scripts temporales alternativos.
-- **Enrutamiento de Subagentes:** Para refactors de más de 100 líneas, arquitectura de sistemas, depuración multi-archivo o generación de documentos complejos, priorizar subagentes PRO. Para tareas puntuales (crear notas, ejecutar scripts, greps, consultas rápidas), Flash es suficiente.
-- **LaTeX:** Binario `pdflatex` disponible en el sistema. Su salida se genera exclusivamente dentro de `archivos-generados/<proyecto>/`.
+- **Compilación PDF:** Motores soportados: Typst (basado en Rust, ultrarrápido, recomendado) y `pdflatex` (TeX Live). Su salida se genera exclusivamente dentro de `archivos-generados/<proyecto>/`. Ante ausencia del motor solicitado, reportar de inmediato al usuario según `doctor.py` sin simular la compilación.
 
 ## Repositorios de Referencia y Fuentes Académicas
 - Las fuentes y apuntes de cátedra residen en la ruta parametrizada en `.env` (`MATERIAL_ACADEMICO_PATH`), con fallback estándar a la carpeta hermana `../material-academico/`.
