@@ -12,7 +12,7 @@ Procedimiento maestro para procesar archivos crudos de la facultad y convertirlo
 ## Procedimiento Paso a Paso
 
 ### 1. Escaneo y Clasificación (Modo Seguro)
-- Accede al directorio indicado por el usuario, típicamente en `~/Compartido/material-academico/<materia>/`.
+- Accede al directorio de material académico (configurado en `.env` o por defecto `../material-academico/<materia>/`).
 - **REGLA ABSOLUTA:** Esta ruta es estrictamente de **SOLO LECTURA**. NUNCA debes modificar, mover, renombrar o borrar archivos originales allí.
 - Identifica los archivos clave: PDFs (teoría), PPTX (presentaciones), Código (.py, .c, .java) y enunciados de parciales/TPs.
 
@@ -24,7 +24,7 @@ Procedimiento maestro para procesar archivos crudos de la facultad y convertirlo
 
 ### 2. Creación de Notas Conceptuales
 - Por cada unidad, módulo o tema principal procesado, crea un archivo en:
-  `/home/joaquin/Compartido/braind/brain/conceptos/<siglamateria>-u<numero>-<tema-corto>.md`
+  `brain/conceptos/<siglamateria>-u<numero>-<tema-corto>.md`
 - Aplica estrictamente el Frontmatter YAML para "Notas de Concepto" definido en `GEMINI.md`:
   ```yaml
   ---
@@ -38,7 +38,7 @@ Procedimiento maestro para procesar archivos crudos de la facultad y convertirlo
 
 ### 3. Creación de Apuntes, Compendios y Bancos de Ejercicios
 - Si el material contiene compendios de estudio para exámenes, tratados integrales, bancos de ejercicios/parciales, cuestionarios o guías de laboratorio de cátedra, créalos en:
-  `/home/joaquin/Compartido/braind/brain/apuntes/<siglamateria>-<nombre-descriptivo>.md`
+  `brain/apuntes/<siglamateria>-<nombre-descriptivo>.md`
 - Aplica estrictamente el Frontmatter YAML para "Notas de Apunte" definido en `GEMINI.md`:
   ```yaml
   ---
@@ -51,7 +51,7 @@ Procedimiento maestro para procesar archivos crudos de la facultad y convertirlo
 
 ### 4. Indexación
 - Todo archivo creado debe ser agregado al índice central.
-- Edita `/home/joaquin/Compartido/braind/brain/index.md` insertando el wikilink `[[nombre-del-archivo-sin-md]]` en la categoría correspondiente a la materia.
+- Edita `brain/index.md` insertando el wikilink `[[nombre-del-archivo-sin-md]]` en la categoría correspondiente a la materia.
 - **Importante:** Nunca uses acentos graves (backticks) alrededor de los wikilinks. (Usa `[[nota]]`, NO `\`[[nota]]\``).
 
 ### 5. Validación Final de Tags
@@ -60,4 +60,4 @@ Procedimiento maestro para procesar archivos crudos de la facultad y convertirlo
 
 ### 6. Cierre
 - Termina la operación ejecutando el LINT de la bóveda para garantizar que la nueva ingesta no rompió nada:
-  `python3 /home/joaquin/Compartido/braind/scripts/brain-lint.py`
+  `python3 scripts/brain-lint.py`

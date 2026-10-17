@@ -13,15 +13,28 @@ Procedimiento estandarizado para la redacción, maquetación y compilación de d
 
 ## 1. Reglas de Ubicación y Propósito
 * **Carpeta Exclusiva de Salida:** Todo archivo `.tex`, archivo auxiliar y `.pdf` compilado debe generarse **única y exclusivamente** dentro de:
-  `/home/joaquin/Compartido/braind/archivos-generados/<nombre-proyecto>/`
-* **Prohibición:** Está terminantemente prohibido generar artefactos LaTeX dentro de `/brain/` o en las carpetas académicas de sólo lectura (`~/Compartido/material-academico/`).
-* **Propósito:** `archivos-generados/` es exclusivamente una carpeta de salida y entrega de entregables para el usuario. No participa en la administración interna de `braind`.
+  `archivos-generados/<nombre-proyecto>/`
+* **Prohibición:** Está terminantemente prohibido generar artefactos LaTeX dentro de `brain/` o en las carpetas académicas de referencia (`material-academico/`).
+* **Propósito y Exclusión de LINT:** `archivos-generados/` es exclusivamente una carpeta de salida y entrega de entregables para el usuario. No participa en la administración interna de `braind` ni forma parte del grafo de notas. **Está terminantemente prohibido ejecutar `brain-lint.py` o la skill `brain-audit` tras compilar o generar archivos en esta carpeta.**
 
 ---
 
-## 2. Entorno y Binarios del Sistema
-* **Motor LaTeX:** `/usr/bin/pdflatex` (instalado y verificado en el sistema).
+## 2. Entorno, Binarios y Manejo de Dependencias Faltantes
+* **Motor LaTeX Requerido:** `pdflatex` (TeX Live).
 * **Flags recomendados:** `-interaction=nonstopmode -halt-on-error`
+
+### Verificación Previa Obligatoria (Protocolo Anti-Improvisación):
+Antes de compilar, el asistente debe comprobar la disponibilidad de `pdflatex` en el sistema (`which pdflatex`).
+* **Si el binario NO está disponible en el PATH:**
+  1. **Prohibición Absoluta de Simulación:** Queda terminantemente prohibido improvisar scripts con librerías alternativas (`reportlab`, `fpdf`), generar archivos vacíos o simular que se compiló el documento.
+  2. **Notificación Inmediata y Sugerencia de Instalación:** El asistente debe detener el flujo y notificar de forma transparente al usuario:
+     > *"⚠️ Dependencia requerida no encontrada: No se detectó `pdflatex` en tu sistema operativo.*  
+     > *Para habilitar la compilación nativa de PDFs en LaTeX se requiere TeX Live:*  
+     > *• Arch Linux: `sudo pacman -S texlive-basic texlive-latexextra`*  
+     > *• Ubuntu / Debian: `sudo apt install texlive-latex-base texlive-latex-extra`*  
+     > *• Fedora: `sudo dnf install texlive-scheme-basic`*  
+     > 
+     > *¿Deseas instalar la herramienta ahora o prefieres que genere únicamente el archivo fuente `.tex` listo para compilar en otra máquina?"*
 
 ---
 
@@ -105,26 +118,26 @@ Formato de compresión de superficie diseñado para vaciar presentaciones de Pow
 ## 4. Flujo de Compilación Paso a Paso
 
 ### Paso 1: Escritura del Código Fuente `.tex`
-Escribir el código fuente completo en `/home/joaquin/Compartido/braind/archivos-generados/<proyecto>/documento.tex` usando la herramienta nativa `write_to_file`.
+Escribir el código fuente completo en `archivos-generados/<proyecto>/documento.tex` usando la herramienta nativa `write_to_file`.
 
 ### Paso 2: Compilación con `pdflatex` (Doble Pasada)
 Ejecutar la compilación en dos pasadas consecutivas para resolver correctamente la tabla de contenidos (`\tableofcontents`), referencias cruzadas y numeración de páginas:
 
 ```bash
-cd /home/joaquin/Compartido/braind/archivos-generados/<proyecto> && pdflatex -interaction=nonstopmode documento.tex && pdflatex -interaction=nonstopmode documento.tex
+pdflatex -interaction=nonstopmode -output-directory=archivos-generados/<proyecto> archivos-generados/<proyecto>/documento.tex && pdflatex -interaction=nonstopmode -output-directory=archivos-generados/<proyecto> archivos-generados/<proyecto>/documento.tex
 ```
 
 ### Paso 3: Limpieza de Archivos Auxiliares (Opcional pero Recomendado)
 Eliminar los archivos temporales de compilación para mantener el directorio limpio, conservando el `.tex` y el `.pdf`:
 
 ```bash
-cd /home/joaquin/Compartido/braind/archivos-generados/<proyecto> && rm -f *.aux *.log *.out *.toc *.synctex.gz
+rm -f archivos-generados/<proyecto>/*.aux archivos-generados/<proyecto>/*.log archivos-generados/<proyecto>/*.out archivos-generados/<proyecto>/*.toc archivos-generados/<proyecto>/*.synctex.gz
 ```
 
 ---
 
 ## 5. Reporte y Entrega
 Al finalizar exitosamente:
-1. Notificar al usuario la ruta absoluta del PDF generado:
-   `file:///home/joaquin/Compartido/braind/archivos-generados/<proyecto>/documento.pdf`
+1. Notificar al usuario el enlace al PDF generado:
+   `[Documento PDF](file:///ruta/absoluta/al/workspace/archivos-generados/<proyecto>/documento.pdf)`
 2. Resumir la estructura de secciones, páginas y contenido del documento entregado.

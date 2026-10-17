@@ -14,12 +14,12 @@ Procedimiento maestro para documentar infraestructura, inventario de hardware/ta
 
 ## 1. Ubicación y Nomenclatura del Archivo
 
-Cada archivo de recurso debe ubicarse en `/home/joaquin/Compartido/braind/brain/recursos/` y seguir estrictamente la convención de nomenclatura:
+Cada archivo de recurso debe ubicarse en `brain/recursos/` y seguir estrictamente la convención de nomenclatura:
 
 ```
-/home/joaquin/Compartido/braind/brain/recursos/recursos-<identificador-kebab-case>.md
+brain/recursos/recursos-<identificador-kebab-case>.md
 ```
-o en subcarpetas temáticas ya estructuradas (ej: `/brain/recursos/<materia>/recursos-...md` o `/brain/recursos/<materia>/<nombre>.md`).
+o en subcarpetas temáticas ya estructuradas (ej: `brain/recursos/<materia>/recursos-...md` o `brain/recursos/<materia>/<nombre>.md`).
 
 * **Identificador:** Cadena en minúsculas separada por guiones (`kebab-case`) que describa unívocamente el equipo, servidor, componente, proyecto o recurso documentado.
 
@@ -74,7 +74,7 @@ Resumen técnico del recurso, propósito dentro del ecosistema/homelab/taller y 
 
 ## 4. Indexación en `index.md`
 
-Toda nota de recurso creada debe indexarse de forma inmediata en `/home/joaquin/Compartido/braind/brain/index.md`:
+Toda nota de recurso creada debe indexarse de forma inmediata en `brain/index.md`:
 1. Ubicar la sección correspondiente:
    - `## Planificación y Cronogramas` (para recursos de homelab, taller, hardware o servicios).
    - O bajo la sección de la cátedra específica si el recurso es de ámbito académico (ej: `ACP`, `CSyT`, etc.).
@@ -91,7 +91,7 @@ Toda nota de recurso creada debe indexarse de forma inmediata en `/home/joaquin/
 Al finalizar la creación e indexación del recurso, certificar la integridad del grafo ejecutando el linter oficial:
 
 ```bash
-python3 /home/joaquin/Compartido/braind/scripts/brain-lint.py
+python3 scripts/brain-lint.py
 ```
 
 * **Veredicto esperado:** Exit code `0` (Cerebro 100% saludable). Si se detectan observaciones o enlaces rotos, corregirlos inmediatamente.

@@ -13,9 +13,9 @@ Procedimiento maestro para documentar jornadas de trabajo, sesiones de desarroll
 ---
 
 ## 1. Nomenclatura del Archivo
-Cada archivo de sesión debe ubicarse en `/home/joaquin/Compartido/braind/brain/sesiones/` y seguir estrictamente el patrón:
+Cada archivo de sesión debe ubicarse en `brain/sesiones/` y seguir estrictamente el patrón:
 ```
-/home/joaquin/Compartido/braind/brain/sesiones/AAAA-MM-DD-nombre-corto.md
+brain/sesiones/AAAA-MM-DD-nombre-corto.md
 ```
 * **Fecha:** Debe corresponder a la fecha local del sistema (ej: `2026-08-23`).
 * **Nombre corto:** Identificador en minúsculas separado por guiones (kebab-case) que resuma el foco principal de la jornada.
@@ -62,7 +62,7 @@ Toda nota de sesión debe estructurarse con las siguientes 3 secciones de nivel 
 ---
 
 ## 4. Indexación en `index.md`
-Toda nota de sesión creada debe agregarse inmediatamente a `/home/joaquin/Compartido/braind/brain/index.md`:
+Toda nota de sesión creada debe agregarse inmediatamente a `brain/index.md`:
 1. Ubicar la sección correspondiente bajo `## Sesiones de Trabajo`.
 2. Insertar una nueva línea en la lista cronológica con el formato:
    ```markdown
@@ -75,6 +75,6 @@ Toda nota de sesión creada debe agregarse inmediatamente a `/home/joaquin/Compa
 ## 5. Validación Final de Salud
 Al finalizar la creación e indexación de la sesión, ejecutar el auditor oficial para certificar la salud del grafo:
 ```bash
-python3 /home/joaquin/Compartido/braind/scripts/brain-lint.py
+python3 scripts/brain-lint.py
 ```
 * **Veredicto esperado:** Exit code `0` (Cerebro 100% saludable). Si arroja observaciones, corregirlas de inmediato.

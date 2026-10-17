@@ -3,17 +3,27 @@ import os
 import json
 import re
 
-PROTECTED_DIRS = [
-    os.path.realpath(os.path.expanduser("~/Compartido/material-academico")),
-]
+_script_dir = os.path.dirname(os.path.abspath(__file__))
+_project_root = os.path.dirname(_script_dir)
+if _project_root not in sys.path:
+    sys.path.insert(0, _project_root)
+
+try:
+    from scripts.config import MATERIAL_ACADEMICO_DIR
+    PROTECTED_DIRS = [str(MATERIAL_ACADEMICO_DIR)]
+except Exception:
+    PROTECTED_DIRS = [
+        os.path.realpath(os.path.join(_project_root, "..", "material-academico")),
+    ]
 
 DANGEROUS_CMD_REGEX = re.compile(
     r"\b(rm|mv|cp|touch|chmod|chown|sed\s+-i|truncate|dd|tee|rsync|unlink|shred)\b|>{1,2}",
     re.IGNORECASE
 )
 
+_base_folder_name = os.path.basename(PROTECTED_DIRS[0])
 CMD_TARGETS_REGEX = re.compile(
-    r"(?:^|[\s\"'/])(?:[^\s\"']*/)?material-academico(?:/|[\s\"']|$)",
+    rf"(?:^|[\s\"'/])(?:[^\s\"']*/)?{re.escape(_base_folder_name)}(?:/|[\s\"']|$)",
     re.IGNORECASE
 )
 

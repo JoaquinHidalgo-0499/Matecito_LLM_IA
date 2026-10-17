@@ -21,6 +21,10 @@ grafo de conocimiento personal en `/brain/`.
 | `escanear-materias.py` | `scripts/escanear-materias.py` | Detección de archivos nuevos/modificados en materias académicas |
 | `consolidar-pendientes.py` | `scripts/consolidar-pendientes.py` | Agrupación y consolidación cronológica de tareas pendientes desde las sesiones |
 
+## Ámbito de Ejecución Estricto
+* **Exclusivo para `brain/`:** Esta skill y el script `brain-lint.py` se ejecutan **única y exclusivamente** si se agregan, modifican o indexan archivos **dentro del directorio `brain/`**, o ante solicitud expresa del usuario.
+* **Prohibición Fuera de `brain/`:** Queda terminantemente prohibido ejecutar esta skill o `brain-lint.py` tras operaciones en `archivos-generados/` (compilación LaTeX, PDFs, exportaciones), `scripts/` o rutas fuera de la base de conocimiento, por resultar ineficiente e innecesario.
+
 ## Procedimiento
 
 ### 1. LINT (Validación de Salud)
@@ -85,7 +89,7 @@ python3 scripts/escanear-materias.py
   ```bash
   python3 scripts/escanear-materias.py --update
   ```
-- **Nunca modificar los archivos de materias.** La ruta `~/Compartido/material-academico/` es estrictamente de SOLO LECTURA.
+- **Nunca modificar los archivos de materias.** El repositorio de material académico es estrictamente de SOLO LECTURA (protegido activamente por hook a nivel de proceso).
 
 ### 4. CONSOLIDACIÓN DE PENDIENTES
 
