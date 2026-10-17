@@ -29,8 +29,9 @@ Cuando se hagan preguntas sobre el contenido:
 
 ### 3. LINT y Auditoría (Validación)
 Cuando se pida verificar la salud, enlaces o estadísticas del cerebro:
-- Activar el skill `brain-audit` y seguir su procedimiento.
-- Usar **exclusivamente** los scripts oficiales residentes en `scripts/` (`brain-lint.py`, `brain-stats.py`, `escanear-materias.py`, `consolidar-pendientes.py`). Queda prohibido generar código inline o scripts temporales alternativos en `scratch/` o cualquier otra ruta.
+- **Ámbito Exclusivo de Ejecución (Solo dentro de `brain/`):** El script `scripts/brain-lint.py` y la skill `brain-audit` se ejecutan **única y exclusivamente** si se agregan, modifican o indexan archivos **dentro del directorio `brain/`** (`brain/conceptos/`, `brain/apuntes/`, `brain/recursos/`, `brain/sesiones/`, `brain/index.md`, etc.), o ante solicitud explícita del usuario.
+- **Prohibición Fuera de `brain/`:** Queda terminantemente prohibido ejecutar `brain-lint.py` o activar la skill `brain-audit` tras crear, compilar o modificar archivos fuera de `brain/` (por ejemplo, en `archivos-generados/`, `scripts/`, `scratch/` o configuraciones del sistema), ya que tales rutas no forman parte del grafo de notas ni son evaluadas por el linter, resultando inútil e ineficiente.
+- **Herramientas Oficiales:** Usar **exclusivamente** los scripts oficiales residentes en `scripts/` (`brain-lint.py`, `brain-stats.py`, `escanear-materias.py`, `consolidar-pendientes.py`). Queda prohibido generar código inline o scripts temporales alternativos en `scratch/` o cualquier otra ruta.
 
 ## Tono, Formato y Normalización de Tags
 - **Tono y Estilo:** Directo, técnico y limpio. Markdown básico únicamente.
@@ -40,7 +41,7 @@ Cuando se pida verificar la salud, enlaces o estadísticas del cerebro:
 ## Infraestructura Homelab y Topología Distribuida
 - **Servidor Personal (`servidor_personal` / `192.168.20.200`):** Los servicios Docker se gestionan con `docker-compose.yml` en `~/docker/<servicio>/`.
 - **Servidor MCP `homelab-mcp`:** Usar prioritariamente las herramientas de `homelab-mcp` (`estado_servidor`, `listar_contenedores`, `logs_contenedor`, `consultar_uptime_kuma`) para inspección y monitoreo del servidor antes de recurrir a comandos de terminal.
-- **Topología y Cómputo Distribuido (Syncthing):** Las carpetas bajo `~/Compartido/` están sincronizadas bidireccionalmente con el servidor personal. Para tareas pesadas de procesamiento (RAG, indexación masiva, conversiones por lotes), priorizar la ejecución directa en el servidor (vía SSH, tmux o nohup) para evitar consumo innecesario de batería y saturación de la laptop.
+- **Topología y Cómputo Distribuido (Syncthing):** Para tareas pesadas de procesamiento (RAG, indexación masiva, conversiones por lotes), priorizar la ejecución directa en el servidor personal (vía SSH, tmux o nohup) para evitar consumo innecesario de batería y saturación de la laptop.
 
 ## Política de Ejecución, Herramientas y Archivos
 - **Manipulación de Archivos:**
@@ -51,10 +52,10 @@ Cuando se pida verificar la salud, enlaces o estadísticas del cerebro:
 - **Enrutamiento de Subagentes:** Para refactors de más de 100 líneas, arquitectura de sistemas, depuración multi-archivo o generación de documentos complejos, priorizar subagentes PRO. Para tareas puntuales (crear notas, ejecutar scripts, greps, consultas rápidas), Flash es suficiente.
 - **LaTeX:** Binario `pdflatex` disponible en el sistema. Su salida se genera exclusivamente dentro de `archivos-generados/<proyecto>/`.
 
-## Repositorios de Referencia y Fuentes Académicas (SOLO LECTURA)
-- La ruta `~/Compartido/material-academico/` es **estrictamente de SOLO LECTURA**.
-- El asistente puede leer, buscar y consultar libremente sus archivos (apuntes, libros, parciales, códigos) para responder preguntas, preparar resúmenes o sintetizar contenido hacia `brain/` o `archivos-generados/`.
-- **Prohibición Absoluta (Bloqueo Activo por Hook):** Queda terminantemente prohibido modificar, sobrescribir, mover o eliminar cualquier archivo dentro de estas rutas de referencia. Toda salida generada debe residir en `brain/` o `archivos-generados/`. Un hook `PreToolUse` en `.agents/hooks.json` bloquea a nivel de sistema cualquier intento de escritura o comando destructivo sobre estas carpetas.
+## Repositorios de Referencia y Fuentes Académicas
+- Las fuentes y apuntes de cátedra residen en la ruta parametrizada en `.env` (`MATERIAL_ACADEMICO_PATH`), con fallback estándar a la carpeta hermana `../material-academico/`.
+- Es un repositorio estrictamente de **consulta y lectura**: el asistente debe leer, buscar y consultar libremente sus archivos para fundamentar respuestas, preparar resúmenes o sintetizar contenido.
+- Toda salida o nuevo contenido generado debe residir exclusivamente en `brain/` (conocimiento) o `archivos-generados/` (artefactos y PDFs). El hook de seguridad del sistema bloquea a nivel de proceso cualquier intento de escritura sobre estas rutas de referencia.
 
 ## Uso del Servidor RAG y Generación Anclada (RAG-First Académico)
 - **Criterio RAG-First Obligatorio:** Siempre que el usuario solicite:
@@ -68,5 +69,3 @@ Cuando se pida verificar la salud, enlaces o estadísticas del cerebro:
   - El asistente continuará la tarea utilizando las notas existentes en `brain/` y su base conceptual.
   - Advertirá explícitamente al usuario al inicio: `⚠️ Nota: RAG no disponible / sin cobertura para [Materia]; respondiendo con base conceptual de la bóveda local.`
 - **Consultas Rápidas Exentas:** Preguntas de definición puntual corta (ej. "¿Qué significa la sigla CIA?"), sintaxis de código o aclaraciones breves no requieren invocar el RAG obligatoriamente, respondiéndose de forma instantánea para evitar latencia innecesaria.
-
-
