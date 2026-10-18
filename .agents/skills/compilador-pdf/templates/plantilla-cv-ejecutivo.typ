@@ -22,7 +22,7 @@
 )
 
 #set text(
-  font: ("Liberation Sans", "Helvetica Neue", "Arial", "DejaVu Sans"),
+  font: ("Liberation Sans", "DejaVu Sans", "Adwaita Sans"),
   size: 9pt,
   fill: rgb("#1e293b"),
   lang: "es",
@@ -78,7 +78,7 @@
   #text(size: 8pt)[
     San Salvador de Jujuy, Argentina (Remoto / Presencial) |
     #link("tel:+5493880000000")[(+54) 388-0000000] |
-    #link("mailto:contacto@ejemplo.com")[contacto@ejemplo.com] \
+    #link("mailto:contacto@ejemplo.com")[contacto\@ejemplo.com] \
     LinkedIn: #link("https://linkedin.com/in/joaquinhidalgo")[linkedin.com/in/joaquinhidalgo] |
     GitHub: #link("https://github.com/joaquinhidalgo")[github.com/joaquinhidalgo]
   ]

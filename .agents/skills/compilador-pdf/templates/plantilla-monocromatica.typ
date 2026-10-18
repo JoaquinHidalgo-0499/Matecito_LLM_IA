@@ -21,7 +21,7 @@
   paper: "a4",
   margin: (top: 1.8cm, bottom: 1.8cm, left: 2.2cm, right: 1.8cm),
   header: none,
-  footer: locate(loc => {
+  footer: context {
     grid(
       columns: (1fr, auto),
       align: (left, right),
@@ -29,16 +29,16 @@
         [Materia / Asignatura] · Compendio Técnico Monocromo
       ],
       text(size: 8.5pt, weight: "bold", fill: black, font: "DejaVu Sans")[
-        #loc.page()
+        #counter(page).display()
       ]
     )
     v(-3pt)
     line(length: 100%, stroke: 0.3pt + rgb("#94a3b8"))
-  }),
+  },
 )
 
 #set text(
-  font: ("Linux Libertine", "Charter", "DejaVu Serif", "Times New Roman"),
+  font: ("Libertinus Serif", "Liberation Serif", "DejaVu Serif"),
   size: 10pt,
   fill: black,
   lang: "es",
@@ -55,7 +55,7 @@
 
 // --- Títulos y Encabezados Sans-Serif Monocromo ---
 #show heading: it => [
-  #set text(fill: black, font: ("DejaVu Sans", "Liberation Sans", "Helvetica Neue"))
+  #set text(fill: black, font: ("DejaVu Sans", "Liberation Sans"))
   #v(0.8em)
   #it
   #v(0.3em)
@@ -180,7 +180,7 @@ Texto introductorio del tema desarrollado. El formato a 1 columna continua garan
     align: (left, left, left),
     [*Criterio Evaluado*], [*Enfoque Convencional*], [*Enfoque Avanzado / Cátedra*],
     [*Objetivo Primario*], [Mecanismo base y limitaciones operativas.], [Alta disponibilidad y tolerancia a fallos.],
-    [*Tiempo de Respuesta*], [Latencia dependiente de conmutación electromecánica.], [Conmutación instantánea ($0 upright("ms)$).],
+    [*Tiempo de Respuesta*], [Latencia dependiente de conmutación electromecánica.], [Conmutación instantánea ($0 upright("ms")$).],
     [*Resiliencia*], [Intervención manual ante caídas de enlace.], [Recuperación automatizada con redundancia activa.],
   )
 ]

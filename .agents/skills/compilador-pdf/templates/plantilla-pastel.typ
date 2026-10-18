@@ -21,15 +21,15 @@
   paper: "a4",
   margin: (top: 1.2cm, bottom: 1.3cm, left: 1.25cm, right: 1.25cm),
   header: none,
-  footer: locate(loc => {
-    align(center)[
-      #text(size: 8pt, fill: rgb("#64748b"))[— Página #loc.page() —]
+  footer: context [
+    #align(center)[
+      #text(size: 8pt, fill: rgb("#64748b"))[— Página #counter(page).display() —]
     ]
-  }),
+  ],
 )
 
 #set text(
-  font: ("Liberation Sans", "Helvetica Neue", "DejaVu Sans", "Arial"),
+  font: ("Liberation Sans", "DejaVu Sans", "Adwaita Sans"),
   size: 9pt,
   lang: "es",
   region: "ar",

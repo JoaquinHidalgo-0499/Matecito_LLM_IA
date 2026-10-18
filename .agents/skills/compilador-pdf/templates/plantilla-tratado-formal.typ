@@ -22,9 +22,10 @@
 #set page(
   paper: "a4",
   margin: (top: 2.5cm, bottom: 2.5cm, left: 2.5cm, right: 2.5cm),
-  header: locate(loc => {
+  header: context {
     // Encabezado activo únicamente a partir del cuerpo principal (pág > 2)
-    if loc.page() > 2 [
+    let page-num = counter(page).get().first()
+    if page-num > 2 [
       #grid(
         columns: (1fr, 1fr),
         align: (left, right),
@@ -34,19 +35,20 @@
       #v(-3pt)
       #line(length: 100%, stroke: 0.5pt + rgb("#cbd5e1"))
     ]
-  }),
-  footer: locate(loc => {
+  },
+  footer: context {
     // Pie de página con numeración
-    if loc.page() > 1 [
+    let page-num = counter(page).get().first()
+    if page-num > 1 [
       #align(center)[
-        #text(size: 9pt, fill: rgb("#475569"))[— #loc.page() —]
+        #text(size: 9pt, fill: rgb("#475569"))[— #page-num —]
       ]
     ]
-  }),
+  },
 )
 
 #set text(
-  font: ("Linux Libertine", "Times New Roman", "DejaVu Serif", "PT Serif"),
+  font: ("Libertinus Serif", "Liberation Serif", "DejaVu Serif"),
   size: 11pt,
   lang: "es",
   region: "ar",
@@ -62,7 +64,7 @@
 // Numeración de encabezados
 #set heading(numbering: "1.1")
 #show heading: it => [
-  #set text(fill: rgb("#0f172a"), font: ("DejaVu Sans", "Liberation Sans", "Helvetica Neue"))
+  #set text(fill: rgb("#0f172a"), font: ("DejaVu Sans", "Liberation Sans"))
   #v(1em)
   #it
   #v(0.5em)
@@ -93,7 +95,7 @@
   #v(0.3em)
   #text(size: 10pt, fill: rgb("#334155"))[
     Facultad de Ingeniería --- Universidad Nacional de Jujuy \
-    #link("mailto:contacto@ejemplo.com")[contacto@ejemplo.com]
+    #link("mailto:contacto@ejemplo.com")[contacto\@ejemplo.com]
   ]
   
   #v(3cm)
