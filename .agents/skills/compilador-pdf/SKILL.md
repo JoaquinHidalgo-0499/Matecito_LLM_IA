@@ -94,6 +94,15 @@ Ubicadas en `.agents/skills/compilador-pdf/templates/`:
 * **Versión LaTeX:** `plantilla-cv-ejecutivo-compacto-1pagina.tex`
   - Clase `extarticle` a `9pt`, secciones con `\cvsection` y macros anti-solapamiento.
 
+### Formato E: Simulacro de Examen / Banco Interactivo (Navegación Bidireccional)
+* **Versión Typst:** `plantilla-simulacro-examen.typ`
+  - Diseñado para exámenes parciales, finales, guías de autoevaluación y bancos de preguntas.
+  - Insignias automáticas de tipo de reactivo (`A DESARROLLAR`, `SELECCIÓN MÚLTIPLE`, `MARQUE LAS QUE NO CORRESPONDEN`, `CASO PRÁCTICO`) y puntaje.
+  - **Navegación bidireccional hipertextual integrada (84+ botones):**
+    - En cada pregunta: botón interactivo `[Ver Solución ➜]` que salta directamente a la respuesta en la sección final.
+    - En cada respuesta: doble botón de retorno `[⬅ Volver a Pregunta]` y `[⬅ Volver al Apartado X]`.
+  - Bloques con `breakable: false` para evitar que preguntas o soluciones se fracturen entre saltos de página.
+
 ---
 
 ## 5. Flujos de Compilación Paso a Paso
