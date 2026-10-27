@@ -81,10 +81,16 @@ Ubicadas en `.agents/skills/compilador-pdf/templates/`:
   - Clase `extarticle` a `9pt`, `geometry`, cajas `tcolorbox` con acento lateral y fondo blanco.
 
 ### Formato C: Plantilla Monocromática (Impresión Láser / Alto Rendimiento)
-* **Versión Typst:** `plantilla-monocromatica.typ`
+* **Versión Typst (1 Columna):** `plantilla-monocromatica.typ`
   - Formato a 1 columna continua con ancho completo y compensación para anillado/perforado.
   - Tipografía serif de alto contraste (`10pt`), sin distracciones visuales ni encabezados superiores.
-  - Cajas modulares (`#definicion`, `#alertaparcial`, `#formulabox`) 100% negro puro sobre blanco.
+  - Cajas modulares sin sombreado ni bordes gruesos: `#slidebox`, `#examplebox`, `#importantbox` (punteada/discontinua), `#definicion`, `#alertaparcial` y `#formulabox`.
+  - Footer minimalista con número de página centrado.
+* **Versión Typst (2-Up Horizontal / Diapositivas):** `plantilla-monocromatica-2up.typ`
+  - Formato A4 apaisado (*landscape*) a 2 columnas (2 páginas lógicas por carilla física).
+  - Guía central punteada para plegado o guillotina. Cero sombreado (`fill: none`) para ahorro total de tóner.
+  - Cajas modulares (`#slidebox`, `#examplebox`, `#importantbox`) calibradas para alta densidad de estudio.
+  - Footer minimalista con número de hoja física centrado.
 * **Versión LaTeX:** `plantilla-monocromatica.tex`
   - Clase `extarticle` a `10pt` con fuente Charter, geometría de 1 columna (162 mm útil), reglas de 0.8pt y ahorro total de tóner.
 

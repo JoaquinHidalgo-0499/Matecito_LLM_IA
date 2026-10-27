@@ -21,20 +21,9 @@
   paper: "a4",
   margin: (top: 1.8cm, bottom: 1.8cm, left: 2.2cm, right: 1.8cm),
   header: none,
-  footer: context {
-    grid(
-      columns: (1fr, auto),
-      align: (left, right),
-      text(size: 7.5pt, fill: rgb("#475569"), font: "DejaVu Sans")[
-        [Materia / Asignatura] · Compendio Técnico Monocromo
-      ],
-      text(size: 8.5pt, weight: "bold", fill: black, font: "DejaVu Sans")[
-        #counter(page).display()
-      ]
-    )
-    v(-3pt)
-    line(length: 100%, stroke: 0.3pt + rgb("#94a3b8"))
-  },
+  footer: context align(center)[
+    #text(size: 8.5pt, fill: black, font: "DejaVu Sans")[#counter(page).display()]
+  ],
 )
 
 #set text(
@@ -73,23 +62,73 @@
   #text(size: 10.5pt, weight: "bold", fill: rgb("#1e293b"))[#it.body]
 ]
 
-// --- Cajas Técnicas Monocromáticas ---
+// --- Cajas Técnicas Monocromáticas (Sin sombreado, sin bordes gruesos) ---
+#let slidebox(title, slide_num: none, content) = block(
+  width: 100%,
+  stroke: 0.4pt + luma(130),
+  radius: 1.5pt,
+  inset: (x: 8pt, y: 6pt),
+  fill: none,
+  below: 0.6em,
+  breakable: false,
+  [
+    #grid(
+      columns: if slide_num != none { (1fr, auto) } else { (1fr,) },
+      text(weight: "bold", size: 9pt, font: "DejaVu Sans", fill: black)[#title],
+      if slide_num != none { text(size: 7.5pt, fill: luma(100))[Diap. #slide_num] }
+    )
+    #v(1.5pt)
+    #line(length: 100%, stroke: 0.3pt + luma(180))
+    #v(2.5pt)
+    #content
+  ]
+)
+
+#let examplebox(title, content) = block(
+  width: 100%,
+  stroke: (left: 1pt + luma(90)),
+  inset: (left: 7pt, y: 3pt),
+  fill: none,
+  below: 0.5em,
+  breakable: false,
+  [
+    #text(weight: "bold", size: 8.5pt, font: "DejaVu Sans", fill: black)[Ejemplo: #title]
+    #v(1.5pt)
+    #text(size: 8.8pt)[#content]
+  ]
+)
+
+#let importantbox(title, content) = block(
+  width: 100%,
+  stroke: (paint: black, thickness: 0.5pt, dash: "dashed"),
+  radius: 1.5pt,
+  inset: (x: 7pt, y: 5pt),
+  fill: none,
+  below: 0.5em,
+  breakable: false,
+  [
+    #text(weight: "bold", size: 8.5pt, font: "DejaVu Sans", fill: black)[Importante: #title]
+    #v(1.5pt)
+    #text(size: 8.8pt)[#content]
+  ]
+)
+
 #let definicion(title: "", body) = {
   block(
     width: 100%,
-    fill: white,
-    stroke: (left: 2.5pt + black, rest: 0.4pt + rgb("#cbd5e1")),
-    inset: (x: 10pt, y: 7pt),
+    fill: none,
+    stroke: (left: 1.2pt + black, rest: 0.3pt + luma(180)),
+    inset: (x: 8pt, y: 6pt),
     spacing: 7pt,
-    radius: (right: 2pt),
+    radius: (right: 1.5pt),
     [
       #if title != "" [
-        #text(weight: "bold", size: 9.5pt, font: "DejaVu Sans", fill: black)[Definición: #title]
-        #v(3pt)
-        #line(length: 100%, stroke: 0.3pt + rgb("#e2e8f0"))
-        #v(3pt)
+        #text(weight: "bold", size: 9pt, font: "DejaVu Sans", fill: black)[Definición: #title]
+        #v(2pt)
+        #line(length: 100%, stroke: 0.3pt + luma(200))
+        #v(2.5pt)
       ]
-      #text(size: 9.2pt)[#body]
+      #text(size: 9pt)[#body]
     ]
   )
 }
@@ -97,17 +136,17 @@
 #let alertaparcial(title: "", body) = {
   block(
     width: 100%,
-    fill: white,
-    stroke: 0.8pt + black,
-    inset: (x: 10pt, y: 8pt),
-    spacing: 8pt,
-    radius: 2pt,
+    fill: none,
+    stroke: (paint: black, thickness: 0.5pt, dash: "dashed"),
+    inset: (x: 8pt, y: 6pt),
+    spacing: 7pt,
+    radius: 1.5pt,
     [
-      #text(weight: "bold", size: 9.2pt, font: "DejaVu Sans", fill: black)[▶ Punto Crítico / Criterio de Examen: #title]
+      #text(weight: "bold", size: 8.8pt, font: "DejaVu Sans", fill: black)[Importante / Examen: #title]
+      #v(2pt)
+      #line(length: 100%, stroke: 0.3pt + luma(180))
       #v(3pt)
-      #line(length: 100%, stroke: 0.4pt + black)
-      #v(4pt)
-      #text(size: 9.2pt)[#body]
+      #text(size: 9pt)[#body]
     ]
   )
 }
@@ -115,13 +154,13 @@
 #let formulabox(body) = {
   block(
     width: 100%,
-    fill: white,
-    stroke: 0.5pt + rgb("#475569"),
-    inset: (x: 9pt, y: 7pt),
+    fill: none,
+    stroke: 0.4pt + luma(120),
+    inset: (x: 8pt, y: 6pt),
     spacing: 6pt,
-    radius: 2pt,
+    radius: 1.5pt,
     [
-      #text(size: 9.2pt)[#body]
+      #text(size: 9pt)[#body]
     ]
   )
 }
@@ -205,3 +244,17 @@ chmod 600 /etc/security/audit.conf
 chown root:root /etc/security/audit.conf
 auditctl -l -a always,exit -F arch=b64 -S open,openat -F success=0
 ```
+
+== 1.5. Cajas Modulares y de Diapositivas (Diseño Monocromo Limpio)
+
+#slidebox("Concepto Modular de Diapositiva", slide_num: "12-14", [
+  Estructura modular ideal para transcripciones de presentaciones oficiales o compendios canónicos. No posee sombreado ni rellenos grises que ensucien la impresión láser o consuman tóner innecesario.
+  
+  #examplebox("Caso Práctico en Producción", [
+    Los médicos acceden a las historias clínicas digitales. Si el sistema cae, el problema radica en la *disponibilidad*, no en la confidencialidad.
+  ])
+  
+  #importantbox("Aclaración Doctrinal Crítica", [
+    Un mecanismo redundante no reemplaza las copias de seguridad de datos. Protege contra averías de hardware, pero no ante ransomware o borrado accidental.
+  ])
+])
