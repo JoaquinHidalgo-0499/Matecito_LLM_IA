@@ -9,8 +9,17 @@ import sys
 import re
 import argparse
 import json
-WORKSPACE_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BRAIN_DIR = os.environ.get("BRAIN_DIR", os.path.join(WORKSPACE_ROOT, "brain"))
+_project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _project_root not in sys.path:
+    sys.path.insert(0, _project_root)
+
+try:
+    from scripts.config import WORKSPACE_ROOT as _CFG_ROOT, BRAIN_DIR as _CFG_BRAIN
+    WORKSPACE_ROOT = str(_CFG_ROOT)
+    BRAIN_DIR = os.environ.get("BRAIN_DIR", str(_CFG_BRAIN))
+except Exception:
+    WORKSPACE_ROOT = _project_root
+    BRAIN_DIR = os.environ.get("BRAIN_DIR", os.path.join(WORKSPACE_ROOT, "brain"))
 
 # Vocabulario Controlado de Tags
 FORBIDDEN_TAGS = {
@@ -199,6 +208,7 @@ def fix_tags(brain_dir=None):
                 changed = False
                 new_lines = []
                 in_frontmatter = False
+                in_tags_list = False
 
                 for i, line in enumerate(lines):
                     if i == 0 and line.strip() == '---':
@@ -207,12 +217,18 @@ def fix_tags(brain_dir=None):
                         continue
                     if in_frontmatter and line.strip() == '---':
                         in_frontmatter = False
+                        in_tags_list = False
                         new_lines.append(line)
                         continue
 
-                    if in_frontmatter and line.strip().startswith('tags:'):
+                    if in_frontmatter and not line.startswith((' ', '\t')) and ':' in line:
+                        key = line.split(':', 1)[0].strip()
+                        in_tags_list = (key == 'tags')
+
+                    if in_frontmatter and in_tags_list and line.strip().startswith('tags:'):
                         raw = line.split('tags:', 1)[1].strip()
                         if raw.startswith('[') and raw.endswith(']'):
+                            in_tags_list = False
                             inside = raw[1:-1]
                             tags = [t.strip().strip('"\'') for t in inside.split(',') if t.strip()]
                             updated_tags = []
@@ -230,8 +246,8 @@ def fix_tags(brain_dir=None):
                                 changed = True
                                 line = f"tags: [{', '.join(updated_tags)}]\n"
 
-                    # Soporte para tags en formato lista YAML (- item)
-                    if in_frontmatter and (line.startswith(' ') or line.startswith('\t')) and line.strip().startswith('-'):
+                    # Soporte para tags en formato lista YAML (- item) exclusivamente bajo tags:
+                    if in_frontmatter and in_tags_list and line.startswith((' ', '\t')) and line.strip().startswith('-'):
                         stripped_item = line.strip()[1:].strip().strip('"\'')
                         tl = stripped_item.lower()
                         target = FORBIDDEN_TAGS.get(tl, tl)
@@ -257,16 +273,20 @@ def audit_brain(verbose=False, brain_dir=None):
         sys.exit(1)
 
     all_md_files = {}
+    duplicate_basenames = {}
     for root, dirs, files in os.walk(target_dir):
         for f in files:
             if f.endswith('.md'):
                 rel_path = os.path.relpath(os.path.join(root, f), target_dir)
                 base_name = os.path.splitext(f)[0]
-                all_md_files[base_name] = rel_path
+                if base_name in all_md_files:
+                    duplicate_basenames.setdefault(base_name, [all_md_files[base_name]]).append(rel_path)
+                else:
+                    all_md_files[base_name] = rel_path
 
-    # Destinos de wikilinks válidos (notas del cerebro + markdown en raíz como GEMINI o README)
+    # Destinos de wikilinks válidos (notas del cerebro + markdown en raíz solo si auditamos la bóveda local)
     valid_targets = set(all_md_files.keys())
-    if os.path.exists(WORKSPACE_ROOT):
+    if target_dir == os.path.abspath(BRAIN_DIR) and os.path.exists(WORKSPACE_ROOT):
         for f in os.listdir(WORKSPACE_ROOT):
             if f.endswith('.md') and os.path.isfile(os.path.join(WORKSPACE_ROOT, f)):
                 valid_targets.add(os.path.splitext(f)[0])
@@ -359,6 +379,7 @@ def audit_brain(verbose=False, brain_dir=None):
         "backtick_links": backtick_links,
         "yaml_errors": yaml_errors,
         "session_warnings": session_warnings,
+        "duplicate_basenames": duplicate_basenames,
         "all_files": all_md_files
     }
 
@@ -398,10 +419,11 @@ def main():
             "broken_links": res["broken_links"],
             "backtick_links": res["backtick_links"],
             "yaml_errors": res["yaml_errors"],
-            "session_warnings": res["session_warnings"]
+            "session_warnings": res["session_warnings"],
+            "duplicate_basenames": res["duplicate_basenames"]
         }
         print(json.dumps(out, indent=2, ensure_ascii=False))
-        sys.exit(0 if (len(res["unindexed"]) == 0 and len(res["broken_links"]) == 0 and len(res["yaml_errors"]) == 0 and len(res["backtick_links"]) == 0) else 1)
+        sys.exit(0 if (len(res["unindexed"]) == 0 and len(res["broken_links"]) == 0 and len(res["yaml_errors"]) == 0 and len(res["backtick_links"]) == 0 and len(res["duplicate_basenames"]) == 0) else 1)
 
     print(f"\n{BOLD}{CYAN}┌──────────────────────────────────────────────────────────┐{RESET}")
     print(f"{BOLD}{CYAN}│          AUDITOR DE SALUD DEL CEREBRO (BRAIN-LINT)       │{RESET}")
@@ -473,6 +495,13 @@ def main():
         print()
     else:
         print(f"{GREEN}✔ Todas las sesiones tienen secciones Contexto/Decisiones/Pendientes{RESET}")
+
+    if res["duplicate_basenames"]:
+        has_errors = True
+        print(f"\n{RED}❌ Nombres de archivo duplicados en distintas carpetas:{RESET}")
+        for bname, paths in res["duplicate_basenames"].items():
+            print(f"   • {BOLD}{bname}.md{RESET}: {', '.join(paths)}")
+        print()
 
     print(f"\n{BOLD}────────────────────────────────────────────────────────────{RESET}")
     if not has_errors:

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import os
+import sys
 import re
-import yaml
 import argparse
 import json
 import logging
@@ -9,15 +9,30 @@ from datetime import datetime
 from collections import defaultdict
 from pathlib import Path
 
+_project_root = Path(__file__).resolve().parent.parent
+if str(_project_root) not in sys.path:
+    sys.path.insert(0, str(_project_root))
+
+try:
+    from scripts.config import WORKSPACE_ROOT as _CFG_ROOT
+except Exception:
+    _CFG_ROOT = _project_root
+
+
 def parse_frontmatter(content):
-    """Extrae el frontmatter YAML de un string soportando saltos LF y CRLF."""
+    """Extrae metadatos del frontmatter YAML usando solo la biblioteca estándar."""
     match = re.match(r'^---\r?\n(.*?)\r?\n---', content, re.DOTALL)
-    if match:
-        try:
-            return yaml.safe_load(match.group(1))
-        except yaml.YAMLError:
-            return {}
-    return {}
+    if not match:
+        return {}
+    meta = {}
+    for line in match.group(1).splitlines():
+        stripped = line.strip()
+        if not stripped or stripped.startswith('#') or line.startswith((' ', '\t')):
+            continue
+        if ':' in stripped:
+            key, val = stripped.split(':', 1)
+            meta[key.strip()] = val.strip().strip('"').strip("'")
+    return meta
 
 def extract_pendientes(content):
     """Extrae la lista de tareas pendientes de la sección ## Pendientes."""
@@ -59,7 +74,7 @@ def main():
     parser.add_argument('--meses-activos', type=int, default=2, help='Cantidad de meses más recientes a conservar en el tablero activo (default: 2, el resto se archiva).')
     parser.add_argument('--json', action='store_true', help='Generar salida en formato JSON en lugar de Markdown (hacia stdout).')
     parser.add_argument('-v', '--verbose', action='store_true', help='Habilitar logs detallados.')
-    parser.add_argument('--braind-dir', default=str(Path(__file__).resolve().parent.parent), help='Ruta raíz de la base de conocimiento.')
+    parser.add_argument('--braind-dir', default=str(_CFG_ROOT), help='Ruta raíz de la base de conocimiento.')
     args = parser.parse_args()
 
     logging.basicConfig(level=logging.DEBUG if args.verbose else logging.INFO, format='%(levelname)s: %(message)s')

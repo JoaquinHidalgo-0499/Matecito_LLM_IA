@@ -42,7 +42,10 @@ RESET = "\033[0m"
 
 def is_ignored(name):
     for pat in IGNORED_PATTERNS:
-        if pat in name:
+        if pat == ".syncthing":
+            if pat in name:
+                return True
+        elif name == pat or name.startswith(pat + ".") or name.endswith(pat):
             return True
     return False
 
@@ -51,7 +54,6 @@ def scan_current_state():
     for base_dir in SCAN_DIRS:
         if not os.path.exists(base_dir):
             continue
-        base_name = os.path.basename(base_dir)
         for root, dirs, files in os.walk(base_dir):
             # Filtrar carpetas ignoradas
             dirs[:] = [d for d in dirs if not is_ignored(d)]
@@ -61,10 +63,12 @@ def scan_current_state():
                 full_path = os.path.join(root, f)
                 try:
                     stat = os.stat(full_path)
-                    rel_path = os.path.relpath(full_path, _material_parent)
-                    parts = rel_path.split(os.sep)
-                    group = parts[1] if len(parts) > 1 else parts[0]
-                    subject = parts[2] if len(parts) > 2 else "General"
+                    # Normalizar prefijo lógico 'material-academico/' para portabilidad entre máquinas
+                    rel_within = os.path.relpath(full_path, base_dir)
+                    rel_path = os.path.join("material-academico", rel_within)
+                    parts = rel_within.split(os.sep)
+                    group = parts[0] if len(parts) > 1 else "material-academico"
+                    subject = parts[1] if len(parts) > 2 else "General"
                     state[rel_path] = {
                         "size": stat.st_size,
                         "mtime": stat.st_mtime,

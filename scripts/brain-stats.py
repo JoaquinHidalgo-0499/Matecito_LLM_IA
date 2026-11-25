@@ -9,8 +9,17 @@ import re
 import json
 import argparse
 from collections import Counter
-WORKSPACE_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-BRAIN_DIR = os.environ.get("BRAIN_DIR", os.path.join(WORKSPACE_ROOT, "brain"))
+_project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _project_root not in sys.path:
+    sys.path.insert(0, _project_root)
+
+try:
+    from scripts.config import WORKSPACE_ROOT as _CFG_ROOT, BRAIN_DIR as _CFG_BRAIN
+    WORKSPACE_ROOT = str(_CFG_ROOT)
+    BRAIN_DIR = os.environ.get("BRAIN_DIR", str(_CFG_BRAIN))
+except Exception:
+    WORKSPACE_ROOT = _project_root
+    BRAIN_DIR = os.environ.get("BRAIN_DIR", os.path.join(WORKSPACE_ROOT, "brain"))
 
 # Colores ANSI
 BLUE = "\033[1;34m"
@@ -137,6 +146,7 @@ def get_stats(brain_dir=None):
                             tags_count[t] += 1
 
                         clean_content = re.sub(r'```.*?```', '', content, flags=re.DOTALL)
+                        clean_content = re.sub(r'`.*?`', '', clean_content)
                         links = re.findall(r'\[\[([^\[\]]+?)\]\]', clean_content)
                         
                         valid_links = []
@@ -144,6 +154,7 @@ def get_stats(brain_dir=None):
                             link_clean = link.strip()
                             if link_clean.startswith(('-', '$', '!', '<', '>')): continue
                             if re.search(r'\s(==|!=|-eq|-ne|-lt|-le|-gt|-ge|=~)\s', link_clean): continue
+                            if ' ' in link_clean and link_clean.startswith(('-z', '-n', '-f', '-d', '-e', '-r', '-w', '-x')): continue
                             target = link_clean.split('|')[0].split('#')[0].strip()
                             if target:
                                 inbound_links[target] += 1
@@ -159,10 +170,11 @@ def get_stats(brain_dir=None):
         if inbound_links.get(f, 0) == 0 and outbound_links_count.get(f, 0) == 0 and f != 'index'
     ]
     
+    internal_edges = sum(cnt for node, cnt in inbound_links.items() if node in all_files)
     total_edges = sum(inbound_links.values())
     density = 0
     if file_count > 1:
-        density = total_edges / (file_count * (file_count - 1))
+        density = internal_edges / (file_count * (file_count - 1))
 
     return {
         "target_dir": target_dir,

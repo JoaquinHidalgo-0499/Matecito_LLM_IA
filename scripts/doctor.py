@@ -173,14 +173,33 @@ def run_diagnostics() -> dict:
     hooks_json = WORKSPACE_ROOT / ".agents" / "hooks.json"
     hooks_ok = hooks_json.is_file()
     hooks_valid = False
+    matchers_ok = False
     if hooks_ok:
         try:
             with open(hooks_json, "r", encoding="utf-8") as fh:
-                json.load(fh)
+                hooks_data = json.load(fh)
             hooks_valid = True
+            matchers = []
+            for hook_cfg in hooks_data.values():
+                if not isinstance(hook_cfg, dict):
+                    continue
+                for ev in ("PreToolUse", "PostToolUse"):
+                    for grp in hook_cfg.get(ev, []):
+                        if isinstance(grp, dict) and "matcher" in grp:
+                            matchers.append(grp["matcher"])
+            joined = " ".join(matchers)
+            matchers_ok = ("write_file" in joined and "edit_file" in joined)
+            if not matchers_ok:
+                diag["suggestions"].append(
+                    "Los matchers en .agents/hooks.json no cubren las herramientas actuales de CLI ('write_file', 'edit_file')."
+                )
         except Exception:
             hooks_valid = False
-    diag["hooks"]["hooks_json"] = {"ok": hooks_ok and hooks_valid, "path": str(hooks_json)}
+    diag["hooks"]["hooks_json"] = {
+        "ok": hooks_ok and hooks_valid,
+        "matchers_ok": matchers_ok,
+        "path": str(hooks_json),
+    }
 
     protect_py = WORKSPACE_ROOT / ".agents" / "protect_readonly.py"
     diag["hooks"]["protect_readonly"] = {"ok": protect_py.is_file(), "path": str(protect_py)}
@@ -268,7 +287,10 @@ def print_human_report(diag: dict):
     print(f"\n{BOLD}[4] HOOKS Y SEGURIDAD{RESET}")
     h_json = diag["hooks"]["hooks_json"]
     if h_json["ok"]:
-        print(f"  {GREEN}✔{RESET} .agents/hooks.json presente y sintácticamente válido")
+        if h_json.get("matchers_ok"):
+            print(f"  {GREEN}✔{RESET} .agents/hooks.json presente, válido y compatible con CLI/IDE")
+        else:
+            print(f"  {YELLOW}⚠️{RESET} .agents/hooks.json válido pero sin matchers 'write_file'/'edit_file'")
     else:
         print(f"  {RED}❌{RESET} .agents/hooks.json falta o contiene errores JSON")
 
