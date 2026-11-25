@@ -97,8 +97,12 @@ Ubicadas en `.agents/skills/compilador-pdf/templates/`:
 ### Formato D: CV Ejecutivo ATS (1 Página A4)
 * **Versión Typst:** `plantilla-cv-ejecutivo.typ`
   - Tipografía compacta a `9pt`, presupuesto vertical calibrado a exactamente 1 página sin desbordes.
-* **Versión LaTeX:** `plantilla-cv-ejecutivo-compacto-1pagina.tex`
+* **Versión LaTeX (Serif Compacto):** `plantilla-cv-ejecutivo-compacto-1pagina.tex`
   - Clase `extarticle` a `9pt`, secciones con `\cvsection` y macros anti-solapamiento.
+* **Versión LaTeX (Sans-Serif ATS):** `plantilla-cv-ejecutivo-sans.tex`
+  - Clase `article` a `10pt` con tipografía Helvetica/Arial, paleta corporativa azul marino/slate y enlaces interactivos.
+* **Versión LaTeX (2 Columnas Moderno):** `plantilla-cv-moderno-dos-columnas.tex`
+  - Maquetación asimétrica con `paracol`, barra lateral con foto en TikZ, código QR e íconos vectoriales nativos.
 
 ### Formato E: Simulacro de Examen / Banco Interactivo (Navegación Bidireccional)
 * **Versión Typst:** `plantilla-simulacro-examen.typ`
@@ -108,6 +112,10 @@ Ubicadas en `.agents/skills/compilador-pdf/templates/`:
     - En cada pregunta: botón interactivo `[Ver Solución ➜]` que salta directamente a la respuesta en la sección final.
     - En cada respuesta: doble botón de retorno `[⬅ Volver a Pregunta]` y `[⬅ Volver al Apartado X]`.
   - Bloques con `breakable: false` para evitar que preguntas o soluciones se fracturen entre saltos de página.
+
+### Formato F: Transcripción Ultra-Densa de Diapositivas
+* **Versión LaTeX:** `plantilla-transcripcion-diapositivas.tex`
+  - Clase `extarticle` a `9pt` en `twocolumn` con Bitstream Charter, márgenes de `1.0cm` y macro `\filmina{N}{Título}` para vaciar presentaciones completas en el menor número de carillas posible.
 
 ---
 

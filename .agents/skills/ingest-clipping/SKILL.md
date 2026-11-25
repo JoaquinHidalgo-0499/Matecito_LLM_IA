@@ -6,7 +6,7 @@ description: Procesamiento de archivos de la bandeja de entrada Clippings/ hacia
 # Skill: ingest-clipping
 
 ## Propósito
-Este skill define el protocolo estándar para procesar archivos Markdown ubicados en la carpeta `Clippings/` e integrarlos adecuadamente en el cerebro (`/brain/`). El objetivo es mantener la carpeta `Clippings/` vacía (Inbox Zero).
+Este skill define el protocolo estándar para procesar archivos ubicados en la carpeta `Clippings/` (capturas web Markdown o documentos PDF entrantes) e integrarlos adecuadamente en el cerebro (`/brain/`). El objetivo es mantener la carpeta `Clippings/` vacía (Inbox Zero).
 
 ## Protocolo de Procesamiento
 
@@ -43,4 +43,4 @@ Este skill define el protocolo estándar para procesar archivos Markdown ubicado
 ## Restricciones
 - Respetar la normalización de tags canónicos: usar siempre `ingesta` (no `ingest`) y `clippings` (no `clipping`).
 - No usar acentos graves (backticks) alrededor de los wikilinks (ej: usar `[[enlace]]` y no \`[[enlace]]\`).
-- No usar `cat << EOF` para crear archivos en `braind/`. Usar siempre la herramienta `write_to_file`.
+- No usar `cat << EOF` para crear archivos en `braind/`. Usar siempre la herramienta `write_file`.

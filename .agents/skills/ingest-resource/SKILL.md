@@ -76,13 +76,13 @@ Resumen técnico del recurso, propósito dentro del ecosistema/homelab/taller y 
 
 Toda nota de recurso creada debe indexarse de forma inmediata en `brain/index.md`:
 1. Ubicar la sección correspondiente:
-   - `## Planificación y Cronogramas` (para recursos de homelab, taller, hardware o servicios).
+   - `## Planificación, Carrera y Cronogramas` o `## Infraestructura, Hardware y Recursos Técnicos` (para recursos de homelab, taller, hardware, carrera o servicios).
    - O bajo la sección de la cátedra específica si el recurso es de ámbito académico (ej: `ACP`, `CSyT`, etc.).
 2. Insertar una nueva línea en la lista con el formato:
    ```markdown
    * [[recursos-nombre-del-archivo]] — **Título o Resumen en Negrita** (Breve descripción técnica).
    ```
-3. Realizar la edición mediante la herramienta nativa `replace_file_content` sin alterar el resto del documento.
+3. Realizar la edición mediante la herramienta nativa `edit_file` sin alterar el resto del documento.
 
 ---
 

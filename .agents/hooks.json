@@ -2,11 +2,11 @@
   "autofix-wikilinks-formatting": {
     "PostToolUse": [
       {
-        "matcher": "write_to_file|replace_file_content|multi_replace_file_content",
+        "matcher": "write_file|edit_file|write_to_file|replace_file_content|multi_replace_file_content",
         "hooks": [
           {
             "type": "command",
-            "command": "python3 fix_backticks.py",
+            "command": "python3 ./fix_backticks.py",
             "timeout": 5
           }
         ]
@@ -16,11 +16,11 @@
   "protect-readonly-repos": {
     "PreToolUse": [
       {
-        "matcher": "write_to_file|replace_file_content|multi_replace_file_content|run_command",
+        "matcher": "write_file|edit_file|write_to_file|replace_file_content|multi_replace_file_content|run_command",
         "hooks": [
           {
             "type": "command",
-            "command": "python3 protect_readonly.py",
+            "command": "python3 ./protect_readonly.py",
             "timeout": 5
           }
         ]

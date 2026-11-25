@@ -45,7 +45,7 @@ Cuando se pida verificar la salud, enlaces o estadísticas del cerebro:
 
 ## Política de Ejecución, Herramientas y Archivos
 - **Manipulación de Archivos:**
-  - Para archivos **dentro de `braind/`**: usar exclusivamente `write_to_file` y `replace_file_content`. Nunca usar `cat << EOF` ni `run_command` para escribir archivos en el workspace.
+  - Para archivos **dentro de `braind/`**: usar exclusivamente `write_file` y `edit_file` (o equivalentes nativos del entorno). Nunca usar `cat << EOF` ni `run_command` para escribir archivos en el workspace.
   - Para archivos **en servidores remotos** (`servidor_personal`, OpenWrt) o rutas externas: se permite `cat << EOF` vía `run_command`.
 - **Explicación Previa Obligatoria de Scripts:** Antes de generar o ejecutar cualquier script o comando complejo, explicar detalladamente al usuario: 1. Qué hace paso a paso, 2. Dependencias externas, 3. Rutas que lee o modifica, 4. Objetivo e impacto esperado.
 - **Herramientas Oficiales:** Las utilidades operativas y de mantenimiento del workspace residen centralizadas en `scripts/`. Prohibido generar código inline o scripts temporales alternativos.

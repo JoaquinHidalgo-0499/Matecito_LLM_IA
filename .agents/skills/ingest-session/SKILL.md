@@ -68,7 +68,7 @@ Toda nota de sesión creada debe agregarse inmediatamente a `brain/index.md`:
    ```markdown
    * [[AAAA-MM-DD-nombre-corto]] — Descripción concisa de los hitos logrados en la sesión.
    ```
-3. Realizar la edición mediante `replace_file_content` de forma precisa sin alterar el resto del archivo.
+3. Realizar la edición mediante `edit_file` de forma precisa sin alterar el resto del archivo.
 
 ---
 

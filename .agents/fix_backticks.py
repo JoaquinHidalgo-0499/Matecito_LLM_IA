@@ -6,7 +6,7 @@ import json
 # Derivar brain_dir desde la ubicación del script (portabilidad)
 _script_dir = os.path.dirname(os.path.abspath(__file__))
 _project_root = os.path.dirname(_script_dir)  # .agents/ -> raíz del proyecto
-brain_dir = os.path.join(_project_root, "brain")
+brain_dir = os.path.realpath(os.path.join(_project_root, "brain"))
 def strip_backticks_from_content(content):
     # Proteger bloques de código cercados (```...```) para no alterar sintaxis de ejemplos
     parts = re.split(r"(```[\s\S]*?```)", content)
@@ -43,15 +43,22 @@ def fix_file(path):
 
 def main():
     target_file = None
+    cwd = _project_root
 
     # 1. Leer payload desde stdin (estándar de Antigravity PostToolUse)
     try:
         raw_input = sys.stdin.read().strip()
         if raw_input:
             payload = json.loads(raw_input)
+            cwd = payload.get("cwd") or _project_root
             tool_call = payload.get("toolCall") or payload.get("tool_call") or {}
             args = tool_call.get("args") or payload.get("args") or {}
-            target_file = args.get("TargetFile") or args.get("target_file")
+            target_file = (
+                args.get("Path")
+                or args.get("path")
+                or args.get("TargetFile")
+                or args.get("target_file")
+            )
     except Exception:
         pass
 
@@ -61,13 +68,24 @@ def main():
         if tool_args_raw:
             try:
                 args = json.loads(tool_args_raw)
-                target_file = args.get("TargetFile", "")
+                target_file = (
+                    args.get("Path")
+                    or args.get("path")
+                    or args.get("TargetFile")
+                    or args.get("target_file")
+                    or ""
+                )
             except Exception:
                 pass
 
     # 3. Procesar archivo si pertenece a brain/
-    if target_file and target_file.startswith(brain_dir) and target_file.endswith(".md"):
-        fix_file(target_file)
+    if target_file:
+        expanded = os.path.expanduser(target_file)
+        if not os.path.isabs(expanded):
+            expanded = os.path.join(cwd, expanded)
+        resolved = os.path.realpath(expanded)
+        if resolved.startswith(brain_dir + os.sep) and resolved.endswith(".md"):
+            fix_file(resolved)
 
     # PostToolUse espera {} en stdout
     print(json.dumps({}))

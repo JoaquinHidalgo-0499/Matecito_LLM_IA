@@ -100,7 +100,7 @@ python3 scripts/consolidar-pendientes.py
 ```
 
 **Interpretación:**
-- Genera el tablero `Tablero-Pendientes.md` con los ítems agrupados por fecha y referenciando a su nota origen.
+- Genera el tablero `Tablero-Pendientes.md` (últimos meses configurados con `--meses-activos`, por defecto 2) y archiva el histórico en `Tablero-Pendientes-Archivo.md`, referenciando siempre la nota origen.
 - `Tablero-Pendientes.md` actúa como un subíndice válido reconocido automáticamente por `brain-lint.py`.
 - Admite argumentos como `--output` para cambiar el destino y `--json` para uso programático.
 
@@ -118,6 +118,6 @@ Presentar un reporte consolidado con las secciones.
 ## Reglas Críticas
 
 - **Nunca generar scripts Python inline** para hacer lo que estos scripts ya hacen.
-- **Nunca usar `cat << EOF`** para archivos dentro de `braind/`. Usar las herramientas nativas (`write_to_file`, `replace_file_content`).
+- **Nunca usar `cat << EOF`** para archivos dentro de `braind/`. Usar las herramientas nativas (`write_file`, `edit_file`).
 - Si un script falla, **leer el error y corregir el script residente**, no improvisar un reemplazo temporal.
 - Si se detectan tags no canónicos durante STATS o LINT, usar `python3 scripts/brain-lint.py --fix-tags`.
